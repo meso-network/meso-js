@@ -137,7 +137,11 @@ a page with a `Buy Crypto` button.
 
 ```ts
 import { transfer, Environment } from "@meso-network/meso-js";
-import type { EventKind, Event, SigningMessage } from "@meso-network/meso-js";
+import type {
+  EventKind,
+  MesoEvent,
+  SigningMessage,
+} from "@meso-network/meso-js";
 
 const buyCrypto = document.querySelector("button#buy-crypto");
 
@@ -151,7 +155,7 @@ buyCrypto.addEventListener("click", () => {
     walletAddress: "<WALLET_ADDRESS>", // The user's wallet address obtained at runtime by your application
 
     // A callback to handle events throughout the integration lifecycle
-    onEvent({ kind, payload }: Event) {
+    onEvent({ kind, payload }: MesoEvent) {
       switch (kind) {
         // The transfer has been approved and will go through, however funds have not yet moved.
         case EventKind.TRANSFER_APPROVED:
@@ -219,7 +223,7 @@ export const BuyCrypto = () => {
       walletAddress: "<WALLET_ADDRESS>", // The user's wallet address obtained at runtime by your application
 
       // A callback to handle events throughout the integration lifecycle
-      onEvent({ kind, payload }: Event) {
+      onEvent({ kind, payload }: MesoEvent) {
         switch (kind) {
           // The transfer has been approved and will go through, however funds have not yet moved.
           case EventKind.TRANSFER_APPROVED:
@@ -317,7 +321,7 @@ enum Network {
   ETHEREUM_MAINNET = "eip155:1"
   ETHEREUM_GOERLI = "eip155:5"
   SOLANA_MAINNET = "solana:5eykt4UsFv8P8NJdTREpY1vzqKqZKvdp"
-  SOLANA_DEVENT = "solana:EtWTRABZaYq6iMfeYKouRu166VU2xqa1"
+  SOLANA_DEVNET = "solana:EtWTRABZaYq6iMfeYKouRu166VU2xqa1"
   SOLANA_TESTNET = "solana:4uhcVJyU9pJkvQyS88uRDiswHXSCkY3z"
 }
 
@@ -367,17 +371,13 @@ networks and assets.
 **Type:**
 
 ```ts
-type ConfigurationError = {
-  kind: EventKind.CONFIGURATION_ERROR;
-  payload: ConfigurationErrorPayload;
+// An error surfaced from the `meso-js` integration.
+type MesoError = {
+  // A client-friendly error message.
+  message: string;
 };
 
-type ConfigurationErrorPayload = {
-  // A developer-facing message describing the error.
-  message: string;
-  // A list of the invalid properties (if available).
-  invalidProperties?: Array<keyof TransferConfiguration>;
-};
+type ConfigurationErrorPayload = { error: MesoError };
 ```
 
 **Example:**
@@ -385,9 +385,10 @@ type ConfigurationErrorPayload = {
 ```ts
 transfer({
   // ...
-  onEvent: (event: Event) => {
+  onEvent: (event: MesoEvent) => {
     if (event.kind === EventKind.CONFIGURATION_ERROR) {
       // handle configuration error
+      console.log(event.payload.error.message); // "some error message"
     }
   },
 });
@@ -403,13 +404,9 @@ Other errors dispatched during the integration will also be surfaced via the
 **Type:**
 
 ```ts
-type GeneralError = {
-  kind: EventKind.ERROR;
-  payload: ErrorPayload;
-};
-
-type ErrorPayload = {
-  // A client-friendly message describing the error.
+// An error surfaced from the `meso-js` integration.
+type MesoError = {
+  // A client-friendly error message.
   message: string;
 };
 ```
@@ -419,12 +416,15 @@ type ErrorPayload = {
 ```ts
 transfer({
   // ...
-  onEvent: (event: Event) => {
+  onEvent: (event: MesoEvent) => {
     if (event.kind === EventKind.ERROR) {
       // handle general error
+      console.log(event.payload.error.message); // "some error message"
     }
   },
 });
+
+export type ErrorPayload = { error: MesoError };
 ```
 
 ### Events
@@ -438,7 +438,7 @@ Each event has a `kind` and a `payload` (which may be `null` in some cases).
 **Example usage:**
 
 ```ts
-onEvent({kind, payload}: Event) {
+onEvent({kind, payload}: MesoEvent) {
   switch (kind) {
   case EventKind.TRANSFER_APPROVED:
     console.log(payload); // { transfer: { ... }}
@@ -507,7 +507,7 @@ been moved.
 
 #### `ERROR`
 
-This event is fired when an error occurs in the MesoJS experience.
+This event is fired when an error occurs in the Meso experience.
 
 **Example payload:**
 
