@@ -268,9 +268,9 @@ export const BuyCrypto = () => {
 
 ## Integration lifecycle
 
-| Lifecycle                                                                                                                      |
-| ------------------------------------------------------------------------------------------------------------------------------ |
-| ![Meso integration lifecycle](https://github.com/meso-network/meso-js-dev/assets/1217116/cdcea19f-570d-4f61-ac68-74998cab410e) |
+| Lifecycle                                                                                                                  |
+| -------------------------------------------------------------------------------------------------------------------------- |
+| ![Meso integration lifecycle](https://github.com/meso-network/meso-js/assets/1217116/b0afb4a4-8c59-49b0-ab7d-d279250094d0) |
 
 When your user is ready, initiate the on-ramp by calling
 [`transfer()`](#transfer). During setup, subscribe to the [`onEvent`](#events)
