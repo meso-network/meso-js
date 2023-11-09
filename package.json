@@ -1,0 +1,49 @@
+{
+  "name": "meso-js",
+  "version": "0.0.58",
+  "private": true,
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/meso-network/meso-js.git"
+  },
+  "license": "MIT",
+  "scripts": {
+    "ci:publish": "pnpm build && pnpm publish -r && changeset tag",
+    "clean": "rimraf packages/**/lib packages/**/*.tsbuildinfo packages/**/*.timestamp packages/types/src/index.d.ts",
+    "lint:es": "eslint .",
+    "lint:markdown": "markdownlint .",
+    "lint": "pnpm lint:es && pnpm lint:markdown",
+    "typecheck": "pnpm clean && pnpm run -r --if-present typecheck",
+    "test": "pnpm run -r --if-present test",
+    "build": "pnpm clean && pnpm typecheck && pnpm run --filter @meso-network/post-message-bus -r build && pnpm run --filter @meso-network/meso-js -r build",
+    "fmt": "prettier -w .",
+    "fmt:check": "prettier --check .",
+    "spelling:check": "cspell ."
+  },
+  "workspaces": [
+    "packages/*"
+  ],
+  "devDependencies": {
+    "@changesets/changelog-github": "^0.4.8",
+    "@changesets/cli": "^2.26.2",
+    "@types/node": "^20.8.7",
+    "@typescript-eslint/eslint-plugin": "^6.8.0",
+    "@typescript-eslint/parser": "^6.8.0",
+    "cspell": "^7.3.8",
+    "eslint": "^8.51.0",
+    "eslint-config-prettier": "^9.0.0",
+    "eslint-plugin-prettier": "^5.0.1",
+    "eslint-plugin-vitest": "^0.3.2",
+    "eslint-plugin-vitest-globals": "^1.4.0",
+    "markdownlint-cli": "^0.37.0",
+    "prettier": "^3.0.3",
+    "rimraf": "^5.0.5",
+    "typescript": "^5.2.2",
+    "vite": "^4.5.0",
+    "vite-plugin-dts": "^3.6.0",
+    "vitest": "^0.34.6"
+  },
+  "prettier": {
+    "trailingComma": "all"
+  }
+}

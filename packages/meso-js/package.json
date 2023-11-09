@@ -1,0 +1,38 @@
+{
+  "name": "@meso-network/meso-js",
+  "version": "0.0.58",
+  "description": "A TypeScript SDK to embed the Meso on/off-ramp into a dapp.",
+  "type": "module",
+  "main": "./lib/index.js",
+  "types": "./lib/index.d.ts",
+  "files": [
+    "lib",
+    "package.json",
+    "README.md",
+    "CHANGELOG.md"
+  ],
+  "publishConfig": {
+    "access": "restricted"
+  },
+  "scripts": {
+    "typecheck": "tsc -b",
+    "build": "vite build",
+    "clean": "rimraf lib",
+    "test": "vitest run --silent",
+    "test:watch": "vitest --watch"
+  },
+  "author": "",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/meso-network/meso-js.git",
+    "directory": "packages/meso-js"
+  },
+  "dependencies": {
+    "@meso-network/post-message-bus": "workspace:*"
+  },
+  "devDependencies": {
+    "@testing-library/jest-dom": "^6.1.4",
+    "jsdom": "^22.1.0"
+  }
+}
