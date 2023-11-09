@@ -1,6 +1,6 @@
 {
   "name": "@meso-network/post-message-bus",
-  "version": "0.0.58",
+  "version": "0.0.59",
   "description": "Pass strongly typed messages across frames.",
   "type": "module",
   "main": "./lib/index.js",
