@@ -1,0 +1,28 @@
+{
+  "recommendations": [
+    "streetsidesoftware.code-spell-checker",
+    "vivaxy.vscode-conventional-commits",
+    "jinsihou.diff-tool",
+    "mikestead.dotenv",
+    "dbaeumer.vscode-eslint",
+    "editorconfig.editorconfig",
+    "mhutchie.git-graph",
+    "github.vscode-github-actions",
+    "me-dutour-mathieu.vscode-github-actions",
+    "bierner.github-markdown-preview",
+    "github.vscode-pull-request-github",
+    "eamodio.gitlens",
+    "ms-vsliveshare.vsliveshare",
+    "yzhang.markdown-all-in-one",
+    "bierner.markdown-checkbox",
+    "bierner.markdown-emoji",
+    "bierner.markdown-footnotes",
+    "bierner.markdown-preview-github-styles",
+    "davidanson.vscode-markdownlint",
+    "christian-kohler.npm-intellisense",
+    "esbenp.prettier-vscode",
+    "timonwong.shellcheck",
+    "zixuanchen.vitest-explorer",
+    "redhat.vscode-yaml"
+  ]
+}

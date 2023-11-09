@@ -1,0 +1,17 @@
+{
+  "compilerOptions": {
+    "composite": true,
+    "esModuleInterop": true,
+    "forceConsistentCasingInFileNames": true,
+    "target": "ESNext",
+    "module": "ESNext",
+    "moduleResolution": "Node",
+    "resolveJsonModule": true,
+    "strict": true,
+    "baseUrl": ".",
+    "paths": {
+      "@meso-network/post-message-bus": ["packages/post-message-bus/src"],
+      "@meso-network/types": ["packages/types/src"]
+    }
+  }
+}

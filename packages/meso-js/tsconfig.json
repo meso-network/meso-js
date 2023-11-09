@@ -1,0 +1,10 @@
+{
+  "extends": "../../tsconfig.json",
+  "compilerOptions": {
+    "outDir": "lib",
+    "rootDir": "./",
+    "types": ["vitest", "vitest/globals"]
+  },
+  "references": [{ "path": "../post-message-bus" }, { "path": "../types" }],
+  "include": ["./**/*.ts", "../types/**/*.ts", "./package.json"]
+}

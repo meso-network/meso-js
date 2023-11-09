@@ -1,0 +1,70 @@
+name: Version or Release
+
+on:
+  workflow_run:
+    workflows: ["Checks"]
+    branches: [main]
+    types:
+      - completed
+env:
+  CI: true
+  PNPM_CACHE_FOLDER: .pnpm-store
+  # Required for the PR this action creates.
+  GITHUB_TOKEN: ${{ secrets.CUSTOM_GITHUB_PAT }}
+  NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+
+jobs:
+  version:
+    name: Version or release
+    timeout-minutes: 15
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: checkout code repository
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+
+      - name: setup node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 20
+
+      - name: install pnpm
+        run: npm i pnpm@latest -g
+
+      - name: setup pnpm config
+        run: pnpm config set store-dir $PNPM_CACHE_FOLDER
+
+      - name: install dependencies
+        run: pnpm install
+
+      - name: create and publish versions
+        id: changesets
+        uses: changesets/action@v1
+        with:
+          commit: "chore: update versions"
+          title: "chore: update versions"
+          publish: pnpm ci:publish
+          # TODO: Investigate re-enabling to allow the opened PR to run CI. https://github.com/changesets/action/issues/198
+          # setupGitUser: false
+
+      - name: Get published package version
+        if: steps.changesets.outputs.published == 'true'
+        id: version
+        run: |
+          VERSION=$(echo $changeset_outputs_published_packages | jq '.[0].version')
+          echo "publishedVersion=$VERSION" >> "$GITHUB_OUTPUT"
+        env:
+          changeset_outputs_published_packages: ${{ steps.changesets.outputs.publishedPackages }}
+
+      - name: Notify slack
+        if: steps.changesets.outputs.published == 'true'
+        uses: slackapi/slack-github-action@v1.23.0
+        with:
+          payload: |
+            {
+              "version": ${{ steps.version.outputs.publishedVersion }}
+            }
+        env:
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}

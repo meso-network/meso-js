@@ -1,0 +1,12 @@
+{
+  "conventionalCommits.scopes": [
+    "@meso-network/post-message-bus",
+    "@meso-network",
+    "@meso-network/meso-js",
+    "@meso-network/types"
+  ],
+  "editor.formatOnSave": true,
+  "editor.defaultFormatter": "esbenp.prettier-vscode",
+  // https://github.com/microsoft/vscode-eslint/issues/1620#issuecomment-1473305698
+  "eslint.experimental.useFlatConfig": true
+}

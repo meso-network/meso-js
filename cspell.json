@@ -1,0 +1,33 @@
+{
+  "version": "0.2",
+  "ignorePaths": [
+    "vite.config.ts.timestamp*",
+    "pnpm-lock.yaml",
+    "lib",
+    "*.tsbuildinfo",
+    "CHANGELOG.md",
+    "lib"
+  ],
+  "dictionaryDefinitions": [],
+  "dictionaries": [],
+  "words": [
+    "allowtransparency",
+    "caip",
+    "commitlint",
+    "devnet",
+    "iframes",
+    "iife",
+    "keyof",
+    "meso",
+    "onboarded",
+    "quickstart",
+    "runtimes",
+    "solana",
+    "tsbuildinfo",
+    "typecheck",
+    "webviews"
+  ],
+  "ignoreWords": [],
+  "ignoreRegExpList": ["/solana:(\\w+)/"],
+  "import": []
+}
