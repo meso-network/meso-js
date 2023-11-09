@@ -11,7 +11,7 @@ It is currently unavailable for standalone use.
 <details>
   <summary><strong>Contents</strong></summary>
 
-- [`@meso-network/post-message-bus`](#meso-devpost-message-bus)
+- [`@meso-network/post-message-bus`](#meso-networkpost-message-bus)
   - [Usage](#usage)
     - [From a parent frame (window)](#from-a-parent-frame-window)
     - [From inside an iframe](#from-inside-an-iframe)
