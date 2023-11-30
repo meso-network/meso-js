@@ -123,6 +123,17 @@ export enum Asset {
 export type USDAmount = `${number}${"." | ""}${number | ""}`;
 
 /**
+ * Screen position to launch the Meso experience.
+ */
+export enum Position {
+  TOP_RIGHT = "top-right",
+  BOTTOM_RIGHT = "bottom-right",
+  BOTTOM_LEFT = "bottom-left",
+  TOP_LEFT = "top-left",
+  CENTER = "center",
+}
+
+/**
  * Parameters to initialize the Meso experience.
  */
 export type TransferConfiguration = Readonly<{
@@ -151,6 +162,10 @@ export type TransferConfiguration = Readonly<{
    */
   destinationAsset: Asset;
   /**
+   * The position to launch the Meso experience.
+   */
+  position: Position;
+  /**
    * A handler to notify you when a message needs to be signed.
    */
   onSignMessageRequest: (message: string) => Promise<SignedMessageResult>;
@@ -170,6 +185,7 @@ export type TransferIframeParams = Pick<
   | "walletAddress"
   | "sourceAmount"
   | "destinationAsset"
+  | "position"
 > & {
   /** The version of meso-js. */
   version: string;

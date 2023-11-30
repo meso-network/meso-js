@@ -29,6 +29,7 @@ export const transfer = (
     destinationAsset,
     environment,
     partnerId,
+    position,
     onSignMessageRequest,
     onEvent,
   } = configuration;
@@ -40,6 +41,7 @@ export const transfer = (
     walletAddress,
     sourceAmount,
     destinationAsset,
+    position,
     version,
   });
   const bus = setupBus(apiHost, frame, onSignMessageRequest, onEvent);

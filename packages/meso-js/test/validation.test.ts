@@ -1,4 +1,4 @@
-import { Asset, Environment, Network } from "@meso-network/types";
+import { Asset, Environment, Network, Position } from "@meso-network/types";
 import { validateConfiguration } from "../src/validation";
 
 const onEvent = vi.fn();
@@ -271,6 +271,35 @@ describe("validateConfiguration", () => {
     `);
   });
 
+  test("non-Position emits", () => {
+    expect(
+      validateConfiguration({
+        onEvent,
+        sourceAmount: "1",
+        network: Network.ETHEREUM_MAINNET,
+        walletAddress: "0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48",
+        destinationAsset: Asset.ETH,
+        environment: Environment.SANDBOX,
+        partnerId: "meso-js-test",
+        // @ts-expect-error: Bypass type system to simulate runtime behavior
+        position: "bottom-center",
+      }),
+    ).toBe(false);
+    expect(onEvent).toHaveBeenCalledOnce();
+    expect(onEvent.mock.lastCall).toMatchInlineSnapshot(`
+      [
+        {
+          "kind": "CONFIGURATION_ERROR",
+          "payload": {
+            "error": {
+              "message": "\\"position\\" must be a supported Position: top-right,bottom-right,bottom-left,top-left,center.",
+            },
+          },
+        },
+      ]
+    `);
+  });
+
   test("non-function onSignMessageRequest emits", () => {
     expect(
       validateConfiguration({
@@ -281,6 +310,7 @@ describe("validateConfiguration", () => {
         destinationAsset: Asset.ETH,
         environment: Environment.SANDBOX,
         partnerId: "meso-js-test",
+        position: Position.TOP_RIGHT,
         // @ts-expect-error: Bypass type system to simulate runtime behavior
         onSignMessageRequest: "signedMessage",
       }),
@@ -310,6 +340,7 @@ describe("validateConfiguration", () => {
         destinationAsset: Asset.ETH,
         environment: Environment.SANDBOX,
         partnerId: "meso-js-test",
+        position: Position.TOP_RIGHT,
         onSignMessageRequest: vi.fn(),
       }),
     ).toBe(true);

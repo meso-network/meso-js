@@ -3,6 +3,7 @@ import {
   Network,
   Asset,
   Environment,
+  Position,
 } from "@meso-network/types";
 import { Mock } from "vitest";
 import { transfer } from "../src";
@@ -38,6 +39,7 @@ describe("transfer", () => {
     destinationAsset: Asset.ETH,
     environment: Environment.SANDBOX,
     partnerId: "partnerId",
+    position: Position.TOP_RIGHT,
     onSignMessageRequest: vi.fn(),
     onEvent: vi.fn(),
   };
@@ -66,6 +68,7 @@ describe("transfer", () => {
           "destinationAsset": "ETH",
           "network": "eip155:1",
           "partnerId": "partnerId",
+          "position": "top-right",
           "sourceAmount": "100",
           "version": "${version}",
           "walletAddress": "0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48",
