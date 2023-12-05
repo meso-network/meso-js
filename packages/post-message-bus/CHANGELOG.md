@@ -1,5 +1,7 @@
 # @meso-network/post-message-bus
 
+## 0.0.60
+
 ## 0.0.59
 
 ### Patch Changes

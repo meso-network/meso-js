@@ -1,5 +1,14 @@
 # @meso-network/meso-js
 
+## 0.0.60
+
+### Patch Changes
+
+- [#3](https://github.com/meso-network/meso-js/pull/3) [`567d2ef`](https://github.com/meso-network/meso-js/commit/567d2efc1c750f5d44491e445fed63a966ee0bf0) Thanks [@dseeto](https://github.com/dseeto)! - Introduce layout options for customization of positioning.
+
+- Updated dependencies []:
+  - @meso-network/post-message-bus@0.0.60
+
 ## 0.0.59
 
 ### Patch Changes
