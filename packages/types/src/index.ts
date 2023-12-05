@@ -134,6 +134,20 @@ export enum Position {
 }
 
 /**
+ * Configuration to customize how the Meso experience is launched and presented.
+ */
+export type Layout = {
+  /**
+   * The position to launch the Meso experience. Defaults to `Position.TOP_RIGHT`.
+   */
+  position?: Position;
+  /**
+   * A positive integer as a string (excluding units) representing the number of pixels from the edges of the viewport to position the Meso experience. Defaults to `0`.
+   */
+  offset?: string;
+};
+
+/**
  * Parameters to initialize the Meso experience.
  */
 export type TransferConfiguration = Readonly<{
@@ -162,13 +176,9 @@ export type TransferConfiguration = Readonly<{
    */
   destinationAsset: Asset;
   /**
-   * [Optional] The position to launch the Meso experience. Defaults to `Position.TOP_RIGHT`.
+   * Configuration related to how the Meso experience is presented.
    */
-  position?: Position;
-  /**
-   * [Optional] The number of pixels (>= 0, integer) from the edges of the window to position the Meso experience. Defaults to `0`.
-   */
-  offset?: string;
+  layout?: Layout;
   /**
    * A handler to notify you when a message needs to be signed.
    */
@@ -180,7 +190,7 @@ export type TransferConfiguration = Readonly<{
 }>;
 
 /**
- * Subset of TransferConfiguration keys passed to Meso experience iframe
+ * Subset of TransferConfiguration keys passed to Meso experience iframe.
  */
 export type TransferIframeParams = Pick<
   TransferConfiguration,
@@ -189,11 +199,12 @@ export type TransferIframeParams = Pick<
   | "walletAddress"
   | "sourceAmount"
   | "destinationAsset"
-> &
-  Required<Pick<TransferConfiguration, "position" | "offset">> & {
-    /** The version of meso-js. */
-    version: string;
-  };
+> & {
+  layoutPosition: NonNullable<Layout["position"]>;
+  layoutOffset: NonNullable<Layout["offset"]>;
+  /** The version of meso-js. */
+  version: string;
+};
 
 /**
  * The handler to the instance returned when calling `transfer()`.

@@ -7,6 +7,7 @@ import {
 import { Mock } from "vitest";
 import { transfer } from "../src";
 import { version } from "../package.json";
+import { DEFAULT_LAYOUT } from "../src/transfer";
 
 var validateConfigurationMock: Mock;
 vi.mock("../src/validation", async () => {
@@ -38,6 +39,7 @@ describe("transfer", () => {
     destinationAsset: Asset.ETH,
     environment: Environment.SANDBOX,
     partnerId: "partnerId",
+    layout: DEFAULT_LAYOUT,
     onSignMessageRequest: vi.fn(),
     onEvent: vi.fn(),
   };
@@ -64,10 +66,10 @@ describe("transfer", () => {
         "https://api.sandbox.meso.network",
         {
           "destinationAsset": "ETH",
+          "layoutOffset": "0",
+          "layoutPosition": "top-right",
           "network": "eip155:1",
-          "offset": "0",
           "partnerId": "partnerId",
-          "position": "top-right",
           "sourceAmount": "100",
           "version": "${version}",
           "walletAddress": "0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48",

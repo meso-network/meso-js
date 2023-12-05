@@ -3,6 +3,7 @@ import {
   TransferInstance,
   TransferConfiguration,
   Position,
+  Layout,
 } from "@meso-network/types";
 import { validateConfiguration } from "./validation";
 import { setupBus } from "./bus";
@@ -18,6 +19,11 @@ const apiHosts: { readonly [key in Environment]: string } = {
   [Environment.PRODUCTION]: "https://api.meso.network",
 };
 
+export const DEFAULT_LAYOUT: Required<Layout> = {
+  position: Position.TOP_RIGHT,
+  offset: "0",
+};
+
 export const transfer = ({
   sourceAmount,
   network,
@@ -25,11 +31,11 @@ export const transfer = ({
   destinationAsset,
   environment,
   partnerId,
-  position = Position.TOP_RIGHT,
-  offset = "0",
+  layout = DEFAULT_LAYOUT,
   onSignMessageRequest,
   onEvent,
 }: TransferConfiguration): TransferInstance => {
+  const mergedLayout = { ...DEFAULT_LAYOUT, ...layout };
   const configuration = {
     sourceAmount,
     network,
@@ -37,8 +43,7 @@ export const transfer = ({
     destinationAsset,
     environment,
     partnerId,
-    position,
-    offset,
+    layout: mergedLayout,
     onSignMessageRequest,
     onEvent,
   };
@@ -51,8 +56,8 @@ export const transfer = ({
     walletAddress,
     sourceAmount,
     destinationAsset,
-    position,
-    offset,
+    layoutPosition: mergedLayout.position,
+    layoutOffset: mergedLayout.offset,
     version,
   });
   const bus = setupBus(apiHost, frame, onSignMessageRequest, onEvent);

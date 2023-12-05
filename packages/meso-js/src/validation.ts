@@ -26,8 +26,7 @@ export const validateConfiguration = ({
   destinationAsset,
   environment,
   partnerId,
-  position,
-  offset,
+  layout,
   onSignMessageRequest,
   onEvent,
 }: TransferConfiguration): boolean => {
@@ -100,7 +99,7 @@ export const validateConfiguration = ({
       payload: { error: { message: `"partnerId" must be provided.` } },
     });
     return false;
-  } else if (!isValidPosition(position)) {
+  } else if (!layout || !isValidPosition(layout.position)) {
     onEvent({
       kind: EventKind.CONFIGURATION_ERROR,
       payload: {
@@ -113,10 +112,11 @@ export const validateConfiguration = ({
     });
     return false;
   } else if (
-    !offset ||
-    typeof offset !== "string" ||
-    !/^\d+$/.test(offset) ||
-    parseInt(offset, 10) < 0
+    !layout ||
+    !layout.offset ||
+    typeof layout.offset !== "string" ||
+    !/^\d+$/.test(layout.offset) ||
+    parseInt(layout.offset, 10) < 0
   ) {
     onEvent({
       kind: EventKind.CONFIGURATION_ERROR,

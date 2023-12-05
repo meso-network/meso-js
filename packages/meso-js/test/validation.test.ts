@@ -282,7 +282,7 @@ describe("validateConfiguration", () => {
         environment: Environment.SANDBOX,
         partnerId: "meso-js-test",
         // @ts-expect-error: Bypass type system to simulate runtime behavior
-        position: "bottom-center",
+        layout: { position: "bottom-center" },
       }),
     ).toBe(false);
     expect(onEvent).toHaveBeenCalledOnce();
@@ -311,8 +311,7 @@ describe("validateConfiguration", () => {
         destinationAsset: Asset.ETH,
         environment: Environment.SANDBOX,
         partnerId: "meso-js-test",
-        position: Position.TOP_RIGHT,
-        offset: "0px",
+        layout: { position: Position.TOP_RIGHT, offset: "0px" },
       }),
     ).toBe(false);
     expect(onEvent).toHaveBeenCalledOnce();
@@ -341,8 +340,7 @@ describe("validateConfiguration", () => {
         destinationAsset: Asset.ETH,
         environment: Environment.SANDBOX,
         partnerId: "meso-js-test",
-        position: Position.TOP_RIGHT,
-        offset: "-10",
+        layout: { position: Position.TOP_RIGHT, offset: "-10" },
       }),
     ).toBe(false);
     expect(onEvent).toHaveBeenCalledOnce();
@@ -370,8 +368,7 @@ describe("validateConfiguration", () => {
         destinationAsset: Asset.ETH,
         environment: Environment.SANDBOX,
         partnerId: "meso-js-test",
-        position: Position.TOP_RIGHT,
-        offset: "0",
+        layout: { position: Position.TOP_RIGHT, offset: "0" },
         // @ts-expect-error: Bypass type system to simulate runtime behavior
         onSignMessageRequest: "signedMessage",
       }),
@@ -400,8 +397,7 @@ describe("validateConfiguration", () => {
       destinationAsset: Asset.ETH,
       environment: Environment.SANDBOX,
       partnerId: "meso-js-test",
-      position: Position.TOP_RIGHT,
-      offset: "0",
+      layout: { position: Position.TOP_RIGHT, offset: "0" },
       onSignMessageRequest: vi.fn(),
     });
     expect(onEvent).not.toHaveBeenCalled();
