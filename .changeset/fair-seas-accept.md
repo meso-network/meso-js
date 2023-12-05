@@ -3,4 +3,4 @@
 "@meso-network/types": patch
 ---
 
-add position argument to transfer config
+Introduce layout options for customization of positioning.
