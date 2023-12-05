@@ -176,7 +176,7 @@ export type TransferConfiguration = Readonly<{
    */
   destinationAsset: Asset;
   /**
-   * Configuration related to how the Meso experience is presented.
+   * Configuration to customize how the Meso experience is launched and presented.
    */
   layout?: Layout;
   /**
