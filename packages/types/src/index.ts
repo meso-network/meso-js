@@ -123,6 +123,31 @@ export enum Asset {
 export type USDAmount = `${number}${"." | ""}${number | ""}`;
 
 /**
+ * Screen position to launch the Meso experience.
+ */
+export enum Position {
+  TOP_RIGHT = "top-right",
+  BOTTOM_RIGHT = "bottom-right",
+  BOTTOM_LEFT = "bottom-left",
+  TOP_LEFT = "top-left",
+  CENTER = "center",
+}
+
+/**
+ * Configuration to customize how the Meso experience is launched and presented.
+ */
+export type Layout = {
+  /**
+   * The position to launch the Meso experience. Defaults to `Position.TOP_RIGHT`.
+   */
+  position?: Position;
+  /**
+   * A positive integer as a string (excluding units) representing the number of pixels from the edges of the viewport to position the Meso experience. Defaults to `0`.
+   */
+  offset?: string;
+};
+
+/**
  * Parameters to initialize the Meso experience.
  */
 export type TransferConfiguration = Readonly<{
@@ -151,6 +176,10 @@ export type TransferConfiguration = Readonly<{
    */
   destinationAsset: Asset;
   /**
+   * Configuration to customize how the Meso experience is launched and presented.
+   */
+  layout?: Layout;
+  /**
    * A handler to notify you when a message needs to be signed.
    */
   onSignMessageRequest: (message: string) => Promise<SignedMessageResult>;
@@ -161,7 +190,7 @@ export type TransferConfiguration = Readonly<{
 }>;
 
 /**
- * Subset of TransferConfiguration keys passed to Meso experience iframe
+ * Subset of TransferConfiguration keys passed to Meso experience iframe.
  */
 export type TransferIframeParams = Pick<
   TransferConfiguration,
@@ -171,6 +200,8 @@ export type TransferIframeParams = Pick<
   | "sourceAmount"
   | "destinationAsset"
 > & {
+  layoutPosition: NonNullable<Layout["position"]>;
+  layoutOffset: NonNullable<Layout["offset"]>;
   /** The version of meso-js. */
   version: string;
 };

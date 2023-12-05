@@ -3,6 +3,7 @@ import {
   Environment,
   EventKind,
   Network,
+  Position,
   TransferConfiguration,
 } from "@meso-network/types";
 
@@ -12,6 +13,12 @@ type NetworkValue = `${Network}`;
 const isValidNetwork = (network: NetworkValue) =>
   Object.values(Network).some((value) => value === network);
 
+/** The values from the `Position` enum. */
+type PositionValue = `${Position}`;
+
+const isValidPosition = (position?: PositionValue) =>
+  position && Object.values(Position).some((value) => value === position);
+
 export const validateConfiguration = ({
   sourceAmount,
   network,
@@ -19,6 +26,7 @@ export const validateConfiguration = ({
   destinationAsset,
   environment,
   partnerId,
+  layout,
   onSignMessageRequest,
   onEvent,
 }: TransferConfiguration): boolean => {
@@ -89,6 +97,32 @@ export const validateConfiguration = ({
     onEvent({
       kind: EventKind.CONFIGURATION_ERROR,
       payload: { error: { message: `"partnerId" must be provided.` } },
+    });
+    return false;
+  } else if (!layout || !isValidPosition(layout.position)) {
+    onEvent({
+      kind: EventKind.CONFIGURATION_ERROR,
+      payload: {
+        error: {
+          message: `"position" must be a supported Position: ${Object.values(
+            Position,
+          )}.`,
+        },
+      },
+    });
+    return false;
+  } else if (
+    !layout ||
+    !layout.offset ||
+    typeof layout.offset !== "string" ||
+    !/^\d+$/.test(layout.offset) ||
+    parseInt(layout.offset, 10) < 0
+  ) {
+    onEvent({
+      kind: EventKind.CONFIGURATION_ERROR,
+      payload: {
+        error: { message: `"offset" must be a non-negative integer.` },
+      },
     });
     return false;
   } else if (typeof onSignMessageRequest !== "function") {

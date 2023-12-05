@@ -1,4 +1,4 @@
-import { Asset, Environment, Network } from "@meso-network/types";
+import { Asset, Environment, Network, Position } from "@meso-network/types";
 import { validateConfiguration } from "../src/validation";
 
 const onEvent = vi.fn();
@@ -271,6 +271,93 @@ describe("validateConfiguration", () => {
     `);
   });
 
+  test("non-Position emits", () => {
+    expect(
+      validateConfiguration({
+        onEvent,
+        sourceAmount: "1",
+        network: Network.ETHEREUM_MAINNET,
+        walletAddress: "0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48",
+        destinationAsset: Asset.ETH,
+        environment: Environment.SANDBOX,
+        partnerId: "meso-js-test",
+        // @ts-expect-error: Bypass type system to simulate runtime behavior
+        layout: { position: "bottom-center" },
+      }),
+    ).toBe(false);
+    expect(onEvent).toHaveBeenCalledOnce();
+    expect(onEvent.mock.lastCall).toMatchInlineSnapshot(`
+      [
+        {
+          "kind": "CONFIGURATION_ERROR",
+          "payload": {
+            "error": {
+              "message": "\\"position\\" must be a supported Position: top-right,bottom-right,bottom-left,top-left,center.",
+            },
+          },
+        },
+      ]
+    `);
+  });
+
+  test("non-number string offset emits", () => {
+    expect(
+      // @ts-expect-error: Bypass type system to simulate runtime behavior
+      validateConfiguration({
+        onEvent,
+        sourceAmount: "1",
+        network: Network.ETHEREUM_MAINNET,
+        walletAddress: "0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48",
+        destinationAsset: Asset.ETH,
+        environment: Environment.SANDBOX,
+        partnerId: "meso-js-test",
+        layout: { position: Position.TOP_RIGHT, offset: "0px" },
+      }),
+    ).toBe(false);
+    expect(onEvent).toHaveBeenCalledOnce();
+    expect(onEvent.mock.lastCall).toMatchInlineSnapshot(`
+      [
+        {
+          "kind": "CONFIGURATION_ERROR",
+          "payload": {
+            "error": {
+              "message": "\\"offset\\" must be a non-negative integer.",
+            },
+          },
+        },
+      ]
+    `);
+  });
+
+  test("negative number string offset emits", () => {
+    expect(
+      // @ts-expect-error: Bypass type system to simulate runtime behavior
+      validateConfiguration({
+        onEvent,
+        sourceAmount: "1",
+        network: Network.ETHEREUM_MAINNET,
+        walletAddress: "0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48",
+        destinationAsset: Asset.ETH,
+        environment: Environment.SANDBOX,
+        partnerId: "meso-js-test",
+        layout: { position: Position.TOP_RIGHT, offset: "-10" },
+      }),
+    ).toBe(false);
+    expect(onEvent).toHaveBeenCalledOnce();
+    expect(onEvent.mock.lastCall).toMatchInlineSnapshot(`
+      [
+        {
+          "kind": "CONFIGURATION_ERROR",
+          "payload": {
+            "error": {
+              "message": "\\"offset\\" must be a non-negative integer.",
+            },
+          },
+        },
+      ]
+    `);
+  });
+
   test("non-function onSignMessageRequest emits", () => {
     expect(
       validateConfiguration({
@@ -281,6 +368,7 @@ describe("validateConfiguration", () => {
         destinationAsset: Asset.ETH,
         environment: Environment.SANDBOX,
         partnerId: "meso-js-test",
+        layout: { position: Position.TOP_RIGHT, offset: "0" },
         // @ts-expect-error: Bypass type system to simulate runtime behavior
         onSignMessageRequest: "signedMessage",
       }),
@@ -301,18 +389,18 @@ describe("validateConfiguration", () => {
   });
 
   test("valid configuration returns true", () => {
-    expect(
-      validateConfiguration({
-        onEvent,
-        sourceAmount: "1",
-        network: Network.ETHEREUM_MAINNET,
-        walletAddress: "0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48",
-        destinationAsset: Asset.ETH,
-        environment: Environment.SANDBOX,
-        partnerId: "meso-js-test",
-        onSignMessageRequest: vi.fn(),
-      }),
-    ).toBe(true);
+    const valid = validateConfiguration({
+      onEvent,
+      sourceAmount: "1",
+      network: Network.ETHEREUM_MAINNET,
+      walletAddress: "0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48",
+      destinationAsset: Asset.ETH,
+      environment: Environment.SANDBOX,
+      partnerId: "meso-js-test",
+      layout: { position: Position.TOP_RIGHT, offset: "0" },
+      onSignMessageRequest: vi.fn(),
+    });
     expect(onEvent).not.toHaveBeenCalled();
+    expect(valid).toBe(true);
   });
 });
