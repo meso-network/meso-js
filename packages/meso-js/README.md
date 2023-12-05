@@ -313,7 +313,8 @@ type TransferConfiguration = {
   destinationAsset: Asset; // The token the user will receive ("ETH" | "SOL" | "USDC")
   network: Network; // The network to use for the transfer
   walletAddress: string; // The user's wallet address obtained at runtime by your application
-  position: Position; // The position to launch the Meso experience
+  position: Position; // [Optional] The position to launch the Meso experience. Defaults to `Position.TOP_RIGHT`.
+  offset: string; // [Optional] The number of pixels (>= 0, integer) from the edges of the window to position the Meso experience. Defaults to `0`.
   onSignMessageRequest: (message: string) => Promise<SignedMessageResult>; // A callback that is fired when you need to collect the user's signature via their wallet.
   onEvent?: (event: MesoEvent) => void; // An optional handler to notify you when an event or error occurs. This is useful for tracking the state of the user through the experience.
 };

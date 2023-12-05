@@ -16,6 +16,7 @@ describe("setupFrame", () => {
     sourceAmount: "100",
     destinationAsset: Asset.ETH,
     position: Position.TOP_RIGHT,
+    offset: "0",
     version: "1.0.0",
   };
 
@@ -29,7 +30,7 @@ describe("setupFrame", () => {
     expect(setupFrameRes.element.attributes).toMatchInlineSnapshot(`
       NamedNodeMap {
         "allowtransparency": "true",
-        "src": "https://api.sandbox.meso.network/app?partnerId=partnerId&network=eip155%3A1&walletAddress=0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48&sourceAmount=100&destinationAsset=ETH&position=top-right&version=1.0.0",
+        "src": "https://api.sandbox.meso.network/app?partnerId=partnerId&network=eip155%3A1&walletAddress=0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48&sourceAmount=100&destinationAsset=ETH&position=top-right&offset=0&version=1.0.0",
         "style": "position: fixed; left: 0px; top: 0px; width: 100%; height: 100%; z-index: 9999; box-sizing: border-box; background-color: transparent;",
       }
     `);

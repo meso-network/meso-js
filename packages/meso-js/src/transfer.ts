@@ -2,6 +2,7 @@ import {
   Environment,
   TransferInstance,
   TransferConfiguration,
+  Position,
 } from "@meso-network/types";
 import { validateConfiguration } from "./validation";
 import { setupBus } from "./bus";
@@ -17,12 +18,19 @@ const apiHosts: { readonly [key in Environment]: string } = {
   [Environment.PRODUCTION]: "https://api.meso.network",
 };
 
-export const transfer = (
-  configuration: TransferConfiguration,
-): TransferInstance => {
-  if (!validateConfiguration(configuration)) return { destroy: () => {} };
-
-  const {
+export const transfer = ({
+  sourceAmount,
+  network,
+  walletAddress,
+  destinationAsset,
+  environment,
+  partnerId,
+  position = Position.TOP_RIGHT,
+  offset = "0",
+  onSignMessageRequest,
+  onEvent,
+}: TransferConfiguration): TransferInstance => {
+  const configuration = {
     sourceAmount,
     network,
     walletAddress,
@@ -30,9 +38,11 @@ export const transfer = (
     environment,
     partnerId,
     position,
+    offset,
     onSignMessageRequest,
     onEvent,
-  } = configuration;
+  };
+  if (!validateConfiguration(configuration)) return { destroy: () => {} };
 
   const apiHost = apiHosts[environment];
   const frame = setupFrame(apiHost, {
@@ -42,6 +52,7 @@ export const transfer = (
     sourceAmount,
     destinationAsset,
     position,
+    offset,
     version,
   });
   const bus = setupBus(apiHost, frame, onSignMessageRequest, onEvent);

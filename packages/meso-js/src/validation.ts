@@ -16,8 +16,8 @@ const isValidNetwork = (network: NetworkValue) =>
 /** The values from the `Position` enum. */
 type PositionValue = `${Position}`;
 
-const isValidPosition = (position: PositionValue) =>
-  Object.values(Position).some((value) => value === position);
+const isValidPosition = (position?: PositionValue) =>
+  position && Object.values(Position).some((value) => value === position);
 
 export const validateConfiguration = ({
   sourceAmount,
@@ -27,6 +27,7 @@ export const validateConfiguration = ({
   environment,
   partnerId,
   position,
+  offset,
   onSignMessageRequest,
   onEvent,
 }: TransferConfiguration): boolean => {
@@ -108,6 +109,19 @@ export const validateConfiguration = ({
             Position,
           )}.`,
         },
+      },
+    });
+    return false;
+  } else if (
+    !offset ||
+    typeof offset !== "string" ||
+    !/^\d+$/.test(offset) ||
+    parseInt(offset, 10) < 0
+  ) {
+    onEvent({
+      kind: EventKind.CONFIGURATION_ERROR,
+      payload: {
+        error: { message: `"offset" must be a non-negative integer.` },
       },
     });
     return false;

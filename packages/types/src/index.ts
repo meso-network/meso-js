@@ -162,9 +162,13 @@ export type TransferConfiguration = Readonly<{
    */
   destinationAsset: Asset;
   /**
-   * The position to launch the Meso experience.
+   * [Optional] The position to launch the Meso experience. Defaults to `Position.TOP_RIGHT`.
    */
-  position: Position;
+  position?: Position;
+  /**
+   * [Optional] The number of pixels (>= 0, integer) from the edges of the window to position the Meso experience. Defaults to `0`.
+   */
+  offset?: string;
   /**
    * A handler to notify you when a message needs to be signed.
    */
@@ -185,11 +189,11 @@ export type TransferIframeParams = Pick<
   | "walletAddress"
   | "sourceAmount"
   | "destinationAsset"
-  | "position"
-> & {
-  /** The version of meso-js. */
-  version: string;
-};
+> &
+  Required<Pick<TransferConfiguration, "position" | "offset">> & {
+    /** The version of meso-js. */
+    version: string;
+  };
 
 /**
  * The handler to the instance returned when calling `transfer()`.
