@@ -2,14 +2,14 @@ import {
   Asset,
   Network,
   Position,
-  TransferIframeParams,
+  SerializedTransferIframeParams,
 } from "@meso-network/types";
 import { setupFrame } from "../src/frame";
 import "@testing-library/jest-dom/vitest";
 
 describe("setupFrame", () => {
   const apiHost = "https://api.sandbox.meso.network";
-  const params: TransferIframeParams = {
+  const params: SerializedTransferIframeParams = {
     partnerId: "partnerId",
     network: Network.ETHEREUM_MAINNET,
     walletAddress: "0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48",

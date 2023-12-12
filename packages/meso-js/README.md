@@ -30,6 +30,9 @@ used in a vanilla JavaScript application as well.
   - [Integration lifecycle](#integration-lifecycle)
   - [Reference](#reference)
     - [`transfer`](#transfer)
+    - [Customizing the layout](#customizing-the-layout)
+      - [Position](#position)
+      - [Offset](#offset)
     - [Handling errors](#handling-errors)
       - [Configuration errors](#configuration-errors)
       - [Other errors](#other-errors)
@@ -347,9 +350,17 @@ enum Position {
   CENTER = "center",
 }
 
+/**
+ * A stringified positive integer (excluding units) representing a number of pixels.
+ */
+export type PixelValue = `${number}`;
+
 type Layout = {
   position?: Position;
-  offset?: string;
+  offset?:
+    | PixelValue
+    | { horizontal: PixelValue, vertical?: PixelValue}
+    | { horizontal?: PixelValue, vertical: PixelValue};
 };
 ```
 
@@ -371,6 +382,81 @@ type TransferInstance = {
 const { destroy } = transfer({ ... });
 
 destroy(); // The meso iframe is unmounted. No more events/callbacks will fire.
+```
+
+### Customizing the layout
+
+The Meso experience renders as a full-viewport modal. However, you can provide
+configuration to set the positioning of the rendered UI. This is helpful in
+cases where you want the application to render in a more precise location.
+
+You can customize the `Position` of the rendered UI and the offset (from the
+edge of the viewport).
+
+#### Position
+
+When initializing the Meso experience, you can provide a `position` value of:
+
+- `TOP_RIGHT` (default)
+- `BOTTOM_RIGHT`
+- `BOTTOM_LEFT`
+- `TOP_LEFT`
+- `CENTER`
+
+Example:
+
+```typescript
+transfer({
+  // ... other params
+  layout: {
+    position: Position.BOTTOM_RIGHT,
+  },
+});
+```
+
+#### Offset
+
+You can provide a horizontal and vertical offset to the rendered UI to add more
+padding from the edge of the viewport. These values are provided as stringified
+non-negative integers. You _do not_ need to provide units.
+
+Example:
+
+```typescript
+transfer({
+  // ... other params
+  layout: {
+    position: Position.TOP_RIGHT,
+    offset: {
+      horizontal: "50", // An extra 50px of right-padding will be applied
+      vertical: "100", // An extra 100px of top-padding will be applied
+    },
+  },
+});
+```
+
+The horizontal and vertical offsets will be applied based on the
+[`layout.position`](#position) value you provided.
+
+| Position       | Horizontal offset     | Vertical offset       |
+| -------------- | --------------------- | --------------------- |
+| `TOP_RIGHT`    | Right padding         | Top padding           |
+| `BOTTOM_RIGHT` | Right padding         | Bottom padding        |
+| `BOTTOM_LEFT`  | Left padding          | Bottom padding        |
+| `TOP_LEFT`     | Left padding          | Top padding           |
+| `CENTER`       | No padding is applied | No padding is applied |
+
+If you would like to use the same value for horizontal and vertical offset, you
+can provide a string value:
+
+```typescript
+transfer({
+  // ... other params
+  layout: {
+    position: Position.TOP_RIGHT,
+    offset: "50", // An extra 50px of right-padding and 50px of top-padding will be applied
+  },
+});
 ```
 
 ### Handling errors

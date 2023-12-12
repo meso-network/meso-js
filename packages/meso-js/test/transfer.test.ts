@@ -9,10 +9,10 @@ import { transfer } from "../src";
 import { version } from "../package.json";
 import { DEFAULT_LAYOUT } from "../src/transfer";
 
-var validateConfigurationMock: Mock;
-vi.mock("../src/validation", async () => {
-  validateConfigurationMock = vi.fn();
-  return { validateConfiguration: validateConfigurationMock };
+var validateTransferConfigurationMock: Mock;
+vi.mock("../src/validateTransferConfiguration", async () => {
+  validateTransferConfigurationMock = vi.fn();
+  return { validateTransferConfiguration: validateTransferConfigurationMock };
 });
 
 var setupBusMock: Mock;
@@ -45,7 +45,7 @@ describe("transfer", () => {
   };
 
   test("invalid configuration returns without setting up frame or bus", () => {
-    validateConfigurationMock.mockImplementationOnce(() => false);
+    validateTransferConfigurationMock.mockImplementationOnce(() => false);
     transfer(configuration);
 
     expect(setupFrameMock).not.toHaveBeenCalled();
@@ -53,7 +53,7 @@ describe("transfer", () => {
   });
 
   test("valid configuration sets up frame, bus, and returns destroy method to clean up both", () => {
-    validateConfigurationMock.mockImplementationOnce(() => true);
+    validateTransferConfigurationMock.mockImplementationOnce(() => true);
     const frameRemoveMock = vi.fn();
     setupFrameMock.mockImplementationOnce(() => ({ remove: frameRemoveMock }));
     const busDestroyMock = vi.fn();
