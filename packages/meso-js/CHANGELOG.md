@@ -1,5 +1,14 @@
 # @meso-network/meso-js
 
+## 0.0.61
+
+### Patch Changes
+
+- [#5](https://github.com/meso-network/meso-js/pull/5) [`959f37b`](https://github.com/meso-network/meso-js/commit/959f37ba7410e03d0d37c70bd374d269fe10c826) Thanks [@kyledetella](https://github.com/kyledetella)! - Allow passing in `layout.offset.horizontal` and `layout.offset.vertical` ad configuration to `transfer()`.
+
+- Updated dependencies []:
+  - @meso-network/post-message-bus@0.0.61
+
 ## 0.0.60
 
 ### Patch Changes
