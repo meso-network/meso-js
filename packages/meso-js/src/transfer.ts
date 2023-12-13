@@ -5,7 +5,7 @@ import {
   Position,
   Layout,
 } from "@meso-network/types";
-import { validateConfiguration } from "./validation";
+import { validateTransferConfiguration } from "./validateTransferConfiguration";
 import { setupBus } from "./bus";
 import { setupFrame } from "./frame";
 import { version } from "../package.json";
@@ -47,7 +47,8 @@ export const transfer = ({
     onSignMessageRequest,
     onEvent,
   };
-  if (!validateConfiguration(configuration)) return { destroy: () => {} };
+  if (!validateTransferConfiguration(configuration))
+    return { destroy: () => {} };
 
   const apiHost = apiHosts[environment];
   const frame = setupFrame(apiHost, {
@@ -57,7 +58,10 @@ export const transfer = ({
     sourceAmount,
     destinationAsset,
     layoutPosition: mergedLayout.position,
-    layoutOffset: mergedLayout.offset,
+    layoutOffset:
+      typeof mergedLayout.offset === "string"
+        ? mergedLayout.offset
+        : JSON.stringify(mergedLayout.offset),
     version,
   });
   const bus = setupBus(apiHost, frame, onSignMessageRequest, onEvent);

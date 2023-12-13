@@ -27,6 +27,9 @@
     "url": "git+https://github.com/meso-network/meso-js.git",
     "directory": "packages/meso-js"
   },
+  "dependencies": {
+    "@meso-network/types": "workspace:*"
+  },
   "devDependencies": {
     "jsdom": "^22.1.0"
   }

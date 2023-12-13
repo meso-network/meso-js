@@ -134,6 +134,11 @@ export enum Position {
 }
 
 /**
+ * A stringified positive integer (excluding units) representing a number of pixels.
+ */
+export type PixelValue = `${number}`;
+
+/**
  * Configuration to customize how the Meso experience is launched and presented.
  */
 export type Layout = {
@@ -142,9 +147,46 @@ export type Layout = {
    */
   position?: Position;
   /**
-   * A positive integer as a string (excluding units) representing the number of pixels from the edges of the viewport to position the Meso experience. Defaults to `0`.
+   * The number of pixels from the edges of the viewport to position the Meso experience.
+   *
+   * Offset values are additive. By default, Meso adds it's own `16px` offset.
+   *
+   * Providing a single value (e.g. `"10"`) will apply the offset to both the `x` and `y` axes.
+   *
+   * If an object specifying the `horizontal` or `vertical` values is provided, the offset will be applied to each axis respectively.
+   * Omitting a value in this object will default to `"0"`.
+   *
+   * **Examples:**
+   *
+   * - `"10"` – Will apply a 10px offset to the Meso experience.
+   * - `{ horizontal: "10" }` – Will apply a 10px offset horizontally (relative to the assigned `Position`) and 0 to the vertical offset.
+   * - `{ vertical: "10" }` – Will apply a 10px offset vertically (relative to the assigned `Position`) and 0 to the horizontal offset.
+   * - `{ horizontal: "10", vertical: "25" }` – Will apply a 10px offset 25px offset to the horizontal and vertical axes respectively (relative to the assigned `Position`).
+   *
+   * If no offset is provided, this value defaults to `"0"`.
    */
-  offset?: string;
+  offset?:
+    | PixelValue
+    | {
+        /**
+         * A value representing the horizontal (x-axis) offset relative to the assigned `Position`.
+         */
+        horizontal?: PixelValue;
+        /**
+         * A value representing the vertical (y-axis) offset relative to the assigned `Position`.
+         */
+        vertical: PixelValue;
+      }
+    | {
+        /**
+         * A value representing the horizontal (x-axis) offset relative to the assigned `Position`.
+         */
+        horizontal: PixelValue;
+        /**
+         * A value representing the vertical (y-axis) offset relative to the assigned `Position`.
+         */
+        vertical?: PixelValue;
+      };
 };
 
 /**
@@ -190,7 +232,7 @@ export type TransferConfiguration = Readonly<{
 }>;
 
 /**
- * Subset of TransferConfiguration keys passed to Meso experience iframe.
+ * Configuration that will be serialized to query params for the Transfer App.
  */
 export type TransferIframeParams = Pick<
   TransferConfiguration,
@@ -205,6 +247,21 @@ export type TransferIframeParams = Pick<
   /** The version of meso-js. */
   version: string;
 };
+
+/**
+ * The serialized configuration sent to the Transfer App as a query string.
+ */
+export type SerializedTransferIframeParams = Record<
+  | "partnerId"
+  | "network"
+  | "walletAddress"
+  | "sourceAmount"
+  | "destinationAsset"
+  | "layoutPosition"
+  | "layoutOffset"
+  | "version",
+  string
+>;
 
 /**
  * The handler to the instance returned when calling `transfer()`.

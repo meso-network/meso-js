@@ -1,6 +1,9 @@
-import { TransferIframeParams } from "@meso-network/types";
+import { SerializedTransferIframeParams } from "@meso-network/types";
 
-export const setupFrame = (apiHost: string, params: TransferIframeParams) => {
+export const setupFrame = (
+  apiHost: string,
+  params: SerializedTransferIframeParams,
+) => {
   const queryString = new URLSearchParams(params).toString();
   const iframe = injectFullScreenIframe(`${apiHost}/app?${queryString}`);
 
