@@ -11,9 +11,6 @@
     "README.md",
     "CHANGELOG.md"
   ],
-  "publishConfig": {
-    "access": "restricted"
-  },
   "scripts": {
     "typecheck": "tsc -b",
     "build": "vite build",
