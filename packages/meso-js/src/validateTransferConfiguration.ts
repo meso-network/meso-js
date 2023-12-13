@@ -3,7 +3,6 @@ import {
   Environment,
   EventKind,
   Network,
-  Position,
   TransferConfiguration,
 } from "@meso-network/types";
 import { validateLayout } from "./validateLayout";
@@ -13,12 +12,6 @@ type NetworkValue = `${Network}`;
 
 const isValidNetwork = (network: NetworkValue) =>
   Object.values(Network).some((value) => value === network);
-
-/** The values from the `Position` enum. */
-type PositionValue = `${Position}`;
-
-const isValidPosition = (position?: PositionValue) =>
-  position && Object.values(Position).some((value) => value === position);
 
 export const validateTransferConfiguration = ({
   sourceAmount,

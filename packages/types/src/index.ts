@@ -149,6 +149,8 @@ export type Layout = {
   /**
    * The number of pixels from the edges of the viewport to position the Meso experience.
    *
+   * Offset values are additive. By default, Meso adds it's own `16px` offset.
+   *
    * Providing a single value (e.g. `"10"`) will apply the offset to both the `x` and `y` axes.
    *
    * If an object specifying the `horizontal` or `vertical` values is provided, the offset will be applied to each axis respectively.
