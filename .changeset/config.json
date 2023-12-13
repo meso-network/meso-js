@@ -6,11 +6,10 @@
   ],
 
   "commit": false,
-  "fixed": [
-    ["@meso-network/meso-js", "@meso-network/post-message-bus"]
+  "linked": [
+    ["@meso-network/meso-js", "@meso-network/post-message-bus", "@meso-network/types"]
   ],
-  "linked": [],
-  "access": "restricted",
+  "access": "public",
   "baseBranch": "main",
   "updateInternalDependencies": "patch",
   "ignore": []
