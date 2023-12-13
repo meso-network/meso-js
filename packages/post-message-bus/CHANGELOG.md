@@ -1,5 +1,11 @@
 # @meso-network/post-message-bus
 
+## 0.0.63
+
+### Patch Changes
+
+- [#9](https://github.com/meso-network/meso-js/pull/9) [`ac19749`](https://github.com/meso-network/meso-js/commit/ac1974988a443071d6d7fc4c5d4d5591c0fe7cb1) Thanks [@kyledetella](https://github.com/kyledetella)! - (Internal code only): Use relative paths to reference types in `post-message-bus`.
+
 ## 0.0.62
 
 ### Patch Changes
