@@ -77,10 +77,6 @@ importers:
         version: 22.1.0
 
   packages/post-message-bus:
-    dependencies:
-      '@meso-network/types':
-        specifier: workspace:*
-        version: link:../types
     devDependencies:
       jsdom:
         specifier: ^22.1.0
