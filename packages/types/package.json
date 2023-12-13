@@ -1,6 +1,6 @@
 {
   "name": "@meso-network/types",
-  "version": "0.0.61",
+  "version": "0.0.62",
   "description": "Common TypeScript definitions for @meso-network packages.",
   "main": "src/index.ts",
   "types": "src/index.ts",
