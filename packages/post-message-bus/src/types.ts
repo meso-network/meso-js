@@ -1,4 +1,4 @@
-import { Transfer, MesoError } from "@meso-network/types";
+import { Transfer, MesoError } from "../../types";
 
 /**
  * Kind of messages sent between the Meso experience and parent window.
