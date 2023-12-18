@@ -59,7 +59,7 @@ describe("validateTransferConfiguration", () => {
           "kind": "CONFIGURATION_ERROR",
           "payload": {
             "error": {
-              "message": "\\"network\\" must be a supported network: eip155:1,eip155:5,solana:5eykt4UsFv8P8NJdTREpY1vzqKqZKvdp,solana:EtWTRABZaYq6iMfeYKouRu166VU2xqa1,solana:4uhcVJyU9pJkvQyS88uRDiswHXSCkY3z.",
+              "message": "\\"network\\" must be a supported network: eip155:1,solana:5eykt4UsFv8P8NJdTREpY1vzqKqZKvdp.",
             },
           },
         },
