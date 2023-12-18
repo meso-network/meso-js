@@ -1,5 +1,11 @@
 # @meso-network/types
 
+## 0.0.64
+
+### Patch Changes
+
+- [#11](https://github.com/meso-network/meso-js/pull/11) [`5646396`](https://github.com/meso-network/meso-js/commit/5646396c721304a3cb73f91032f20dab1af39a46) Thanks [@kyledetella](https://github.com/kyledetella)! - Remove testnets from `transfer` configuration.
+
 ## 0.0.63
 
 ### Patch Changes
