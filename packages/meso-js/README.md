@@ -154,7 +154,7 @@ buyCrypto.addEventListener("click", () => {
     environment: Environment.SANDBOX, // SANDBOX | PRODUCTION
     sourceAmount: "100", // The amount (in USD) the user will spend
     destinationAsset: Asset.ETH, // The token the user will receive ("ETH" | "SOL" | "USDC")
-    network: Network.ETHEREUM_GOERLI, // The network to use for the transfer
+    network: Network.ETHEREUM_MAINNET, // The network to use for the transfer
     walletAddress: "<WALLET_ADDRESS>", // The user's wallet address obtained at runtime by your application
 
     // A callback to handle events throughout the integration lifecycle
@@ -222,7 +222,7 @@ export const BuyCrypto = () => {
       environment: Environment.SANDBOX, // SANDBOX | PRODUCTION
       sourceAmount: "100", // The amount (in USD) the user will spend
       destinationAsset: Asset.ETH, // The token the user will receive ("ETH" | "SOL" | "USDC")
-      network: Network.ETHEREUM_GOERLI, // The network to use for the transfer
+      network: Network.ETHEREUM_MAINNET, // The network to use for the transfer
       walletAddress: "<WALLET_ADDRESS>", // The user's wallet address obtained at runtime by your application
 
       // A callback to handle events throughout the integration lifecycle
@@ -323,10 +323,7 @@ type TransferConfiguration = {
 
 enum Network {
   ETHEREUM_MAINNET = "eip155:1"
-  ETHEREUM_GOERLI = "eip155:5"
   SOLANA_MAINNET = "solana:5eykt4UsFv8P8NJdTREpY1vzqKqZKvdp"
-  SOLANA_DEVNET = "solana:EtWTRABZaYq6iMfeYKouRu166VU2xqa1"
-  SOLANA_TESTNET = "solana:4uhcVJyU9pJkvQyS88uRDiswHXSCkY3z"
 }
 
 enum DestinationAsset {
@@ -336,9 +333,8 @@ enum DestinationAsset {
 }
 
 enum Environment {
-  // Uses testnets and no fiat currency is moved.
   SANDBOX = "SANDBOX"
-  // Uses mainnet and transfers fiat currency.
+  // Uses mainnet(s) and transfers fiat currency.
   PRODUCTION = "PRODUCTION"
 } as const
 
@@ -660,8 +656,8 @@ This event will fire in the following scenarios:
 
 Meso provides two environments:
 
-- `SANDBOX` – In this environment, testnets will be used to transfer crypto
-  assets. No fiat assets are moved.
+- `SANDBOX` – In this environment, no crypto assets are transferred and no fiat
+  assets are moved.
 - `PRODUCTION` – In this environment, production networks will be used to
   transfer real crypto assets. Fiat assets are moved.
 

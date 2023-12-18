@@ -7,7 +7,7 @@ export enum Environment {
   DEV = "DEV",
   /** For office use only. */
   PREVIEW = "PREVIEW",
-  /** In this environment, testnets will be used to transfer crypto assets. No fiat assets are moved. */
+  /** In this environment, no crypto assets are transferred and no fiat assets are moved. */
   SANDBOX = "SANDBOX",
   /** In this environment, production networks will be used to transfer real crypto assets. Fiat assets are moved. */
   PRODUCTION = "PRODUCTION",
@@ -98,10 +98,7 @@ export type SignedMessageResult = Readonly<string> | undefined;
  */
 export enum Network {
   ETHEREUM_MAINNET = "eip155:1",
-  ETHEREUM_GOERLI = "eip155:5",
   SOLANA_MAINNET = "solana:5eykt4UsFv8P8NJdTREpY1vzqKqZKvdp",
-  SOLANA_DEVNET = "solana:EtWTRABZaYq6iMfeYKouRu166VU2xqa1",
-  SOLANA_TESTNET = "solana:4uhcVJyU9pJkvQyS88uRDiswHXSCkY3z",
 }
 
 /**
