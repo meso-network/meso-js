@@ -21,6 +21,7 @@ export const validateTransferConfiguration = ({
   environment,
   partnerId,
   layout,
+  headlessSignature,
   onSignMessageRequest,
   onEvent,
 }: TransferConfiguration): boolean => {
@@ -91,6 +92,14 @@ export const validateTransferConfiguration = ({
     onEvent({
       kind: EventKind.CONFIGURATION_ERROR,
       payload: { error: { message: `"partnerId" must be provided.` } },
+    });
+    return false;
+  } else if (typeof headlessSignature !== "boolean") {
+    onEvent({
+      kind: EventKind.CONFIGURATION_ERROR,
+      payload: {
+        error: { message: '"headlessSignature" must be a boolean.' },
+      },
     });
     return false;
   } else if (typeof onSignMessageRequest !== "function") {
