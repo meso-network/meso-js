@@ -318,7 +318,7 @@ type TransferConfiguration = {
   network: Network; // The network to use for the transfer
   walletAddress: string; // The user's wallet address obtained at runtime by your application
   layout?: Layout; // Configuration to customize how the Meso experience is launched and presented
-  headlessSignature?: boolean; // Automatically invoke the `onSignMessageRequest` callback to initiate message signing
+  headlessSignature?: boolean; // Perform message signing in the background without prompting the user. This is useful for embedded wallets
   onSignMessageRequest: (message: string) => Promise<SignedMessageResult>; // A callback that is fired when you need to collect the user's signature via their wallet
   onEvent?: (event: MesoEvent) => void; // An optional handler to notify you when an event or error occurs. This is useful for tracking the state of the user through the experience
 };
@@ -384,17 +384,11 @@ destroy(); // The meso iframe is unmounted. No more events/callbacks will fire.
 
 ### Headless Signature
 
-For partners using embedded wallets, message signing or the existence of a
-wallet itself may be transparent to the end user. In this scenario, it may not
-make sense for the user to be prompted to trigger message signing to either
-verify wallet ownership or approve a transaction.
-
-To support this scenario, you can launch the Meso experience with the
-`headlessSignature` param set to `true`. In doing so, the `onSignMessageRequest`
-callback will be immediately invoked when needed, allowing you to return a
-signed message back to the Meso SDK using the embedded wallet and keeping this
-step completely transparent to the user. Once the signed message is received,
-the rest of the Meso experience proceeds as usual.
+In some cases (such as embedded wallets), message signing may be transparent to
+the end user. You can launch the Meso experience with `headlessSignature: true`
+which will invoke the `onSignMessageRequest` callback immediately allowing you
+to return a signed message back to the Meso SDK using the embedded wallet and
+keeping this step completely transparent to the user.
 
 ### Customizing the layout
 

@@ -219,8 +219,8 @@ export type TransferConfiguration = Readonly<{
    */
   layout?: Layout;
   /**
-   * Automatically invoke the `onSignMessageRequest` callback to initiate
-   * message signing.
+   * Perform message signing in the background without prompting the user. This
+   * is useful for embedded wallets.
    */
   headlessSignature?: boolean;
   /**
