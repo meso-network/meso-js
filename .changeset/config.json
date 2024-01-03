@@ -6,7 +6,7 @@
   ],
 
   "commit": false,
-  "linked": [
+  "fixed": [
     ["@meso-network/meso-js", "@meso-network/post-message-bus", "@meso-network/types"]
   ],
   "access": "public",
