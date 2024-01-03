@@ -1,5 +1,11 @@
 # @meso-network/post-message-bus
 
+## 0.0.66
+
+### Patch Changes
+
+- [#15](https://github.com/meso-network/meso-js/pull/15) [`843647b`](https://github.com/meso-network/meso-js/commit/843647b36e2db1a8d0364d3f69c9ad7025a89c1f) Thanks [@dseeto](https://github.com/dseeto)! - fix instead of link changesets for all modules
+
 ## 0.0.64
 
 ### Patch Changes
