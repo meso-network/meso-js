@@ -1,5 +1,11 @@
 # @meso-network/types
 
+## 0.0.65
+
+### Patch Changes
+
+- [#13](https://github.com/meso-network/meso-js/pull/13) [`948b35c`](https://github.com/meso-network/meso-js/commit/948b35c60d6367d9725ca99eb535ff934c87dc24) Thanks [@dseeto](https://github.com/dseeto)! - add support for headless message signing
+
 ## 0.0.64
 
 ### Patch Changes
