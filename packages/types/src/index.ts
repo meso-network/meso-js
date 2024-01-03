@@ -219,6 +219,11 @@ export type TransferConfiguration = Readonly<{
    */
   layout?: Layout;
   /**
+   * Perform message signing in the background without prompting the user. This
+   * is useful for embedded wallets.
+   */
+  headlessSignature?: boolean;
+  /**
    * A handler to notify you when a message needs to be signed.
    */
   onSignMessageRequest: (message: string) => Promise<SignedMessageResult>;
@@ -238,6 +243,7 @@ export type TransferIframeParams = Pick<
   | "walletAddress"
   | "sourceAmount"
   | "destinationAsset"
+  | "headlessSignature"
 > & {
   layoutPosition: NonNullable<Layout["position"]>;
   layoutOffset: NonNullable<Layout["offset"]>;
@@ -256,6 +262,7 @@ export type SerializedTransferIframeParams = Record<
   | "destinationAsset"
   | "layoutPosition"
   | "layoutOffset"
+  | "headlessSignature"
   | "version",
   string
 >;

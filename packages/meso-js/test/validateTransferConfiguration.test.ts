@@ -279,6 +279,65 @@ describe("validateTransferConfiguration", () => {
     `);
   });
 
+  test("non-boolean headlessSignature emits", () => {
+    expect(
+      validateTransferConfiguration({
+        onEvent,
+        sourceAmount: "1",
+        network: Network.ETHEREUM_MAINNET,
+        walletAddress: "0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48",
+        destinationAsset: Asset.ETH,
+        environment: Environment.SANDBOX,
+        partnerId: "meso-js-test",
+        // @ts-expect-error: Bypass type system to simulate runtime behavior
+        headlessSignature: "false",
+      }),
+    ).toBe(false);
+    expect(onEvent).toHaveBeenCalledOnce();
+    expect(onEvent.mock.lastCall).toMatchInlineSnapshot(`
+      [
+        {
+          "kind": "CONFIGURATION_ERROR",
+          "payload": {
+            "error": {
+              "message": "\\"headlessSignature\\" must be a boolean.",
+            },
+          },
+        },
+      ]
+    `);
+  });
+
+  test("non-function onSignMessageRequest emits", () => {
+    expect(
+      validateTransferConfiguration({
+        onEvent,
+        sourceAmount: "1",
+        network: Network.ETHEREUM_MAINNET,
+        walletAddress: "0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48",
+        destinationAsset: Asset.ETH,
+        environment: Environment.SANDBOX,
+        partnerId: "meso-js-test",
+        headlessSignature: false,
+        // @ts-expect-error: Bypass type system to simulate runtime behavior
+        onSignMessageRequest: "signedMessage",
+      }),
+    ).toBe(false);
+    expect(onEvent).toHaveBeenCalledOnce();
+    expect(onEvent.mock.lastCall).toMatchInlineSnapshot(`
+      [
+        {
+          "kind": "CONFIGURATION_ERROR",
+          "payload": {
+            "error": {
+              "message": "\\"onSignMessageRequest\\" must be a valid function.",
+            },
+          },
+        },
+      ]
+    `);
+  });
+
   describe("layout", () => {
     test("invalid `position` emits an error", () => {
       expect(
@@ -291,6 +350,7 @@ describe("validateTransferConfiguration", () => {
           destinationAsset: Asset.ETH,
           environment: Environment.SANDBOX,
           partnerId: "meso-js-test",
+          headlessSignature: false,
           // @ts-expect-error: Bypass type system to simulate runtime behavior
           layout: { position: "bottom-center" },
         }),
@@ -323,6 +383,7 @@ describe("validateTransferConfiguration", () => {
           destinationAsset: Asset.ETH,
           environment: Environment.SANDBOX,
           partnerId: "meso-js-test",
+          headlessSignature: false,
         };
       });
 
@@ -527,36 +588,6 @@ describe("validateTransferConfiguration", () => {
     });
   });
 
-  test("non-function onSignMessageRequest emits", () => {
-    expect(
-      validateTransferConfiguration({
-        onEvent,
-        sourceAmount: "1",
-        network: Network.ETHEREUM_MAINNET,
-        walletAddress: "0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48",
-        destinationAsset: Asset.ETH,
-        environment: Environment.SANDBOX,
-        partnerId: "meso-js-test",
-        layout: { position: Position.TOP_RIGHT, offset: "0" },
-        // @ts-expect-error: Bypass type system to simulate runtime behavior
-        onSignMessageRequest: "signedMessage",
-      }),
-    ).toBe(false);
-    expect(onEvent).toHaveBeenCalledOnce();
-    expect(onEvent.mock.lastCall).toMatchInlineSnapshot(`
-      [
-        {
-          "kind": "CONFIGURATION_ERROR",
-          "payload": {
-            "error": {
-              "message": "\\"onSignMessageRequest\\" must be a valid function.",
-            },
-          },
-        },
-      ]
-    `);
-  });
-
   describe("valid configuration", () => {
     test("returns true (no layout)", () => {
       const valid = validateTransferConfiguration({
@@ -567,6 +598,7 @@ describe("validateTransferConfiguration", () => {
         destinationAsset: Asset.ETH,
         environment: Environment.SANDBOX,
         partnerId: "meso-js-test",
+        headlessSignature: false,
         onSignMessageRequest: vi.fn(),
       });
       expect(onEvent).not.toHaveBeenCalled();
@@ -582,6 +614,7 @@ describe("validateTransferConfiguration", () => {
         destinationAsset: Asset.ETH,
         environment: Environment.SANDBOX,
         partnerId: "meso-js-test",
+        headlessSignature: false,
         layout: { offset: "0" },
         onSignMessageRequest: vi.fn(),
       });
@@ -598,6 +631,7 @@ describe("validateTransferConfiguration", () => {
         destinationAsset: Asset.ETH,
         environment: Environment.SANDBOX,
         partnerId: "meso-js-test",
+        headlessSignature: false,
         layout: { position: Position.TOP_RIGHT, offset: "0" },
         onSignMessageRequest: vi.fn(),
       });
@@ -614,6 +648,7 @@ describe("validateTransferConfiguration", () => {
         destinationAsset: Asset.ETH,
         environment: Environment.SANDBOX,
         partnerId: "meso-js-test",
+        headlessSignature: false,
         layout: { position: Position.TOP_RIGHT, offset: "0" },
         onSignMessageRequest: vi.fn(),
       });
@@ -630,6 +665,7 @@ describe("validateTransferConfiguration", () => {
         destinationAsset: Asset.ETH,
         environment: Environment.SANDBOX,
         partnerId: "meso-js-test",
+        headlessSignature: false,
         layout: { position: Position.TOP_RIGHT, offset: { horizontal: "10" } },
         onSignMessageRequest: vi.fn(),
       });
@@ -646,6 +682,7 @@ describe("validateTransferConfiguration", () => {
         destinationAsset: Asset.ETH,
         environment: Environment.SANDBOX,
         partnerId: "meso-js-test",
+        headlessSignature: false,
         layout: {
           position: Position.TOP_RIGHT,
           offset: { horizontal: "10", vertical: "22" },

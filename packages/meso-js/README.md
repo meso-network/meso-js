@@ -30,6 +30,7 @@ used in a vanilla JavaScript application as well.
   - [Integration lifecycle](#integration-lifecycle)
   - [Reference](#reference)
     - [`transfer`](#transfer)
+    - [Headless Signature](#headless-signature)
     - [Customizing the layout](#customizing-the-layout)
       - [Position](#position)
       - [Offset](#offset)
@@ -317,8 +318,9 @@ type TransferConfiguration = {
   network: Network; // The network to use for the transfer
   walletAddress: string; // The user's wallet address obtained at runtime by your application
   layout?: Layout; // Configuration to customize how the Meso experience is launched and presented
-  onSignMessageRequest: (message: string) => Promise<SignedMessageResult>; // A callback that is fired when you need to collect the user's signature via their wallet.
-  onEvent?: (event: MesoEvent) => void; // An optional handler to notify you when an event or error occurs. This is useful for tracking the state of the user through the experience.
+  headlessSignature?: boolean; // Perform message signing in the background without prompting the user. This is useful for embedded wallets
+  onSignMessageRequest: (message: string) => Promise<SignedMessageResult>; // A callback that is fired when you need to collect the user's signature via their wallet
+  onEvent?: (event: MesoEvent) => void; // An optional handler to notify you when an event or error occurs. This is useful for tracking the state of the user through the experience
 };
 
 enum Network {
@@ -379,6 +381,14 @@ const { destroy } = transfer({ ... });
 
 destroy(); // The meso iframe is unmounted. No more events/callbacks will fire.
 ```
+
+### Headless Signature
+
+In some cases (such as embedded wallets), message signing may be transparent to
+the end user. You can launch the Meso experience with `headlessSignature: true`
+which will invoke the `onSignMessageRequest` callback immediately allowing you
+to return a signed message back to the Meso SDK using the embedded wallet and
+keeping this step completely transparent to the user.
 
 ### Customizing the layout
 

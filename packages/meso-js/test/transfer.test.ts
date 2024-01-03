@@ -39,6 +39,7 @@ describe("transfer", () => {
     destinationAsset: Asset.ETH,
     environment: Environment.SANDBOX,
     partnerId: "partnerId",
+    headlessSignature: false,
     layout: DEFAULT_LAYOUT,
     onSignMessageRequest: vi.fn(),
     onEvent: vi.fn(),
@@ -66,6 +67,7 @@ describe("transfer", () => {
         "https://api.sandbox.meso.network",
         {
           "destinationAsset": "ETH",
+          "headlessSignature": "false",
           "layoutOffset": "0",
           "layoutPosition": "top-right",
           "network": "eip155:1",
