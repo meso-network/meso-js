@@ -59,7 +59,7 @@ describe("validateTransferConfiguration", () => {
           "kind": "UNSUPPORTED_NETWORK_ERROR",
           "payload": {
             "error": {
-              "message": "\\"network\\" must be a supported network: eip155:1,solana:5eykt4UsFv8P8NJdTREpY1vzqKqZKvdp.",
+              "message": "\\"network\\" must be a supported network: eip155:1,solana:5eykt4UsFv8P8NJdTREpY1vzqKqZKvdp,eip155:137.",
             },
           },
         },
@@ -160,7 +160,7 @@ describe("validateTransferConfiguration", () => {
           "kind": "UNSUPPORTED_ASSET_ERROR",
           "payload": {
             "error": {
-              "message": "\\"destinationAsset\\" must be a supported asset: ETH,SOL,USDC.",
+              "message": "\\"destinationAsset\\" must be a supported asset: ETH,SOL,USDC,MATIC.",
             },
           },
         },

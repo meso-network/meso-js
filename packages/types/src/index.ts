@@ -113,6 +113,7 @@ export type SignedMessageResult = Readonly<string> | undefined;
 export enum Network {
   ETHEREUM_MAINNET = "eip155:1",
   SOLANA_MAINNET = "solana:5eykt4UsFv8P8NJdTREpY1vzqKqZKvdp",
+  POLYGON_MAINNET = "eip155:137",
 }
 
 /**
@@ -122,6 +123,7 @@ export enum Asset {
   ETH = "ETH",
   SOL = "SOL",
   USDC = "USDC",
+  MATIC = "MATIC",
 }
 
 /**
