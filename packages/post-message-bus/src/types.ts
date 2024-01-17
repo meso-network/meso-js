@@ -28,6 +28,14 @@ export enum MessageKind {
    * Dispatch a configuration error when the Meso experience cannot be initialized.
    */
   CONFIGURATION_ERROR = "CONFIGURATION_ERROR",
+  /**
+   * Dispatch an unsupported network error when the `network` passed to initialize the Meso experience is not supported.
+   */
+  UNSUPPORTED_NETWORK_ERROR = "UNSUPPORTED_NETWORK_ERROR",
+  /**
+   * Dispatch an unsupported asset error when the `destinationAsset` passed to initialize the Meso experience is not supported.
+   */
+  UNSUPPORTED_ASSET_ERROR = "UNSUPPORTED_ASSET_ERROR",
 }
 
 export type RequestSignedMessagePayload = {
@@ -76,7 +84,9 @@ export type Message =
         Partial<Pick<Transfer, "networkTransactionId">>;
     }
   | { kind: MessageKind.ERROR; payload: MesoError }
-  | { kind: MessageKind.CONFIGURATION_ERROR; payload: MesoError };
+  | { kind: MessageKind.CONFIGURATION_ERROR; payload: MesoError }
+  | { kind: MessageKind.UNSUPPORTED_NETWORK_ERROR; payload: MesoError }
+  | { kind: MessageKind.UNSUPPORTED_ASSET_ERROR; payload: MesoError };
 
 export type PostMessageHandlerFn = (
   message: Message,

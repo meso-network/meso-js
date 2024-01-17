@@ -36,12 +36,16 @@ used in a vanilla JavaScript application as well.
       - [Offset](#offset)
     - [Handling errors](#handling-errors)
       - [Configuration errors](#configuration-errors)
+      - [Unsupported Network errors](#unsupported-network-errors)
+      - [Unsupported Asset errors](#unsupported-asset-errors)
       - [Other errors](#other-errors)
     - [Events](#events)
       - [`TRANSFER_APPROVED`](#transfer_approved)
       - [`TRANSFER_COMPLETE`](#transfer_complete)
       - [`ERROR`](#error)
       - [`CONFIGURATION_ERROR`](#configuration_error)
+      - [`UNSUPPORTED_NETWORK_ERROR`](#unsupported_network_error)
+      - [`UNSUPPORTED_ASSET_ERROR`](#unsupported_asset_error)
       - [`CLOSE`](#close)
   - [Environments](#environments)
   - [Testing](#testing)
@@ -174,6 +178,16 @@ buyCrypto.addEventListener("click", () => {
           console.error(payload.error.message);
           break;
 
+        // The `network` provided in the configuration is not supported
+        case EventKind.UNSUPPORTED_NETWORK_ERROR:
+          console.error(payload.error.message);
+          break;
+
+        // The `destinationAsset` provided in the configuration is not supported
+        case EventKind.UNSUPPORTED_ASSET_ERROR:
+          console.error(payload.error.message);
+          break;
+
         // A general error has occurred
         case EventKind.ERROR:
           console.error(payload.error.message);
@@ -239,6 +253,16 @@ export const BuyCrypto = () => {
 
           // There was an issue with the provided configuration
           case EventKind.CONFIGURATION_ERROR:
+            console.error(payload.error.message);
+            break;
+
+          // The `network` provided in the configuration is not supported
+          case EventKind.UNSUPPORTED_NETWORK_ERROR:
+            console.error(payload.error.message);
+            break;
+
+          // The `destinationAsset` provided in the configuration is not supported
+          case EventKind.UNSUPPORTED_ASSET_ERROR:
             console.error(payload.error.message);
             break;
 
@@ -502,6 +526,74 @@ transfer({
 
 If you do not provide the `onEvent` callback, `meso-js` will `throw` an exception.
 
+#### Unsupported Network errors
+
+If the `network` that you provided in the configuration isn't currently
+supported, an `UNSUPPORTED_NETWORK_ERROR` will be provided to your
+[`onEvent`](#transfer) callback. This error may occur for networks we're in the
+process of adding support for or if a previously supported network is not
+currently supported.
+
+**Type:**
+
+```ts
+// An error surfaced from the `meso-js` integration.
+type MesoError = {
+  // A client-friendly error message.
+  message: string;
+};
+
+type UnsupportedNetworkErrorPayload = { error: MesoError };
+```
+
+**Example:**
+
+```ts
+transfer({
+  // ...
+  onEvent: (event: MesoEvent) => {
+    if (event.kind === EventKind.UNSUPPORTED_NETWORK_ERROR) {
+      // handle unsupported network error
+      console.log(event.payload.error.message); // "some error message"
+    }
+  },
+});
+```
+
+#### Unsupported Asset errors
+
+If the `destinationAsset` that you provided in the configuration isn't
+currently supported, an `UNSUPPORTED_ASSET_ERROR` will be provided to your
+[`onEvent`](#transfer) callback. This error may occur for assets we're in the
+process of adding support for or if a previously supported asset is not
+currently supported.
+
+**Type:**
+
+```ts
+// An error surfaced from the `meso-js` integration.
+type MesoError = {
+  // A client-friendly error message.
+  message: string;
+};
+
+type UnsupportedAssetErrorPayload = { error: MesoError };
+```
+
+**Example:**
+
+```ts
+transfer({
+  // ...
+  onEvent: (event: MesoEvent) => {
+    if (event.kind === EventKind.UNSUPPORTED_ASSET_ERROR) {
+      // handle unsupported asset error
+      console.log(event.payload.error.message); // "some error message"
+    }
+  },
+});
+```
+
 #### Other errors
 
 Other errors dispatched during the integration will also be surfaced via the
@@ -553,6 +645,12 @@ onEvent({kind, payload}: MesoEvent) {
     console.log(payload); // { transfer: { ... }}
     break;
   case EventKind.CONFIGURATION_ERROR:
+    console.log(payload); // { message: "an error message" }
+    break;
+  case EventKind.UNSUPPORTED_NETWORK_ERROR:
+    console.log(payload); // { message: "an error message" }
+    break;
+  case EventKind.UNSUPPORTED_ASSET_ERROR:
     console.log(payload); // { message: "an error message" }
     break;
   case EventKind.ERROR:
@@ -639,6 +737,42 @@ See [configuration errors](#configuration-errors) for more.
   kind: "CONFIGURATION_ERROR",
   payload: {
     message: "Invalid ETH wallet address."
+  }
+}
+```
+
+#### `UNSUPPORTED_NETWORK_ERROR`
+
+This event is fired when the `network` provided in the `transfer` configuration
+is not supported.
+
+See [unsupported network errors](#unsupported-network-errors) for more.
+
+**Example payload:**
+
+```ts
+{
+  kind: "UNSUPPORTED_NETWORK_ERROR",
+  payload: {
+    message: "\"network\" must be a supported network: eip155:1,solana:5eykt4UsFv8P8NJdTREpY1vzqKqZKvdp,eip155:137."
+  }
+}
+```
+
+#### `UNSUPPORTED_ASSET_ERROR`
+
+This event is fired when the `destinationAsset` provided in the `transfer`
+configuration is not supported.
+
+See [unsupported asset errors](#unsupported-asset-errors) for more.
+
+**Example payload:**
+
+```ts
+{
+  kind: "UNSUPPORTED_ASSET_ERROR",
+  payload: {
+    message: "\"destinationAsset\" must be a supported asset: ETH,SOL,USDC,MATIC.",
   }
 }
 ```

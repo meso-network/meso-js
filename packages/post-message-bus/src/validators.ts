@@ -85,6 +85,8 @@ export const validateMessage = (message: Message) => {
       return true;
     case MessageKind.ERROR:
     case MessageKind.CONFIGURATION_ERROR:
+    case MessageKind.UNSUPPORTED_NETWORK_ERROR:
+    case MessageKind.UNSUPPORTED_ASSET_ERROR:
       if (!("payload" in message)) {
         return false;
       }

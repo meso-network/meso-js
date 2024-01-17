@@ -317,6 +317,86 @@ describe("validators", () => {
     });
   });
 
+  describe("UNSUPPORTED_NETWORK_ERROR", () => {
+    describe("success", () => {
+      test("is valid", () => {
+        expect(
+          validateMessage({
+            kind: MessageKind.UNSUPPORTED_NETWORK_ERROR,
+            payload: { message: "an UNSUPPORTED_NETWORK_ERROR" },
+          }),
+        ).toBe(true);
+      });
+    });
+
+    describe("failure", () => {
+      test.each([
+        [
+          "bad payload (invalid message type)",
+          {
+            kind: MessageKind.UNSUPPORTED_NETWORK_ERROR,
+            payload: { message: false },
+          },
+        ],
+        [
+          "bad payload (empty message)",
+          {
+            kind: MessageKind.UNSUPPORTED_NETWORK_ERROR,
+            payload: { message: "" },
+          },
+        ],
+        [
+          "bad payload (missing message)",
+          { kind: MessageKind.UNSUPPORTED_NETWORK_ERROR, payload: {} },
+        ],
+        ["missing kind", { payload: { message: "an error" } }],
+      ])("%s", (_, message) => {
+        // @ts-expect-error: Bypass type system to simulate runtime behavior
+        expect(validateMessage(message)).toBe(false);
+      });
+    });
+  });
+
+  describe("UNSUPPORTED_ASSET_ERROR", () => {
+    describe("success", () => {
+      test("is valid", () => {
+        expect(
+          validateMessage({
+            kind: MessageKind.UNSUPPORTED_ASSET_ERROR,
+            payload: { message: "an UNSUPPORTED_ASSET_ERROR" },
+          }),
+        ).toBe(true);
+      });
+    });
+
+    describe("failure", () => {
+      test.each([
+        [
+          "bad payload (invalid message type)",
+          {
+            kind: MessageKind.UNSUPPORTED_ASSET_ERROR,
+            payload: { message: false },
+          },
+        ],
+        [
+          "bad payload (empty message)",
+          {
+            kind: MessageKind.UNSUPPORTED_ASSET_ERROR,
+            payload: { message: "" },
+          },
+        ],
+        [
+          "bad payload (missing message)",
+          { kind: MessageKind.UNSUPPORTED_ASSET_ERROR, payload: {} },
+        ],
+        ["missing kind", { payload: { message: "an error" } }],
+      ])("%s", (_, message) => {
+        // @ts-expect-error: Bypass type system to simulate runtime behavior
+        expect(validateMessage(message)).toBe(false);
+      });
+    });
+  });
+
   describe("validateHandlerFunction()", () => {
     describe("success", () => {
       test("for valid handler", () => {

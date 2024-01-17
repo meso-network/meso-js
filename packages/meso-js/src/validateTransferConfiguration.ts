@@ -40,7 +40,7 @@ export const validateTransferConfiguration = ({
     return false;
   } else if (!isValidNetwork(network)) {
     onEvent({
-      kind: EventKind.CONFIGURATION_ERROR,
+      kind: EventKind.UNSUPPORTED_NETWORK_ERROR,
       payload: {
         error: {
           message: `"network" must be a supported network: ${Object.values(
@@ -62,7 +62,7 @@ export const validateTransferConfiguration = ({
     return false;
   } else if (!(destinationAsset in Asset)) {
     onEvent({
-      kind: EventKind.CONFIGURATION_ERROR,
+      kind: EventKind.UNSUPPORTED_ASSET_ERROR,
       payload: {
         error: {
           message: `"destinationAsset" must be a supported asset: ${Object.values(
