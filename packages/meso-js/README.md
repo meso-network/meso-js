@@ -562,7 +562,7 @@ transfer({
 
 #### Unsupported Asset errors
 
-If the `destinateionAsset` that you provided in the configuration isn't
+If the `destinationAsset` that you provided in the configuration isn't
 currently supported, an `UNSUPPORTED_ASSET_ERROR` will be provided to your
 [`onEvent`](#transfer) callback. This error may occur for assets we're in the
 process of adding support for or if a previously supported asset is not

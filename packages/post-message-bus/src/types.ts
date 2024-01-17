@@ -31,11 +31,11 @@ export enum MessageKind {
   /**
    * Dispatch an unsupported network error when the `network` passed to initialize the Meso experience is not supported.
    */
-  UNSUPPORTED_NETWORK_ERROR = "UNSUPOPRTED_NETWORK_ERROR",
+  UNSUPPORTED_NETWORK_ERROR = "UNSUPPORTED_NETWORK_ERROR",
   /**
    * Dispatch an unsupported asset error when the `destinationAsset` passed to initialize the Meso experience is not supported.
    */
-  UNSUPPORTED_ASSET_ERROR = "UNSUPOPRTED_ASSET_ERROR",
+  UNSUPPORTED_ASSET_ERROR = "UNSUPPORTED_ASSET_ERROR",
 }
 
 export type RequestSignedMessagePayload = {
