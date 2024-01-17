@@ -250,4 +250,66 @@ describe("setupBus", () => {
       ]
     `);
   });
+
+  test("returns bus which handles UNSUPPORTED_NETWORK_ERROR message", () => {
+    const onMock = vi.fn();
+    createPostMessageBusMock.mockImplementationOnce(() => ({ on: onMock }));
+
+    setupBus(apiHost, frame, onSignMessageRequestMock, onEventMock);
+    expect(onMock).toBeCalledWith(
+      MessageKind.UNSUPPORTED_NETWORK_ERROR,
+      expect.any(Function),
+    );
+    const onErrorCallback = onMock.mock.calls.find(
+      (invocationArgs) =>
+        invocationArgs[0] === MessageKind.UNSUPPORTED_NETWORK_ERROR,
+    )[1];
+    onErrorCallback({
+      kind: MessageKind.UNSUPPORTED_NETWORK_ERROR,
+      payload: "unsupportedNetworkErrorPayload",
+    });
+
+    expect(onEventMock).toHaveBeenCalledOnce();
+    expect(onEventMock.mock.lastCall).toMatchInlineSnapshot(`
+      [
+        {
+          "kind": "UNSUPPORTED_NETWORK_ERROR",
+          "payload": {
+            "error": "unsupportedNetworkErrorPayload",
+          },
+        },
+      ]
+    `);
+  });
+
+  test("returns bus which handles UNSUPPORTED_ASSET_ERROR message", () => {
+    const onMock = vi.fn();
+    createPostMessageBusMock.mockImplementationOnce(() => ({ on: onMock }));
+
+    setupBus(apiHost, frame, onSignMessageRequestMock, onEventMock);
+    expect(onMock).toBeCalledWith(
+      MessageKind.UNSUPPORTED_ASSET_ERROR,
+      expect.any(Function),
+    );
+    const onErrorCallback = onMock.mock.calls.find(
+      (invocationArgs) =>
+        invocationArgs[0] === MessageKind.UNSUPPORTED_ASSET_ERROR,
+    )[1];
+    onErrorCallback({
+      kind: MessageKind.UNSUPPORTED_ASSET_ERROR,
+      payload: "unsupportedAssetErrorPayload",
+    });
+
+    expect(onEventMock).toHaveBeenCalledOnce();
+    expect(onEventMock.mock.lastCall).toMatchInlineSnapshot(`
+      [
+        {
+          "kind": "UNSUPPORTED_ASSET_ERROR",
+          "payload": {
+            "error": "unsupportedAssetErrorPayload",
+          },
+        },
+      ]
+    `);
+  });
 });

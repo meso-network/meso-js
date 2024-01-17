@@ -77,5 +77,21 @@ export const setupBus = (
     });
   });
 
+  bus.on(MessageKind.UNSUPPORTED_NETWORK_ERROR, (message) => {
+    if (message.kind !== MessageKind.UNSUPPORTED_NETWORK_ERROR) return;
+    onEvent({
+      kind: EventKind.UNSUPPORTED_NETWORK_ERROR,
+      payload: { error: message.payload },
+    });
+  });
+
+  bus.on(MessageKind.UNSUPPORTED_ASSET_ERROR, (message) => {
+    if (message.kind !== MessageKind.UNSUPPORTED_ASSET_ERROR) return;
+    onEvent({
+      kind: EventKind.UNSUPPORTED_ASSET_ERROR,
+      payload: { error: message.payload },
+    });
+  });
+
   return bus;
 };

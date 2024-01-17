@@ -56,7 +56,7 @@ describe("validateTransferConfiguration", () => {
     expect(onEvent.mock.lastCall).toMatchInlineSnapshot(`
       [
         {
-          "kind": "CONFIGURATION_ERROR",
+          "kind": "UNSUPPORTED_NETWORK_ERROR",
           "payload": {
             "error": {
               "message": "\\"network\\" must be a supported network: eip155:1,solana:5eykt4UsFv8P8NJdTREpY1vzqKqZKvdp.",
@@ -157,7 +157,7 @@ describe("validateTransferConfiguration", () => {
     expect(onEvent.mock.lastCall).toMatchInlineSnapshot(`
       [
         {
-          "kind": "CONFIGURATION_ERROR",
+          "kind": "UNSUPPORTED_ASSET_ERROR",
           "payload": {
             "error": {
               "message": "\\"destinationAsset\\" must be a supported asset: ETH,SOL,USDC.",

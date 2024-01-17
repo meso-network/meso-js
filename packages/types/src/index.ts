@@ -62,12 +62,18 @@ export type TransferCompletePayload = {
 };
 export type ErrorPayload = { error: MesoError };
 export type ConfigurationErrorPayload = { error: MesoError };
+export type UnsupportedNetworkErrorPayload = { error: MesoError };
+export type UnsupportedAssetErrorPayload = { error: MesoError };
 
 export enum EventKind {
   /** An error has occurred while the Meso experience was active.  */
   ERROR = "ERROR",
   /** An error has occurred while initializing the Meso experience. */
   CONFIGURATION_ERROR = "CONFIGURATION_ERROR",
+  /** The `network` provided in the configuration is not supported. */
+  UNSUPPORTED_NETWORK_ERROR = "UNSUPPORTED_NETWORK_ERROR",
+  /** The `destinationAsset` provided in the configuration is not supported. */
+  UNSUPPORTED_ASSET_ERROR = "UNSUPPORTED_ASSET_ERROR",
   /** The user manually exited the Meso experience. */
   CLOSE = "CLOSE",
   /** A Meso transfer has been approved */
@@ -84,6 +90,14 @@ export type MesoEvent =
   | { kind: EventKind.TRANSFER_COMPLETE; payload: TransferCompletePayload }
   | { kind: EventKind.ERROR; payload: ErrorPayload }
   | { kind: EventKind.CONFIGURATION_ERROR; payload: ConfigurationErrorPayload }
+  | {
+      kind: EventKind.UNSUPPORTED_NETWORK_ERROR;
+      payload: UnsupportedNetworkErrorPayload;
+    }
+  | {
+      kind: EventKind.UNSUPPORTED_ASSET_ERROR;
+      payload: UnsupportedAssetErrorPayload;
+    }
   | { kind: EventKind.CLOSE; payload: null };
 
 /**
