@@ -1,5 +1,11 @@
 # @meso-network/types
 
+## 0.0.67
+
+### Patch Changes
+
+- [#17](https://github.com/meso-network/meso-js/pull/17) [`aaf3d63`](https://github.com/meso-network/meso-js/commit/aaf3d6394db5ee03029d410228b23eae31ff3f04) Thanks [@dseeto](https://github.com/dseeto)! - add unsupported network/asset errors
+
 ## 0.0.66
 
 ### Patch Changes
