@@ -1,5 +1,14 @@
 # @meso-network/meso-js
 
+## 0.0.68
+
+### Patch Changes
+
+- [#18](https://github.com/meso-network/meso-js/pull/18) [`c24c479`](https://github.com/meso-network/meso-js/commit/c24c479d1f56e24826c8b0d2d468ff48e16ee78c) Thanks [@dseeto](https://github.com/dseeto)! - add polygon network and matic asset support
+
+- Updated dependencies [[`c24c479`](https://github.com/meso-network/meso-js/commit/c24c479d1f56e24826c8b0d2d468ff48e16ee78c)]:
+  - @meso-network/post-message-bus@0.0.68
+
 ## 0.0.67
 
 ### Patch Changes
