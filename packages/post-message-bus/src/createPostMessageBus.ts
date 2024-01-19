@@ -24,9 +24,9 @@ const logError = (message: string) => {
 export const getParentWindowOrigin = () => {
   if ("ancestorOrigins" in location) {
     return location.ancestorOrigins[0];
+  } else if (document.referrer) {
+    return new URL(document.referrer).origin;
   }
-
-  return new URL(document.referrer).origin;
 };
 
 export const createPostMessageBus = (
