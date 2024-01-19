@@ -21,6 +21,14 @@ const logError = (message: string) => {
   console.error(generateLogMessage(message));
 };
 
+export const getParentWindowOrigin = () => {
+  if ("ancestorOrigins" in location) {
+    return location.ancestorOrigins[0];
+  }
+
+  return new URL(document.referrer).origin;
+};
+
 export const createPostMessageBus = (
   targetOrigin: string,
 ): PostMessageBus | PostMessageBusInitializationError => {
@@ -32,10 +40,7 @@ export const createPostMessageBus = (
   }
 
   let postMessageWindow: Window;
-  if (
-    window.location.ancestorOrigins &&
-    window.location.ancestorOrigins[0] === targetOrigin
-  ) {
+  if (getParentWindowOrigin() === targetOrigin) {
     // target is parent, currently in iframe
     postMessageWindow = window.parent;
   } else {
