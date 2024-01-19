@@ -1,5 +1,11 @@
 # @meso-network/post-message-bus
 
+## 0.0.70
+
+### Patch Changes
+
+- [#23](https://github.com/meso-network/meso-js/pull/23) [`476f262`](https://github.com/meso-network/meso-js/commit/476f262b177d98b0a18774fe419ab1d4d550736b) Thanks [@kyledetella](https://github.com/kyledetella)! - Gracefully handle missing `document.referrer`
+
 ## 0.0.69
 
 ### Patch Changes
