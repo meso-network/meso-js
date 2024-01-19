@@ -1,5 +1,11 @@
 # @meso-network/types
 
+## 0.0.69
+
+### Patch Changes
+
+- [#21](https://github.com/meso-network/meso-js/pull/21) [`4a2935c`](https://github.com/meso-network/meso-js/commit/4a2935c692c381634bd725625cabd285806c9edf) Thanks [@kyledetella](https://github.com/kyledetella)! - Safely lookup parent origins across browsers when initializing post message bus.
+
 ## 0.0.68
 
 ### Patch Changes
