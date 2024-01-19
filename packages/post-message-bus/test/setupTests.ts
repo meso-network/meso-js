@@ -18,4 +18,9 @@ beforeAll(() => {
     },
     writable: true,
   });
+
+  Object.defineProperty(document, "referrer", {
+    value: PARTNER_APP_ORIGIN,
+    configurable: true,
+  });
 });
