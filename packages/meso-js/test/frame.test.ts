@@ -1,5 +1,6 @@
 import {
   Asset,
+  AuthenticationStrategy,
   Network,
   Position,
   SerializedTransferIframeParams,
@@ -19,6 +20,7 @@ describe("setupFrame", () => {
     layoutPosition: Position.TOP_RIGHT,
     layoutOffset: "0",
     version: "1.0.0",
+    authenticationStrategy: AuthenticationStrategy.HEADLESS_WALLET_SIGNATURE,
   };
 
   var setupFrameRes: ReturnType<typeof setupFrame>;

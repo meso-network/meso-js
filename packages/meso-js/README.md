@@ -30,7 +30,10 @@ used in a vanilla JavaScript application as well.
   - [Integration lifecycle](#integration-lifecycle)
   - [Reference](#reference)
     - [`transfer`](#transfer)
-    - [Headless Signature](#headless-signature)
+    - [Authentication Strategies](#authentication-strategies)
+      - [Wallet verification](#wallet-verification)
+      - [Headless wallet verification](#headless-wallet-verification)
+      - [Skip wallet verification](#skip-wallet-verification)
     - [Customizing the layout](#customizing-the-layout)
       - [Position](#position)
       - [Offset](#offset)
@@ -298,7 +301,7 @@ export const BuyCrypto = () => {
 
 | Lifecycle                                                                                                                  |
 | -------------------------------------------------------------------------------------------------------------------------- |
-| ![Meso integration lifecycle](https://github.com/meso-network/meso-js/assets/1217116/b0afb4a4-8c59-49b0-ab7d-d279250094d0) |
+| ![Meso integration lifecycle](https://github.com/meso-network/meso-js/assets/1217116/37daecf3-042f-45d0-b0bd-82c5ff9d842a) |
 
 When your user is ready, initiate the on-ramp by calling
 [`transfer()`](#transfer). During setup, subscribe to the [`onEvent`](#events)
@@ -342,7 +345,7 @@ type TransferConfiguration = {
   network: Network; // The network to use for the transfer
   walletAddress: string; // The user's wallet address obtained at runtime by your application
   layout?: Layout; // Configuration to customize how the Meso experience is launched and presented
-  headlessSignature?: boolean; // Perform message signing in the background without prompting the user. This is useful for embedded wallets
+  authenticationStrategy?: AuthenticationStrategy; // Determines the authentication mechanism for users to perform a transfer. Defaults to `WALLET_SIGNATURE`
   onSignMessageRequest: (message: string) => Promise<SignedMessageResult>; // A callback that is fired when you need to collect the user's signature via their wallet
   onEvent?: (event: MesoEvent) => void; // An optional handler to notify you when an event or error occurs. This is useful for tracking the state of the user through the experience
 };
@@ -386,6 +389,12 @@ type Layout = {
     | { horizontal: PixelValue, vertical?: PixelValue}
     | { horizontal?: PixelValue, vertical: PixelValue};
 };
+
+enum AuthenticationStrategy {
+  WALLET_VERIFICATION = "wallet_verification",
+  HEADLESS_WALLET_VERIFICATION = "headless_wallet_verification",
+  NO_WALLET_VERIFICATION = "no_wallet_verification",
+}
 ```
 
 The `transfer` call returns a `TransferInstance` with a `destroy()` method. You
@@ -408,13 +417,66 @@ const { destroy } = transfer({ ... });
 destroy(); // The meso iframe is unmounted. No more events/callbacks will fire.
 ```
 
-### Headless Signature
+### Authentication Strategies
 
-In some cases (such as embedded wallets), message signing may be transparent to
-the end user. You can launch the Meso experience with `headlessSignature: true`
-which will invoke the `onSignMessageRequest` callback immediately allowing you
-to return a signed message back to the Meso SDK using the embedded wallet and
-keeping this step completely transparent to the user.
+Depending on your integration, you may have different requirements for users
+authenticating with Meso. In all scenarios, the user will still be required to
+perform two-factor authentication (2FA) and, in some cases provide
+email/password.
+
+#### Wallet verification
+
+By default, users are prompted to sign a message with
+their wallet to prove ownership.
+
+<details>
+  <summary><strong>Example</strong></summary>
+
+```ts
+{
+  // ...
+  authenticationStrategy: AuthenticationStrategy.WALLET_VERIFICATION,
+}
+```
+
+</details>
+
+#### Headless wallet verification
+
+In cases such as embedded wallets, message signing may need be transparent to
+the user. In these cases, passing will allow you to perform
+message signing yourself in the background.
+
+<details>
+  <summary><strong>Example</strong></summary>
+
+```ts
+{
+  // ...
+  authenticationStrategy: AuthenticationStrategy.HEADLESS_WALLET_VERIFICATION,
+}
+```
+
+</details>
+
+#### Skip wallet verification
+
+In the case where pre-deployment smart contract wallets are being used and
+wallet verification cannot be performed, you can skip wallet verification
+altogether and rely on Meso's two-factor authentication and email/password
+mechanisms.
+
+<details>
+  <summary><strong>Example</strong></summary>
+
+```ts
+{
+  // ...
+  authenticationStrategy: AuthenticationStrategy.NO_WALLET_VERIFICATION,
+}
+```
+
+</details>
 
 ### Customizing the layout
 
