@@ -237,8 +237,18 @@ export type TransferConfiguration = Readonly<{
   /**
    * Perform message signing in the background without prompting the user. This
    * is useful for embedded wallets.
+   *
+   * @deprecated `headlessSignature` will be removed in a future version. Instead, use {@link TransferConfiguration.authenticationStrategy|authenticationStrategy}.
    */
   headlessSignature?: boolean;
+  /**
+   * Determines the authentication mechanism for users to perform a transfer.
+   *
+   * In all scenarios, the user will still be required to perform two-factor authentication (2FA) and, in some cases provide email/password.
+   *
+   * If omitted, this will default to {@link AuthenticationStrategy.WALLET_VERIFICATION|WALLET_VERIFICATION}.
+   */
+  authenticationStrategy?: AuthenticationStrategy;
   /**
    * A handler to notify you when a message needs to be signed.
    */
@@ -248,6 +258,27 @@ export type TransferConfiguration = Readonly<{
    */
   onEvent: (event: MesoEvent) => void;
 }>;
+
+/**
+ * Used to determine the type of authentication the user will need to perform for a transfer.
+ */
+export enum AuthenticationStrategy {
+  /** Verify wallet by signing a message.
+   *
+   * New users and returning users with new wallets will still need to perform 2FA and login with email/password.
+   **/
+  WALLET_VERIFICATION = "wallet_verification",
+  /** Verify a wallet by signing a message in the background _without_ prompting the user. This is useful for scenarios such as embedded wallets.
+   *
+   * New users and returning users with new wallets will still need to perform login and 2FA.
+   */
+  HEADLESS_WALLET_VERIFICATION = "headless_wallet_verification",
+  /** Bypass wallet signing altogether and rely only on email/password and 2FA.
+   *
+   * This is useful for cases where pre-deployment smart contract wallets are being used and wallet verification cannot be performed.
+   */
+  BYPASS_WALLET_VERIFICATION = "bypass_wallet_verification",
+}
 
 /**
  * Configuration that will be serialized to query params for the Transfer App.
@@ -260,6 +291,7 @@ export type TransferIframeParams = Pick<
   | "sourceAmount"
   | "destinationAsset"
   | "headlessSignature"
+  | "authenticationStrategy"
 > & {
   layoutPosition: NonNullable<Layout["position"]>;
   layoutOffset: NonNullable<Layout["offset"]>;
@@ -271,15 +303,7 @@ export type TransferIframeParams = Pick<
  * The serialized configuration sent to the Transfer App as a query string.
  */
 export type SerializedTransferIframeParams = Record<
-  | "partnerId"
-  | "network"
-  | "walletAddress"
-  | "sourceAmount"
-  | "destinationAsset"
-  | "layoutPosition"
-  | "layoutOffset"
-  | "headlessSignature"
-  | "version",
+  keyof TransferIframeParams,
   string
 >;
 

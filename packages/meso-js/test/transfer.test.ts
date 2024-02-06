@@ -6,8 +6,8 @@ import {
 } from "@meso-network/types";
 import { Mock } from "vitest";
 import { transfer } from "../src";
-import { version } from "../package.json";
 import { DEFAULT_LAYOUT } from "../src/transfer";
+import { version } from "../package.json";
 
 var validateTransferConfigurationMock: Mock;
 vi.mock("../src/validateTransferConfiguration", async () => {
@@ -62,22 +62,27 @@ describe("transfer", () => {
 
     const { destroy } = transfer(configuration);
     expect(setupFrameMock).toHaveBeenCalledOnce();
-    expect(setupFrameMock.mock.lastCall).toMatchInlineSnapshot(`
-      [
-        "https://api.sandbox.meso.network",
-        {
-          "destinationAsset": "ETH",
-          "headlessSignature": "false",
-          "layoutOffset": "0",
-          "layoutPosition": "top-right",
-          "network": "eip155:1",
-          "partnerId": "partnerId",
-          "sourceAmount": "100",
-          "version": "${version}",
-          "walletAddress": "0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48",
-        },
-      ]
-    `);
+    expect(setupFrameMock.mock.lastCall[0]).toMatchInlineSnapshot(
+      '"https://api.sandbox.meso.network"',
+    );
+    expect(setupFrameMock.mock.lastCall[1]).toMatchInlineSnapshot(
+      { version: expect.any(String) },
+      `
+      {
+        "authenticationStrategy": "wallet_verification",
+        "destinationAsset": "ETH",
+        "headlessSignature": "false",
+        "layoutOffset": "0",
+        "layoutPosition": "top-right",
+        "network": "eip155:1",
+        "partnerId": "partnerId",
+        "sourceAmount": "100",
+        "version": Any<String>,
+        "walletAddress": "0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48",
+      }
+    `,
+    );
+    expect(setupFrameMock.mock.lastCall[1].version).toEqual(version);
     expect(setupBusMock).toHaveBeenCalledOnce();
     expect(setupBusMock.mock.lastCall).toMatchInlineSnapshot(`
       [

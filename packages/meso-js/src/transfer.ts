@@ -4,6 +4,7 @@ import {
   TransferConfiguration,
   Position,
   Layout,
+  AuthenticationStrategy,
 } from "@meso-network/types";
 import { validateTransferConfiguration } from "./validateTransferConfiguration";
 import { setupBus } from "./bus";
@@ -33,6 +34,7 @@ export const transfer = ({
   partnerId,
   layout = DEFAULT_LAYOUT,
   headlessSignature = false,
+  authenticationStrategy = AuthenticationStrategy.WALLET_VERIFICATION,
   onSignMessageRequest,
   onEvent,
 }: TransferConfiguration): TransferInstance => {
@@ -66,6 +68,7 @@ export const transfer = ({
         : JSON.stringify(mergedLayout.offset),
     headlessSignature: headlessSignature.toString(),
     version,
+    authenticationStrategy,
   });
   const bus = setupBus(apiHost, frame, onSignMessageRequest, onEvent);
 
