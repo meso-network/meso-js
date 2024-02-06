@@ -10,7 +10,7 @@
     before engaging in a transfer
   - `HEADLESS_WALLET_VERIFICATION` – Requires an app (such as an embedded wallet)
     to sign a message on behalf of the user
-  - `NO_WALLET_VERIFICATION` – Requires no wallet signing for the transfer. This
+  - `BYPASS_WALLET_VERIFICATION` – Requires no wallet signing for the transfer. This
     is typically used for pre-deployed smart contract wallets
 
 - Updated dependencies [[`2f9f9e2`](https://github.com/meso-network/meso-js/commit/2f9f9e23aaeb8ed83a56d85dfa99e08a658aba7f)]:
