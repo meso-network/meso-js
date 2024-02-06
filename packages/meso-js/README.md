@@ -463,8 +463,8 @@ message signing yourself in the background.
 
 In the case where pre-deployment smart contract wallets are being used and
 wallet verification cannot be performed, you can skip wallet verification
-altogether and rely on Meso's two-factor authentication and email/password
-mechanisms.
+altogether and rely on Meso's other authentication mechanisms (such as
+two-factor auth).
 
 <details>
   <summary><strong>Example</strong></summary>

@@ -266,12 +266,11 @@ export enum AuthenticationStrategy {
   /** Verify wallet by signing a message.
    *
    * New users and returning users with new wallets will still need to perform 2FA and login with email/password.
-   *
    **/
   WALLET_VERIFICATION = "wallet_verification",
   /** Verify a wallet by signing a message in the background _without_ prompting the user. This is useful for scenarios such as embedded wallets.
    *
-   * New users and returning users with new wallets will still need to perform 2FA and login with email/password.
+   * New users and returning users with new wallets will still need to perform login and 2FA.
    */
   HEADLESS_WALLET_VERIFICATION = "headless_wallet_verification",
   /** Bypass wallet signing altogether and rely only on email/password and 2FA.
