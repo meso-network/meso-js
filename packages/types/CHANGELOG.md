@@ -10,7 +10,7 @@
     before engaging in a transfer
   - `HEADLESS_WALLET_VERIFICATION` – Requires an app (such as an embedded wallet)
     to sign a message on behalf of the user
-  - `NO_WALLET_VERIFICATION` – Requires no wallet signing for the transfer. This
+  - `BYPASS_WALLET_VERIFICATION` – Requires no wallet signing for the transfer. This
     is typically used for pre-deployed smart contract wallets
 
 ## 0.0.70
