@@ -6,7 +6,6 @@ import {
 } from "@meso-network/types";
 import { Mock } from "vitest";
 import { transfer } from "../src";
-import { version } from "../package.json";
 import { DEFAULT_LAYOUT } from "../src/transfer";
 
 var validateTransferConfigurationMock: Mock;
