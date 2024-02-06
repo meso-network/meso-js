@@ -393,7 +393,7 @@ type Layout = {
 enum AuthenticationStrategy {
   WALLET_VERIFICATION = "wallet_verification",
   HEADLESS_WALLET_VERIFICATION = "headless_wallet_verification",
-  BYPASS_WALLET_VERIFICATION = "BYPASS_WALLET_VERIFICATION",
+  BYPASS_WALLET_VERIFICATION = "bypass_wallet_verification",
 }
 ```
 
