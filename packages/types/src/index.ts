@@ -278,7 +278,7 @@ export enum AuthenticationStrategy {
    *
    * This is useful for cases where pre-deployment smart contract wallets are being used and wallet verification cannot be performed.
    */
-  NO_WALLET_VERIFICATION = "no_wallet_verification",
+  BYPASS_WALLET_VERIFICATION = "bypass_wallet_verification",
 }
 
 /**

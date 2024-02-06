@@ -66,6 +66,7 @@ describe("transfer", () => {
       [
         "https://api.sandbox.meso.network",
         {
+          "authenticationStrategy": "wallet_verification",
           "destinationAsset": "ETH",
           "headlessSignature": "false",
           "layoutOffset": "0",
@@ -73,7 +74,7 @@ describe("transfer", () => {
           "network": "eip155:1",
           "partnerId": "partnerId",
           "sourceAmount": "100",
-          "version": "${version}",
+          "version": "0.0.70",
           "walletAddress": "0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48",
         },
       ]

@@ -33,7 +33,7 @@ used in a vanilla JavaScript application as well.
     - [Authentication Strategies](#authentication-strategies)
       - [Wallet verification](#wallet-verification)
       - [Headless wallet verification](#headless-wallet-verification)
-      - [Skip wallet verification](#skip-wallet-verification)
+      - [Bypass wallet verification](#bypass-wallet-verification)
     - [Customizing the layout](#customizing-the-layout)
       - [Position](#position)
       - [Offset](#offset)
@@ -393,7 +393,7 @@ type Layout = {
 enum AuthenticationStrategy {
   WALLET_VERIFICATION = "wallet_verification",
   HEADLESS_WALLET_VERIFICATION = "headless_wallet_verification",
-  NO_WALLET_VERIFICATION = "no_wallet_verification",
+  BYPASS_WALLET_VERIFICATION = "BYPASS_WALLET_VERIFICATION",
 }
 ```
 
@@ -459,7 +459,7 @@ message signing yourself in the background.
 
 </details>
 
-#### Skip wallet verification
+#### Bypass wallet verification
 
 In the case where pre-deployment smart contract wallets are being used and
 wallet verification cannot be performed, you can skip wallet verification
@@ -472,7 +472,7 @@ mechanisms.
 ```ts
 {
   // ...
-  authenticationStrategy: AuthenticationStrategy.NO_WALLET_VERIFICATION,
+  authenticationStrategy: AuthenticationStrategy.BYPASS_WALLET_VERIFICATION,
 }
 ```
 

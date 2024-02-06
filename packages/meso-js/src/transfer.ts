@@ -34,7 +34,7 @@ export const transfer = ({
   partnerId,
   layout = DEFAULT_LAYOUT,
   headlessSignature = false,
-  authenticationStrategy = AuthenticationStrategy.WALLET_SIGNATURE,
+  authenticationStrategy = AuthenticationStrategy.WALLET_VERIFICATION,
   onSignMessageRequest,
   onEvent,
 }: TransferConfiguration): TransferInstance => {
