@@ -1,4 +1,4 @@
-import { Position } from "./types";
+import { PixelValue, Position, TransferConfiguration } from "./types";
 
 /** The values from the `Position` enum. */
 type PositionValue = `${Position}`;

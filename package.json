@@ -9,7 +9,7 @@
   "license": "MIT",
   "scripts": {
     "ci:publish": "pnpm build && pnpm publish -r && changeset tag",
-    "clean": "rimraf packages/**/lib packages/**/*.tsbuildinfo packages/**/*.timestamp packages/types/src/index.d.ts",
+    "clean": "rimraf packages/**/lib packages/**/*.tsbuildinfo packages/**/*.timestamp",
     "lint:es": "eslint .",
     "lint:markdown": "markdownlint .",
     "lint": "pnpm lint:es && pnpm lint:markdown",
