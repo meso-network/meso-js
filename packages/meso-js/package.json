@@ -25,9 +25,6 @@
     "url": "git+https://github.com/meso-network/meso-js.git",
     "directory": "packages/meso-js"
   },
-  "dependencies": {
-    "@meso-network/post-message-bus": "workspace:*"
-  },
   "devDependencies": {
     "@testing-library/jest-dom": "^6.1.4",
     "jsdom": "^22.1.0"

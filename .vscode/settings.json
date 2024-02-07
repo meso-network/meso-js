@@ -1,6 +1,5 @@
 {
   "conventionalCommits.scopes": [
-    "@meso-network/post-message-bus",
     "@meso-network",
     "@meso-network/meso-js",
     "@meso-network/types"

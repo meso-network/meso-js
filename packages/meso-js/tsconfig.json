@@ -5,6 +5,6 @@
     "rootDir": "./",
     "types": ["vitest", "vitest/globals"]
   },
-  "references": [{ "path": "../post-message-bus" }, { "path": "../types" }],
+  "references": [{ "path": "../types" }],
   "include": ["./**/*.ts", "../types/**/*.ts", "./package.json"]
 }

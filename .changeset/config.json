@@ -7,7 +7,7 @@
 
   "commit": false,
   "fixed": [
-    ["@meso-network/meso-js", "@meso-network/post-message-bus", "@meso-network/types"]
+    ["@meso-network/meso-js", "@meso-network/types"]
   ],
   "access": "public",
   "baseBranch": "main",

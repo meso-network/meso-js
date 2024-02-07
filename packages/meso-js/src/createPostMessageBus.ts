@@ -14,7 +14,7 @@ type HandlerFn = Parameters<PostMessageBus["on"]>[1];
 
 /** Build a namespaced string to identify Meso specific errors/logs. */
 const generateLogMessage = (message: string): string =>
-  `(@meso-network/post-message-bus): ${message}`;
+  `(@meso-network/meso-js): ${message}`;
 
 const logError = (message: string) => {
   // eslint-disable-next-line no-console

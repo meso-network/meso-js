@@ -1,4 +1,4 @@
-import { createPostMessageBus } from "../src";
+import { createPostMessageBus } from "../src/createPostMessageBus";
 import { MESO_IFRAME_ORIGIN, PARTNER_APP_ORIGIN } from "./setupTests";
 
 const injectIframe = (src: string) => {

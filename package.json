@@ -15,7 +15,7 @@
     "lint": "pnpm lint:es && pnpm lint:markdown",
     "typecheck": "pnpm clean && pnpm run -r --if-present typecheck",
     "test": "pnpm run -r --if-present test",
-    "build": "pnpm clean && pnpm typecheck && pnpm run --filter @meso-network/post-message-bus -r build && pnpm run --filter @meso-network/meso-js -r build",
+    "build": "pnpm clean && pnpm typecheck  && pnpm run --filter @meso-network/meso-js -r build",
     "fmt": "prettier -w .",
     "fmt:check": "prettier --check .",
     "spelling:check": "cspell ."

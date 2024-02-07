@@ -2,11 +2,11 @@ import { TransferConfiguration, TransferStatus } from "@meso-network/types";
 import { setupBus } from "../src/bus";
 import { setupFrame } from "../src/frame";
 import { Mock } from "vitest";
-import { MessageKind } from "@meso-network/post-message-bus";
+import { MessageKind } from "../src/types";
 
 var createPostMessageBusMock: Mock;
-vi.mock("@meso-network/post-message-bus", async () => {
-  const actual = await vi.importActual("@meso-network/post-message-bus");
+vi.mock("../src/createPostMessageBus", async () => {
+  const actual = await vi.importActual("../src/createPostMessageBus");
   createPostMessageBusMock = vi.fn();
   return {
     ...(actual as object),

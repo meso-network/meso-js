@@ -64,20 +64,10 @@ importers:
         version: 0.34.6
 
   packages/meso-js:
-    dependencies:
-      '@meso-network/post-message-bus':
-        specifier: workspace:*
-        version: link:../post-message-bus
     devDependencies:
       '@testing-library/jest-dom':
         specifier: ^6.1.4
         version: 6.1.4(vitest@0.34.6)
-      jsdom:
-        specifier: ^22.1.0
-        version: 22.1.0
-
-  packages/post-message-bus:
-    devDependencies:
       jsdom:
         specifier: ^22.1.0
         version: 22.1.0
