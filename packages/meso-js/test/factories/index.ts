@@ -4,7 +4,7 @@ import {
   Network,
   Position,
   SerializedTransferIframeParams,
-} from "@meso-network/types";
+} from "../../src/types";
 
 export const serializedTransferIframeParamsFactory: {
   build: (

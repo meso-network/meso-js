@@ -3,7 +3,7 @@ import {
   Network,
   Asset,
   Environment,
-} from "@meso-network/types";
+} from "../src/types";
 import { Mock } from "vitest";
 import { transfer } from "../src";
 import { DEFAULT_LAYOUT } from "../src/transfer";

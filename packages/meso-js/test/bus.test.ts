@@ -1,4 +1,4 @@
-import { TransferConfiguration, TransferStatus } from "@meso-network/types";
+import { TransferConfiguration, TransferStatus } from "../src/types";
 import { setupBus } from "../src/bus";
 import { setupFrame } from "../src/frame";
 import { Mock } from "vitest";

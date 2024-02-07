@@ -1,13 +1,13 @@
+import { setupFrame } from "./frame";
 import {
+  MessageKind,
   EventKind,
   Transfer,
   TransferStatus,
   TransferApprovedPayload,
   TransferCompletePayload,
   TransferConfiguration,
-} from "@meso-network/types";
-import { setupFrame } from "./frame";
-import { MessageKind } from "./types";
+} from "./types";
 import { createPostMessageBus } from "./createPostMessageBus";
 
 export const setupBus = (

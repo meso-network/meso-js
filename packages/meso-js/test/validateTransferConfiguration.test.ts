@@ -4,7 +4,7 @@ import {
   Network,
   Position,
   TransferConfiguration,
-} from "@meso-network/types";
+} from "../src/types";
 import { validateTransferConfiguration } from "../src/validateTransferConfiguration";
 
 const onEvent = vi.fn();

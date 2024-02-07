@@ -1,4 +1,4 @@
-import { TransferStatus } from "@meso-network/types";
+import { TransferStatus } from "../src/types";
 import { MessageKind, PostMessageHandlerFn } from "../src/types";
 import {
   validateHandlerFunction,

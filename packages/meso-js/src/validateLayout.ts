@@ -1,4 +1,4 @@
-import { Position, TransferConfiguration } from "@meso-network/types";
+import { Position } from "./types";
 
 /** The values from the `Position` enum. */
 type PositionValue = `${Position}`;

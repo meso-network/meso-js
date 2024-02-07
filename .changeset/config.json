@@ -6,9 +6,7 @@
   ],
 
   "commit": false,
-  "fixed": [
-    ["@meso-network/meso-js", "@meso-network/types"]
-  ],
+  "fixed": [["@meso-network/meso-js"]],
   "access": "public",
   "baseBranch": "main",
   "updateInternalDependencies": "patch",
