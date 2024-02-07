@@ -20,8 +20,7 @@ used in a vanilla JavaScript application as well.
 - [@meso-network/meso-js](#meso-networkmeso-js)
   - [Requirements](#requirements)
     - [Account setup](#account-setup)
-    - [Integration setup](#integration-setup)
-      - [Content Security Policy](#content-security-policy)
+    - [Content Security Policy](#content-security-policy)
   - [Usage](#usage)
     - [Installation](#installation)
   - [Initialize a transfer](#initialize-a-transfer)
@@ -63,39 +62,26 @@ used in a vanilla JavaScript application as well.
 
 ### Account setup
 
-To use the `meso-js` SDK, you must have a partner account with
-[Meso](https://meso.network). To sign up, reach out to
-[support@meso.network](mailto:support@meso.network). During the onboarding
-process, you will need to specify the
-[origin/domain](https://developer.mozilla.org/en-US/docs/Glossary/Origin) of
-your dApp or web application to ensure`meso-js` operates seamlessly on your
-site. Meso will then provide you with a `partnerId` and an npm token for SDK
-installation and configuration.
+To use the `meso-js` SDK, you must have a [Meso](https://meso.network) partner
+account. You can reach out to
+[support@meso.network](mailto:support@meso.network) to sign up. During the
+onboarding process, you will need to specify the
+[origin](https://developer.mozilla.org/en-US/docs/Glossary/Origin) of your dApp
+or web application to ensure `meso-js` operates seamlessly on your site. Meso
+will then provide you with a `partnerId` for use with the SDK.
 
-### Integration setup
-
-Once you have been onboarded as a partner and you have your credentials, you
-will need to do at least the following:
-
-- Configure your application's
-  [Content-Security-Policy](#content-security-policy)
-- Be able to connect to a user's wallet from your application
-- (recommended) Have a pre-production instance of your application where you can
-  test against the Meso [sandbox](#environments)
-
-#### Content Security Policy
+### Content Security Policy
 
 `meso-js` can be used in most web browsers and application stacks. However, you
-will need to ensure you configure a [Content Security Policy (CSP)](#content-security-policy)
-to allow Meso's iframe and network calls from your page.
+will need to ensure your [Content Security Policy (CSP)](#content-security-policy)
+will allow Meso's iframe and network calls from your page.
 
-The `meso-js` SDK renders an iframe onto your page. You will need to make sure
-your [Content Security Policy
-(CSP)](https://developer.mozilla.org/en-US/docs/Glossary/CSP) contains the
-following rules and allows the correct origins.
-
-- [frame-src](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Content-Security-Policy/frame-src)
-- [connect-src](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Content-Security-Policy/connect-src)
+Your [CSP](https://developer.mozilla.org/en-US/docs/Glossary/CSP) should enable
+at least
+[frame-src](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Content-Security-Policy/frame-src)
+and
+[connect-src](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Content-Security-Policy/connect-src)
+with the correct values per-environment.
 
 **Sandbox:**
 
@@ -311,7 +297,7 @@ When the Meso interface appears, your [`onSignMessageRequest`](#transfer)
 callback will prompt a message signing request. You'll then retrieve a signed
 message from the user's wallet and pass it to the SDK.
 
-After the transfer receives an `APPROVED`` status, await its progression to
+After the transfer receives an `APPROVED` status, await its progression to
 `COMPLETE`. The Meso UI will be removed, leaving the iframe in place. You'll
 receive a notification in your onEvent callback once the transfer finalizes.
 
