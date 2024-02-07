@@ -67,7 +67,7 @@ account. You can reach out to
 [support@meso.network](mailto:support@meso.network) to sign up. During the
 onboarding process, you will need to specify the
 [origin](https://developer.mozilla.org/en-US/docs/Glossary/Origin) of your dApp
-or web application to ensure`meso-js` operates seamlessly on your site. Meso
+or web application to ensure `meso-js` operates seamlessly on your site. Meso
 will then provide you with a `partnerId` for use with the SDK.
 
 ### Content Security Policy
@@ -297,7 +297,7 @@ When the Meso interface appears, your [`onSignMessageRequest`](#transfer)
 callback will prompt a message signing request. You'll then retrieve a signed
 message from the user's wallet and pass it to the SDK.
 
-After the transfer receives an `APPROVED`` status, await its progression to
+After the transfer receives an `APPROVED` status, await its progression to
 `COMPLETE`. The Meso UI will be removed, leaving the iframe in place. You'll
 receive a notification in your onEvent callback once the transfer finalizes.
 
