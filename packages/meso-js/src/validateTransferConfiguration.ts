@@ -4,7 +4,7 @@ import {
   EventKind,
   Network,
   TransferConfiguration,
-} from "@meso-network/types";
+} from "./types";
 import { validateLayout } from "./validateLayout";
 
 /** The values from the `Network` enum. */

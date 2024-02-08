@@ -1,4 +1,4 @@
-import { SerializedTransferIframeParams } from "@meso-network/types";
+import type { SerializedTransferIframeParams } from "./types";
 
 export const setupFrame = (
   apiHost: string,

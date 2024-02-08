@@ -1,15 +1,15 @@
-import {
-  Environment,
-  TransferInstance,
-  TransferConfiguration,
-  Position,
-  Layout,
-  AuthenticationStrategy,
-} from "@meso-network/types";
 import { validateTransferConfiguration } from "./validateTransferConfiguration";
 import { setupBus } from "./bus";
 import { setupFrame } from "./frame";
 import { version } from "../package.json";
+import {
+  Layout,
+  Position,
+  AuthenticationStrategy,
+  TransferConfiguration,
+  TransferInstance,
+  Environment,
+} from "./types";
 
 const apiHosts: { readonly [key in Environment]: string } = {
   [Environment.LOCAL]: "http://localhost:5173",

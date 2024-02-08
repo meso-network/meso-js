@@ -1,7 +1,7 @@
 import { setupFrame } from "../src/frame";
 import "@testing-library/jest-dom/vitest";
 import { serializedTransferIframeParamsFactory } from "./factories";
-import { AuthenticationStrategy } from "@meso-network/post-message-bus";
+import { AuthenticationStrategy } from "../src";
 
 describe("setupFrame", () => {
   const apiHost = "https://api.sandbox.meso.network";

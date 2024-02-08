@@ -8,10 +8,6 @@
     "moduleResolution": "Node",
     "resolveJsonModule": true,
     "strict": true,
-    "baseUrl": ".",
-    "paths": {
-      "@meso-network/post-message-bus": ["packages/post-message-bus/src"],
-      "@meso-network/types": ["packages/types/src"]
-    }
+    "baseUrl": "."
   }
 }

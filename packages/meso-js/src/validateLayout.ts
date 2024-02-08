@@ -1,8 +1,4 @@
-import {
-  PixelValue,
-  Position,
-  TransferConfiguration,
-} from "@meso-network/post-message-bus";
+import { PixelValue, Position, TransferConfiguration } from "./types";
 
 /** The values from the `Position` enum. */
 type PositionValue = `${Position}`;

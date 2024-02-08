@@ -1,16 +1,14 @@
+import { setupFrame } from "./frame";
 import {
-  createPostMessageBus,
   MessageKind,
-} from "@meso-network/post-message-bus";
-import {
   EventKind,
   Transfer,
   TransferStatus,
   TransferApprovedPayload,
   TransferCompletePayload,
   TransferConfiguration,
-} from "@meso-network/types";
-import { setupFrame } from "./frame";
+} from "./types";
+import { createPostMessageBus } from "./createPostMessageBus";
 
 export const setupBus = (
   apiHost: string,

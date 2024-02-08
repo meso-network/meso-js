@@ -9,13 +9,13 @@
   "license": "MIT",
   "scripts": {
     "ci:publish": "pnpm build && pnpm publish -r && changeset tag",
-    "clean": "rimraf packages/**/lib packages/**/*.tsbuildinfo packages/**/*.timestamp packages/types/src/index.d.ts",
+    "clean": "rimraf packages/**/lib packages/**/*.tsbuildinfo packages/**/*.timestamp",
     "lint:es": "eslint .",
     "lint:markdown": "markdownlint .",
     "lint": "pnpm lint:es && pnpm lint:markdown",
     "typecheck": "pnpm clean && pnpm run -r --if-present typecheck",
     "test": "pnpm run -r --if-present test",
-    "build": "pnpm clean && pnpm typecheck && pnpm run --filter @meso-network/post-message-bus -r build && pnpm run --filter @meso-network/meso-js -r build",
+    "build": "pnpm clean && pnpm typecheck && pnpm run --filter @meso-network/meso-js -r build",
     "fmt": "prettier -w .",
     "fmt:check": "prettier --check .",
     "spelling:check": "cspell ."
@@ -32,6 +32,7 @@
     "cspell": "^7.3.8",
     "eslint": "^8.51.0",
     "eslint-config-prettier": "^9.0.0",
+    "eslint-plugin-import": "^2.29.1",
     "eslint-plugin-prettier": "^5.0.1",
     "eslint-plugin-vitest": "^0.3.2",
     "eslint-plugin-vitest-globals": "^1.4.0",
