@@ -1,5 +1,13 @@
 # @meso-network/meso-js
 
+## 0.0.72
+
+### Patch Changes
+
+- [#29](https://github.com/meso-network/meso-js/pull/29) [`871ba50`](https://github.com/meso-network/meso-js/commit/871ba50ac51e05794edfa10741a483a101240427) Thanks [@kyledetella](https://github.com/kyledetella)! - Collapse `@meso-network/types` and `@meso-network/post-message-bus` into `@meso-network/meso-js`.
+
+  This EOLs `@meso-network/post-message-bus` which will no longer be published to npm.
+
 ## 0.0.71
 
 ### Patch Changes
