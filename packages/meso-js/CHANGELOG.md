@@ -1,5 +1,11 @@
 # @meso-network/meso-js
 
+## 0.0.73
+
+### Patch Changes
+
+- [#31](https://github.com/meso-network/meso-js/pull/31) [`673dc09`](https://github.com/meso-network/meso-js/commit/673dc09aa6260d937e8fa5f906c1e2b5beed727a) Thanks [@kyledetella](https://github.com/kyledetella)! - Expose `createPostMessageBus`
+
 ## 0.0.72
 
 ### Patch Changes
