@@ -1,8 +1,11 @@
-import { TransferConfiguration, TransferStatus } from "../src/types";
+import {
+  TransferConfiguration,
+  TransferStatus,
+  MessageKind,
+} from "../src/types";
 import { setupBus } from "../src/bus";
 import { setupFrame } from "../src/frame";
 import { Mock } from "vitest";
-import { MessageKind } from "../src/types";
 
 var createPostMessageBusMock: Mock;
 vi.mock("../src/createPostMessageBus", async () => {

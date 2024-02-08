@@ -1,5 +1,8 @@
-import { TransferStatus } from "../src/types";
-import { MessageKind, PostMessageHandlerFn } from "../src/types";
+import {
+  TransferStatus,
+  MessageKind,
+  PostMessageHandlerFn,
+} from "../src/types";
 import {
   validateHandlerFunction,
   validateMessage,
