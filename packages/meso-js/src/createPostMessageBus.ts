@@ -46,9 +46,14 @@ export const createPostMessageBus = (
   } else {
     // otherwise, find child iframe with matching origin
     const frames = Array.from(document.querySelectorAll("iframe"));
-    const frameWindow = frames.find(
-      (frame) => new URL(frame.src).origin === targetOrigin,
-    );
+    const frameWindow = frames.find((frame) => {
+      try {
+        const url = new URL(frame.src);
+        return url.origin === targetOrigin;
+      } catch (err: unknown) {
+        return false;
+      }
+    });
 
     if (!frameWindow) {
       const message = `No iframe found with origin ${targetOrigin}`;
