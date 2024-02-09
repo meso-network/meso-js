@@ -1,5 +1,11 @@
 # @meso-network/meso-js
 
+## 0.0.74
+
+### Patch Changes
+
+- [#33](https://github.com/meso-network/meso-js/pull/33) [`e340fea`](https://github.com/meso-network/meso-js/commit/e340feaf262bc8c8b6afc6c5e5e48d3e0393fda8) Thanks [@kyledetella](https://github.com/kyledetella)! - Guard against unreadable iframe `src` attributes
+
 ## 0.0.73
 
 ### Patch Changes
