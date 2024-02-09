@@ -75,8 +75,6 @@ importers:
         specifier: ^22.1.0
         version: 22.1.0
 
-  packages/types: {}
-
 packages:
 
   /@aashutoshrathi/word-wrap@1.2.6:
