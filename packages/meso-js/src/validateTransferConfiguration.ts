@@ -1,5 +1,6 @@
 import {
   Asset,
+  AuthenticationStrategy,
   Environment,
   EventKind,
   Network,
@@ -21,9 +22,9 @@ export const validateTransferConfiguration = ({
   environment,
   partnerId,
   layout,
-  headlessSignature,
   onSignMessageRequest,
   onEvent,
+  authenticationStrategy,
 }: TransferConfiguration): boolean => {
   if (typeof onEvent !== "function") {
     throw new Error("[meso-js] An onEvent callback is required.");
@@ -94,11 +95,18 @@ export const validateTransferConfiguration = ({
       payload: { error: { message: `"partnerId" must be provided.` } },
     });
     return false;
-  } else if (typeof headlessSignature !== "boolean") {
+  } else if (
+    authenticationStrategy &&
+    !Object.values(AuthenticationStrategy).includes(authenticationStrategy)
+  ) {
     onEvent({
       kind: EventKind.CONFIGURATION_ERROR,
       payload: {
-        error: { message: '"headlessSignature" must be a boolean.' },
+        error: {
+          message: `\`authenticationStrategy\` must be one of ${Object.values(
+            AuthenticationStrategy,
+          ).join(", ")}`,
+        },
       },
     });
     return false;

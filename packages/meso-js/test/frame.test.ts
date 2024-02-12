@@ -16,19 +16,18 @@ describe("setupFrame", () => {
         new URLSearchParams(new URL(setupFrameRes.element.src).search),
       );
       expect(params).toMatchInlineSnapshot(`
-      {
-        "authenticationStrategy": "headless_wallet_verification",
-        "destinationAsset": "ETH",
-        "headlessSignature": "false",
-        "layoutOffset": "0",
-        "layoutPosition": "top-right",
-        "network": "eip155:1",
-        "partnerId": "partnerId",
-        "sourceAmount": "100",
-        "version": "1.0.0",
-        "walletAddress": "0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48",
-      }
-    `);
+        {
+          "authenticationStrategy": "headless_wallet_verification",
+          "destinationAsset": "ETH",
+          "layoutOffset": "0",
+          "layoutPosition": "top-right",
+          "network": "eip155:1",
+          "partnerId": "partnerId",
+          "sourceAmount": "100",
+          "version": "1.0.0",
+          "walletAddress": "0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48",
+        }
+      `);
     });
 
     test.each([
@@ -71,7 +70,7 @@ describe("setupFrame", () => {
     expect(setupFrameRes.element.attributes).toMatchInlineSnapshot(`
       NamedNodeMap {
         "allowtransparency": "true",
-        "src": "https://api.sandbox.meso.network/app?partnerId=partnerId&network=eip155%3A1&walletAddress=0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48&sourceAmount=100&destinationAsset=ETH&headlessSignature=false&layoutPosition=top-right&layoutOffset=0&version=1.0.0&authenticationStrategy=headless_wallet_verification",
+        "src": "https://api.sandbox.meso.network/app?partnerId=partnerId&network=eip155%3A1&walletAddress=0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48&sourceAmount=100&destinationAsset=ETH&layoutPosition=top-right&layoutOffset=0&version=1.0.0&authenticationStrategy=headless_wallet_verification",
         "style": "position: fixed; left: 0px; top: 0px; width: 100%; height: 100%; z-index: 9999; box-sizing: border-box; background-color: transparent;",
       }
     `);

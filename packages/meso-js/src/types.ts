@@ -235,13 +235,6 @@ export type TransferConfiguration = Readonly<{
    */
   layout?: Layout;
   /**
-   * Perform message signing in the background without prompting the user. This
-   * is useful for embedded wallets.
-   *
-   * @deprecated `headlessSignature` will be removed in a future version. Instead, use {@link TransferConfiguration.authenticationStrategy|authenticationStrategy}.
-   */
-  headlessSignature?: boolean;
-  /**
    * Determines the authentication mechanism for users to perform a transfer.
    *
    * In all scenarios, the user will still be required to perform two-factor authentication (2FA) and, in some cases provide email/password.
@@ -290,7 +283,6 @@ export type TransferIframeParams = Pick<
   | "walletAddress"
   | "sourceAmount"
   | "destinationAsset"
-  | "headlessSignature"
   | "authenticationStrategy"
 > & {
   layoutPosition: NonNullable<Layout["position"]>;
