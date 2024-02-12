@@ -33,7 +33,6 @@ export const transfer = ({
   environment,
   partnerId,
   layout = DEFAULT_LAYOUT,
-  headlessSignature = false,
   authenticationStrategy = AuthenticationStrategy.WALLET_VERIFICATION,
   onSignMessageRequest,
   onEvent,
@@ -47,7 +46,6 @@ export const transfer = ({
     environment,
     partnerId,
     layout: mergedLayout,
-    headlessSignature,
     onSignMessageRequest,
     onEvent,
   };
@@ -66,7 +64,6 @@ export const transfer = ({
       typeof mergedLayout.offset === "string"
         ? mergedLayout.offset
         : JSON.stringify(mergedLayout.offset),
-    headlessSignature: headlessSignature.toString(),
     version,
     authenticationStrategy,
   });
