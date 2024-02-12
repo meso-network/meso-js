@@ -1,5 +1,14 @@
 # @meso-network/meso-js
 
+## 0.0.75
+
+### Patch Changes
+
+- [#35](https://github.com/meso-network/meso-js/pull/35) [`fc7a05a`](https://github.com/meso-network/meso-js/commit/fc7a05a0d907dc3cdc815ba2cf64efb612de069f) Thanks [@kyledetella](https://github.com/kyledetella)! - Remove `headlessSignature` from configuration options. This had been deprecated
+  in
+  [v0.0.71](https://github.com/meso-network/meso-js/releases/tag/%40meso-network%2Fmeso-js%400.0.71)
+  and is now being fully removed
+
 ## 0.0.74
 
 ### Patch Changes
