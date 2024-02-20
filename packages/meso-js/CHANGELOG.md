@@ -1,5 +1,11 @@
 # @meso-network/meso-js
 
+## 0.0.76
+
+### Patch Changes
+
+- [#37](https://github.com/meso-network/meso-js/pull/37) [`162757e`](https://github.com/meso-network/meso-js/commit/162757e850b0d9041ab80e282d03db6b46182be7) Thanks [@dseeto](https://github.com/dseeto)! - add OP Mainnet to network list
+
 ## 0.0.75
 
 ### Patch Changes
