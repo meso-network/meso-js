@@ -340,6 +340,7 @@ enum Network {
   ETHEREUM_MAINNET = "eip155:1"
   SOLANA_MAINNET = "solana:5eykt4UsFv8P8NJdTREpY1vzqKqZKvdp"
   POLYGON_MAINNET = "eip155:137",
+  OP_MAINNET = "eip155:10",
 }
 
 enum Asset {
