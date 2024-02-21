@@ -1,5 +1,14 @@
 # @meso-network/meso-js
 
+## 0.0.77
+
+### Patch Changes
+
+- [#39](https://github.com/meso-network/meso-js/pull/39) [`4afbd45`](https://github.com/meso-network/meso-js/commit/4afbd4542cdba82a3866902be150bff43c7c8463) Thanks [@kyledetella](https://github.com/kyledetella)! - Set
+  [`color-scheme`](https://developer.mozilla.org/en-US/docs/Web/CSS/color-scheme)
+  to `auto` by default on rendered iframe to ensure the Meso experience respects
+  embedding application color overrides.
+
 ## 0.0.76
 
 ### Patch Changes
