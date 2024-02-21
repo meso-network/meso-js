@@ -30,6 +30,7 @@ const injectFullScreenIframe = (src: string) => {
   iframe.style.border = "none";
   iframe.style.boxSizing = "border-box";
   iframe.style.backgroundColor = "transparent";
+  iframe.style.colorScheme = "auto";
 
   document.body.appendChild(iframe);
 
