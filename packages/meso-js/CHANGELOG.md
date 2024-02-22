@@ -1,5 +1,11 @@
 # @meso-network/meso-js
 
+## 0.0.78
+
+### Patch Changes
+
+- [#41](https://github.com/meso-network/meso-js/pull/41) [`b2a3a64`](https://github.com/meso-network/meso-js/commit/b2a3a640e7c66a5097ef93d77be36fcaed29beb1) Thanks [@kyledetella](https://github.com/kyledetella)! - Introduce `mode` to transfer configuration to support operating in webviews within native mobile apps.
+
 ## 0.0.77
 
 ### Patch Changes
