@@ -57,12 +57,12 @@ export const createPostMessageBus = (
   }
 
   let postMessageWindow: Window;
-  if (getParentWindowOrigin() === targetOrigin) {
-    // target is parent, currently in iframe
-    postMessageWindow = window.parent;
-  } else if (syntheticWindowMessageHandle) {
+  if (syntheticWindowMessageHandle) {
     // If we are given a custom window handler (for mobile webviews), use that.
     postMessageWindow = syntheticWindowMessageHandle;
+  } else if (getParentWindowOrigin() === targetOrigin) {
+    // target is parent, currently in iframe
+    postMessageWindow = window.parent;
   } else {
     // otherwise, find child iframe with matching origin
     const frames = Array.from(document.querySelectorAll("iframe"));
