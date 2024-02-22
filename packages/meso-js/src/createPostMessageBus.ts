@@ -1,4 +1,4 @@
-import { Result, err, ok } from "./result";
+import { parseMessage } from "./parseMessage";
 import type {
   Message,
   PostMessageBus,
@@ -28,26 +28,6 @@ export const getParentWindowOrigin = () => {
   } else if (document.referrer) {
     return new URL(document.referrer).origin;
   }
-};
-
-const parseEventData = (data: string | object): Result<Message, string> => {
-  if (typeof data === "string") {
-    if (data.trim().startsWith("{")) {
-      try {
-        return ok(JSON.parse(data));
-      } catch (error: unknown) {
-        return err(
-          "Unable to deserialize message into JSON (error occurred during parsing).",
-        );
-      }
-    }
-    return err(
-      "Unable to deserialize message into JSON (source is not a JSON string).",
-    );
-  }
-
-  // TODO: Properly validate the structural integrity of the message
-  return ok(data as Message);
 };
 
 /**
@@ -119,30 +99,23 @@ export const createPostMessageBus = (
       return;
     }
 
-    const parsedEventDataResult = parseEventData(event.data);
+    const parsedMessageResult = parseMessage(event.data);
 
-    if (!parsedEventDataResult.ok) {
+    if (!parsedMessageResult.ok) {
       return;
     }
 
     // If there is no handler registered, abort.
     if (
-      !handlers.has(parsedEventDataResult.value.kind) ||
+      !handlers.has(parsedMessageResult.value.kind) ||
       // Prevent message structs we have identified as extraneous.
-      "target" in parsedEventDataResult.value
+      "target" in parsedMessageResult.value
     ) {
       return;
     }
 
-    handlers.get(parsedEventDataResult.value.kind)?.forEach((handlerFn) => {
-      handlerFn(parsedEventDataResult.value, (message: Message) => {
-        // // TODO: Is this needed?
-        // let messageToSend = message;
-
-        // if (typeof message === "string") {
-        //   messageToSend = JSON.parse(message);
-        // }
-
+    handlers.get(parsedMessageResult.value.kind)?.forEach((handlerFn) => {
+      handlerFn(parsedMessageResult.value, (message: Message) => {
         postMessageWindow.postMessage(message, event.origin);
       });
     });

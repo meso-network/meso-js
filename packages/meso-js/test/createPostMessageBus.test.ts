@@ -36,6 +36,20 @@ describe("createPostMessageBus", () => {
     });
   });
 
+  describe("in webview", () => {
+    test("returns a post message bus instance for valid target origin", () => {
+      const fakeWindow = {} as Window;
+      expect(createPostMessageBus(PARTNER_APP_ORIGIN, fakeWindow))
+        .toMatchInlineSnapshot(`
+      {
+        "destroy": [Function],
+        "emit": [Function],
+        "on": [Function],
+      }
+    `);
+    });
+  });
+
   describe("in parent frame", () => {
     afterEach(() => {
       [...document.querySelectorAll("iframe")].forEach((frame) => {

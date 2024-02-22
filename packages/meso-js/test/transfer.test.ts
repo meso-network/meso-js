@@ -65,21 +65,20 @@ describe("transfer", () => {
       '"https://api.sandbox.meso.network"',
     );
     expect(setupFrameMock.mock.lastCall[1]).toMatchInlineSnapshot(
-      { version: expect.any(String) },
-      `
+      { version: expect.any(String) }, `
       {
         "authenticationStrategy": "wallet_verification",
         "destinationAsset": "ETH",
         "layoutOffset": "0",
         "layoutPosition": "top-right",
+        "mode": "embedded",
         "network": "eip155:1",
         "partnerId": "partnerId",
         "sourceAmount": "100",
         "version": Any<String>,
         "walletAddress": "0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48",
       }
-    `,
-    );
+    `);
     expect(setupFrameMock.mock.lastCall[1].version).toEqual(version);
     expect(setupBusMock).toHaveBeenCalledOnce();
     expect(setupBusMock.mock.lastCall).toMatchInlineSnapshot(`
