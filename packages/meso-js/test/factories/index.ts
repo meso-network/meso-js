@@ -4,6 +4,7 @@ import {
   Network,
   Position,
   SerializedTransferIframeParams,
+  TransferExperienceMode,
 } from "../../src/types";
 
 export const serializedTransferIframeParamsFactory: {
@@ -23,6 +24,7 @@ export const serializedTransferIframeParamsFactory: {
       version: "1.0.0",
       authenticationStrategy:
         AuthenticationStrategy.HEADLESS_WALLET_VERIFICATION,
+      mode: TransferExperienceMode.EMBEDDED,
       ...overrides,
     };
   },

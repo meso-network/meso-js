@@ -9,6 +9,7 @@ import {
   TransferConfiguration,
   TransferInstance,
   Environment,
+  TransferExperienceMode,
 } from "./types";
 
 const apiHosts: { readonly [key in Environment]: string } = {
@@ -66,6 +67,7 @@ export const transfer = ({
         : JSON.stringify(mergedLayout.offset),
     version,
     authenticationStrategy,
+    mode: TransferExperienceMode.EMBEDDED,
   });
   const bus = setupBus(apiHost, frame, onSignMessageRequest, onEvent);
 

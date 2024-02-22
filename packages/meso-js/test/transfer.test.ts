@@ -72,6 +72,7 @@ describe("transfer", () => {
         "destinationAsset": "ETH",
         "layoutOffset": "0",
         "layoutPosition": "top-right",
+        "mode": "embedded",
         "network": "eip155:1",
         "partnerId": "partnerId",
         "sourceAmount": "100",

@@ -1,3 +1,4 @@
+import { parseMessage } from "./parseMessage";
 import type {
   Message,
   PostMessageBus,
@@ -29,8 +30,24 @@ export const getParentWindowOrigin = () => {
   }
 };
 
+/**
+ * Create a post message bus instance from a parent frame/native app or from within the Meso experience app/iframe.
+ *
+ * @param targetOrigin A qualified [origin](https://developer.mozilla.org/en-US/docs/Web/API/Location/origin) value
+ * @param syntheticWindowMessageHandle An optional reference to a `window` for sending/receiving messages. If provided, the bus will not attempt to crawl `iframe` elements on the page and instead hook into this window handler's `postMessage` functionality.
+ *
+ * This value is typically a custom message handler created in mobile apps for use with webviews.
+ *
+ * - On iOS, this is created via a [WKScriptMessageHandler](https://developer.apple.com/documentation/webkit/wkscriptmessagehandler)
+ * - On Android, this is created via a [WebMessagePort](https://developer.android.com/reference/android/webkit/WebMessagePort)
+ *
+ * @returns {(PostMessageBus | undefined)} A `PostMessageBus` or `undefined`.
+ */
 export const createPostMessageBus = (
   targetOrigin: string,
+  syntheticWindowMessageHandle?:
+    | Window
+    | Extract<HTMLIFrameElement["contentWindow"], Window>,
 ): PostMessageBus | PostMessageBusInitializationError => {
   if (targetOrigin === "*") {
     const message = "Wildcard (*) target origin is not allowed.";
@@ -40,7 +57,10 @@ export const createPostMessageBus = (
   }
 
   let postMessageWindow: Window;
-  if (getParentWindowOrigin() === targetOrigin) {
+  if (syntheticWindowMessageHandle) {
+    // If we are given a custom window handler (for mobile webviews), use that.
+    postMessageWindow = syntheticWindowMessageHandle;
+  } else if (getParentWindowOrigin() === targetOrigin) {
     // target is parent, currently in iframe
     postMessageWindow = window.parent;
   } else {
@@ -74,18 +94,28 @@ export const createPostMessageBus = (
 
   const handlers = new Map<MessageKind, HandlerFn[]>();
   const postMessageHandler = (event: MessageEvent<Message>) => {
-    if (event.data && typeof event.data === "object" && "target" in event.data)
+    // Check if our event is from a known or trusted source
+    if (targetOrigin !== "*" && targetOrigin !== event.origin) {
       return;
+    }
 
+    const parsedMessageResult = parseMessage(event.data);
+
+    if (!parsedMessageResult.ok) {
+      return;
+    }
+
+    // If there is no handler registered, abort.
     if (
-      (targetOrigin !== "*" && targetOrigin !== event.origin) ||
-      !handlers.has(event.data.kind)
+      !handlers.has(parsedMessageResult.value.kind) ||
+      // Prevent message structs we have identified as extraneous.
+      "target" in parsedMessageResult.value
     ) {
       return;
     }
 
-    handlers.get(event.data.kind)?.forEach((handlerFn) => {
-      handlerFn(event.data, (message: Message) => {
+    handlers.get(parsedMessageResult.value.kind)?.forEach((handlerFn) => {
+      handlerFn(parsedMessageResult.value, (message: Message) => {
         postMessageWindow.postMessage(message, event.origin);
       });
     });
@@ -140,7 +170,6 @@ export const createPostMessageBus = (
       handlers.clear();
     },
   };
-
   return bus;
 };
 

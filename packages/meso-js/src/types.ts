@@ -290,6 +290,8 @@ export type TransferIframeParams = Pick<
   layoutOffset: NonNullable<Layout["offset"]>;
   /** The version of meso-js. */
   version: string;
+  /** The mode for the rendering context of the Meso experience. */
+  mode: TransferExperienceMode;
 };
 
 /**
@@ -299,6 +301,20 @@ export type SerializedTransferIframeParams = Record<
   keyof TransferIframeParams,
   string
 >;
+
+/**
+ * The mode for the rendering context of the Meso experience.
+ */
+export enum TransferExperienceMode {
+  /**
+   * Intended to run inside an iframe in a web browser.
+   */
+  EMBEDDED = "embedded",
+  /**
+   * Intended to run inside a webview in a native mobile app.
+   */
+  WEBVIEW = "webview",
+}
 
 /**
  * The handler to the instance returned when calling `transfer()`.
@@ -422,6 +438,11 @@ export type PostMessageBus = {
    */
   destroy: () => void;
 };
+
+/**
+ * A handler function for a message event.
+ */
+export type HandlerFn = Parameters<PostMessageBus["on"]>[1];
 
 /**
  * A structured error returned when the post message bus cannot be initialized.
