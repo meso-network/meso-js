@@ -91,7 +91,9 @@ describe("parseMessage", () => {
         throw new Error("Test failed");
       }
 
-      expect(result.error).toMatchInlineSnapshot('"Unable to deserialize message into JSON (error occurred during parsing)."');
+      expect(result.error).toMatchInlineSnapshot(
+        '"Unable to deserialize message into JSON (error occurred during parsing)."',
+      );
     });
   });
 });
