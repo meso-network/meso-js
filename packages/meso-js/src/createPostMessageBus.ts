@@ -94,8 +94,13 @@ export const createPostMessageBus = (
 
   const handlers = new Map<MessageKind, HandlerFn[]>();
   const postMessageHandler = (event: MessageEvent<Message>) => {
-    // Check if our event is from a known or trusted source
-    if (targetOrigin !== "*" && targetOrigin !== event.origin) {
+    // Check if we are in an iframe context. If so, check if our event is from a known or trusted source.
+    // If we are not in an iframe and are, for example, in a mobile WebView, skip this check.
+    if (
+      window.top !== window &&
+      targetOrigin !== "*" &&
+      targetOrigin !== event.origin
+    ) {
       return;
     }
 
@@ -160,7 +165,9 @@ export const createPostMessageBus = (
         );
       }
 
-      postMessageWindow.postMessage(message, targetOrigin);
+      // Some contexts, such as WebViews and certain RN libraries require the message to be a `string`.
+      // We safely deserialize strings to objects on the receiving end of the bus before dispatching callbacks.
+      postMessageWindow.postMessage(JSON.stringify(message), targetOrigin);
 
       return this;
     },
