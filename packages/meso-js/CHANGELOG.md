@@ -1,5 +1,11 @@
 # @meso-network/meso-js
 
+## 0.0.79
+
+### Patch Changes
+
+- [#44](https://github.com/meso-network/meso-js/pull/44) [`b891836`](https://github.com/meso-network/meso-js/commit/b8918367207656bdcc53cdfbecf800fe6fc07d7a) Thanks [@kyledetella](https://github.com/kyledetella)! - Enable post messaging in React Native WebViews.
+
 ## 0.0.78
 
 ### Patch Changes
