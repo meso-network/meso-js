@@ -36,6 +36,7 @@ export const transfer = ({
   layout = DEFAULT_LAYOUT,
   authenticationStrategy = AuthenticationStrategy.WALLET_VERIFICATION,
   onSignMessageRequest,
+  onSendTransactionRequest,
   onEvent,
 }: TransferConfiguration): TransferInstance => {
   const mergedLayout = { ...DEFAULT_LAYOUT, ...layout };
@@ -48,6 +49,7 @@ export const transfer = ({
     partnerId,
     layout: mergedLayout,
     onSignMessageRequest,
+    onSendTransactionRequest,
     onEvent,
   };
   if (!validateTransferConfiguration(configuration))
@@ -69,7 +71,7 @@ export const transfer = ({
     authenticationStrategy,
     mode: TransferExperienceMode.EMBEDDED,
   });
-  const bus = setupBus(apiHost, frame, onSignMessageRequest, onEvent);
+  const bus = setupBus(apiHost, frame, onSignMessageRequest, onSendTransactionRequest, onEvent);
 
   return {
     destroy: () => {

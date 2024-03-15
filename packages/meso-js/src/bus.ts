@@ -14,6 +14,7 @@ export const setupBus = (
   apiHost: string,
   frame: ReturnType<typeof setupFrame>,
   onSignMessageRequest: TransferConfiguration["onSignMessageRequest"],
+  onSendTransactionRequest: TransferConfiguration["onSendTransactionRequest"],
   onEvent: TransferConfiguration["onEvent"],
 ) => {
   const bus = createPostMessageBus(apiHost);
@@ -33,6 +34,25 @@ export const setupBus = (
         kind: MessageKind.RETURN_SIGNED_MESSAGE_RESULT,
         payload: { signedMessage },
       });
+    }
+  });
+
+  bus.on(MessageKind.REQUEST_SEND_TRANSACTION, async (message) => {
+    if (message.kind === MessageKind.REQUEST_SEND_TRANSACTION) {
+      const {
+        amount,
+        recipientAddress,
+        tokenAddress,
+        decimals,
+        interfaceDefinition,
+      } = message.payload;
+      await onSendTransactionRequest(
+        amount,
+        recipientAddress,
+        tokenAddress,
+        decimals,
+        interfaceDefinition,
+      );
     }
   });
 

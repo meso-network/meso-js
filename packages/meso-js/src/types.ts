@@ -125,6 +125,7 @@ export enum Asset {
   SOL = "SOL",
   USDC = "USDC",
   MATIC = "MATIC",
+  USD = "USD",
 }
 
 /**
@@ -248,6 +249,23 @@ export type TransferConfiguration = Readonly<{
    */
   onSignMessageRequest: (message: string) => Promise<SignedMessageResult>;
   /**
+   * A handler to notify you when a transaction needs to be sent. Require only
+   * when destinationAsset is a fiat `Asset`.
+   *
+   * @param amount - quantity of the cryptocurrency to send.
+   * @param recipientAddress - wallet address of the transaction recipient.
+   * @param tokenAddress - contract address of the token being send.
+   * @param decimals - number of decimal places used for the token.
+   * @param interfaceDefinition - optional param defining the contract interface.
+   */
+  onSendTransactionRequest?: (
+    amount: string,
+    recipientAddress: string,
+    tokenAddress: string,
+    decimals: number,
+    interfaceDefinition?: string,
+  ) => Promise<void>;
+  /**
    * A handler to notify you when an event has occurred.
    */
   onEvent: (event: MesoEvent) => void;
@@ -345,6 +363,10 @@ export enum MessageKind {
    */
   RETURN_SIGNED_MESSAGE_RESULT = "RETURN_SIGNED_MESSAGE_RESULT",
   /**
+   * Request from Meso experience to parent window to initiate sending of transaction.
+   */
+  REQUEST_SEND_TRANSACTION = "REQUEST_SEND_TRANSACTION",
+  /**
    * Dispatch a message from the Meso experience to the parent window to close the experience.
    */
   CLOSE = "CLOSE",
@@ -386,6 +408,32 @@ export type ReturnSignedMessagePayload = {
   signedMessage?: string;
 };
 
+export type RequestSendTransactionPayload = {
+  /*
+   * A stringified number including decimal (if needed) representing the
+   * quantity to send for the transaction (e.g. `"10",`"0.01"`, `"1.2"`,
+   * `"100.23"`, `"1250", `"1250.40"`).
+   */
+  amount: string;
+  /*
+   * Wallet address of the transaction recipient (i.e. the Meso Deposit Address for Cash-Ins).
+   */
+  recipientAddress: string;
+  /*
+   * Contract address of the token being send (e.g.
+   * "0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48" for USDC on Ethereum).
+   */
+  tokenAddress: string;
+  /*
+   * Number of decimal places used for the token (e.g. 6 for USDC on Ethereum).
+   */
+  decimals: number;
+  /*
+   * Optional param defining the contract interface (e.g. the ABI for ERC-20 token).
+   */
+  interfaceDefinition?: string;
+};
+
 /**
  * Structured `window.postMessage` messages between the Meso experience to parent window
  */
@@ -397,6 +445,10 @@ export type Message =
   | {
       kind: MessageKind.RETURN_SIGNED_MESSAGE_RESULT;
       payload: ReturnSignedMessagePayload;
+    }
+  | {
+      kind: MessageKind.REQUEST_SEND_TRANSACTION;
+      payload: RequestSendTransactionPayload;
     }
   | { kind: MessageKind.CLOSE }
   | {
