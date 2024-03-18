@@ -449,7 +449,7 @@ export type RequestSendTransactionPayload = {
    * quantity to send for the transaction (e.g. `"10",`"0.01"`, `"1.2"`,
    * `"100.23"`, `"1250", `"1250.40"`).
    */
-  amount: string;
+  amount: AssetAmount;
   /*
    * Wallet address of the transaction recipient (i.e. the Meso Deposit Address for Cash-Ins).
    */
