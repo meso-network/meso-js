@@ -1,10 +1,13 @@
 import {
   Asset,
   AuthenticationStrategy,
+  CryptoAsset,
   Environment,
   EventKind,
+  FiatAsset,
   Network,
   TransferConfiguration,
+  isFiatAsset,
 } from "./types";
 import { validateLayout } from "./validateLayout";
 
@@ -25,6 +28,7 @@ export const validateTransferConfiguration = ({
   onSignMessageRequest,
   onEvent,
   authenticationStrategy,
+  ...rest
 }: TransferConfiguration): boolean => {
   if (typeof onEvent !== "function") {
     throw new Error("[meso-js] An onEvent callback is required.");
@@ -61,14 +65,18 @@ export const validateTransferConfiguration = ({
       payload: { error: { message: `"walletAddress" must be provided.` } },
     });
     return false;
-  } else if (!(destinationAsset in Asset)) {
+  } else if (
+    !(destinationAsset in CryptoAsset) &&
+    !(destinationAsset in FiatAsset)
+  ) {
     onEvent({
       kind: EventKind.UNSUPPORTED_ASSET_ERROR,
       payload: {
         error: {
-          message: `"destinationAsset" must be a supported asset: ${Object.values(
-            Asset,
-          )}.`,
+          message: `"destinationAsset" must be a supported asset: ${[
+            ...Object.values(CryptoAsset),
+            ...Object.values(FiatAsset),
+          ]}.`,
         },
       },
     });
@@ -115,6 +123,20 @@ export const validateTransferConfiguration = ({
       kind: EventKind.CONFIGURATION_ERROR,
       payload: {
         error: { message: '"onSignMessageRequest" must be a valid function.' },
+      },
+    });
+    return false;
+  } else if (
+    isFiatAsset(destinationAsset) &&
+    (!("onSendTransactionRequest" in rest) ||
+      typeof rest.onSendTransactionRequest !== "function")
+  ) {
+    onEvent({
+      kind: EventKind.CONFIGURATION_ERROR,
+      payload: {
+        error: {
+          message: '"onSendTransactionRequest" must be a valid function.',
+        },
       },
     });
     return false;

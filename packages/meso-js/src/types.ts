@@ -118,15 +118,34 @@ export enum Network {
 }
 
 /**
- * Symbol representing a crypto/fiat currency.
+ * Symbol representing a cryptocurrency.
  */
-export enum Asset {
+export enum CryptoAsset {
   ETH = "ETH",
   SOL = "SOL",
   USDC = "USDC",
   MATIC = "MATIC",
+}
+
+/**
+ * Symbol representing a fiat currency.
+ */
+export enum FiatAsset {
   USD = "USD",
 }
+
+/**
+ * Symbol representing a crypto/fiat currency.
+ */
+export type Asset = CryptoAsset | FiatAsset;
+
+export const isFiatAsset = (value: string): value is FiatAsset => {
+  return Object.values(FiatAsset).includes(value as FiatAsset);
+};
+
+export const isCryptoAsset = (value: string): value is CryptoAsset => {
+  return Object.values(CryptoAsset).includes(value as CryptoAsset);
+};
 
 /**
  * A stringified number representing an amount of USD.
@@ -135,7 +154,7 @@ export enum Asset {
  *
  * Examples: `"10",`"0.01"`, `"1.2"`, `"100.23"`, `"1250"`, `"1250.40"`
  */
-export type USDAmount = `${number}${"." | ""}${number | ""}`;
+export type AssetAmount = `${number}${"." | ""}${number | ""}`;
 
 /**
  * Screen position to launch the Meso experience.
@@ -205,9 +224,9 @@ export type Layout = {
 };
 
 /**
- * Parameters to initialize the Meso experience.
+ * Shared parameters to initialize the Meso experience.
  */
-export type TransferConfiguration = Readonly<{
+export type BaseConfiguration = Readonly<{
   /**
    * The Meso environment to use. (`Environment.SANDBOX` | `Environment.PRODUCTION`).
    */
@@ -227,11 +246,7 @@ export type TransferConfiguration = Readonly<{
    *
    * Examples: `"10",`"0.01"`, `"1.2"`, `"100.23"`, `"1250", `"1250.40"`.
    */
-  sourceAmount: USDAmount;
-  /**
-   * The asset to be transferred.
-   */
-  destinationAsset: Asset;
+  sourceAmount: AssetAmount;
   /**
    * Configuration to customize how the Meso experience is launched and presented.
    */
@@ -249,8 +264,25 @@ export type TransferConfiguration = Readonly<{
    */
   onSignMessageRequest: (message: string) => Promise<SignedMessageResult>;
   /**
-   * A handler to notify you when a transaction needs to be sent. Require only
-   * when destinationAsset is a fiat `Asset`.
+   * A handler to notify you when an event has occurred.
+   */
+  onEvent: (event: MesoEvent) => void;
+}>;
+
+export type CashInConfiguration = BaseConfiguration & {
+  /**
+   * The asset to be transferred.
+   */
+  destinationAsset: CryptoAsset;
+};
+
+export type CashOutConfiguration = BaseConfiguration & {
+  /**
+   * The asset to be transferred.
+   */
+  destinationAsset: FiatAsset;
+  /**
+   * A handler to notify you when a transaction needs to be sent.
    *
    * @param amount - quantity of the cryptocurrency to send.
    * @param recipientAddress - wallet address of the transaction recipient.
@@ -258,18 +290,16 @@ export type TransferConfiguration = Readonly<{
    * @param decimals - number of decimal places used for the token.
    * @param interfaceDefinition - optional param defining the contract interface.
    */
-  onSendTransactionRequest?: (
+  onSendTransactionRequest: (
     amount: string,
     recipientAddress: string,
     tokenAddress: string,
     decimals: number,
     interfaceDefinition?: string,
   ) => Promise<void>;
-  /**
-   * A handler to notify you when an event has occurred.
-   */
-  onEvent: (event: MesoEvent) => void;
-}>;
+};
+
+export type TransferConfiguration = CashInConfiguration | CashOutConfiguration;
 
 /**
  * Used to determine the type of authentication the user will need to perform for a transfer.

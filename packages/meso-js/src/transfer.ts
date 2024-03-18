@@ -1,15 +1,20 @@
-import { validateTransferConfiguration } from "./validateTransferConfiguration";
 import { setupBus } from "./bus";
 import { setupFrame } from "./frame";
+import { validateTransferConfiguration } from "./validateTransferConfiguration";
 import { version } from "../package.json";
 import {
+  AuthenticationStrategy,
+  BaseConfiguration,
+  CashInConfiguration,
+  CashOutConfiguration,
+  Environment,
   Layout,
   Position,
-  AuthenticationStrategy,
   TransferConfiguration,
-  TransferInstance,
-  Environment,
   TransferExperienceMode,
+  TransferInstance,
+  isCryptoAsset,
+  isFiatAsset,
 } from "./types";
 
 const apiHosts: { readonly [key in Environment]: string } = {
@@ -20,6 +25,8 @@ const apiHosts: { readonly [key in Environment]: string } = {
   [Environment.SANDBOX]: "https://api.sandbox.meso.network",
   [Environment.PRODUCTION]: "https://api.meso.network",
 };
+
+const NOOP_TRANSFER_INSTANCE = { destroy: () => {} };
 
 export const DEFAULT_LAYOUT: Required<Layout> = {
   position: Position.TOP_RIGHT,
@@ -33,27 +40,48 @@ export const transfer = ({
   destinationAsset,
   environment,
   partnerId,
-  layout = DEFAULT_LAYOUT,
+  layout = DEFAULT_LAYOUT, // Assuming DEFAULT_LAYOUT is of type Layout
   authenticationStrategy = AuthenticationStrategy.WALLET_VERIFICATION,
   onSignMessageRequest,
-  onSendTransactionRequest,
   onEvent,
+  ...rest
 }: TransferConfiguration): TransferInstance => {
   const mergedLayout = { ...DEFAULT_LAYOUT, ...layout };
-  const configuration = {
+  const onSendTransactionRequest =
+    "onSendTransactionRequest" in rest
+      ? rest.onSendTransactionRequest
+      : undefined;
+
+  const baseConfiguration: BaseConfiguration = {
     sourceAmount,
     network,
     walletAddress,
-    destinationAsset,
     environment,
     partnerId,
     layout: mergedLayout,
+    authenticationStrategy,
     onSignMessageRequest,
-    onSendTransactionRequest,
     onEvent,
   };
-  if (!validateTransferConfiguration(configuration))
-    return { destroy: () => {} };
+
+  if (isFiatAsset(destinationAsset)) {
+    const cashOutConfiguration: CashOutConfiguration = {
+      ...baseConfiguration,
+      destinationAsset,
+      onSendTransactionRequest: onSendTransactionRequest!,
+    };
+    if (!validateTransferConfiguration(cashOutConfiguration))
+      return NOOP_TRANSFER_INSTANCE;
+  } else if (isCryptoAsset(destinationAsset)) {
+    const cashInConfiguration: CashInConfiguration = {
+      ...baseConfiguration,
+      destinationAsset,
+    };
+    if (!validateTransferConfiguration(cashInConfiguration))
+      return NOOP_TRANSFER_INSTANCE;
+  } else {
+    return NOOP_TRANSFER_INSTANCE;
+  }
 
   const apiHost = apiHosts[environment];
   const frame = setupFrame(apiHost, {
@@ -71,7 +99,13 @@ export const transfer = ({
     authenticationStrategy,
     mode: TransferExperienceMode.EMBEDDED,
   });
-  const bus = setupBus(apiHost, frame, onSignMessageRequest, onSendTransactionRequest, onEvent);
+  const bus = setupBus(
+    apiHost,
+    frame,
+    onEvent,
+    onSignMessageRequest,
+    onSendTransactionRequest,
+  );
 
   return {
     destroy: () => {

@@ -7,15 +7,16 @@ import {
   TransferApprovedPayload,
   TransferCompletePayload,
   TransferConfiguration,
+  CashOutConfiguration,
 } from "./types";
 import { createPostMessageBus } from "./createPostMessageBus";
 
 export const setupBus = (
   apiHost: string,
   frame: ReturnType<typeof setupFrame>,
-  onSignMessageRequest: TransferConfiguration["onSignMessageRequest"],
-  onSendTransactionRequest: TransferConfiguration["onSendTransactionRequest"],
   onEvent: TransferConfiguration["onEvent"],
+  onSignMessageRequest: TransferConfiguration["onSignMessageRequest"],
+  onSendTransactionRequest?: CashOutConfiguration["onSendTransactionRequest"],
 ) => {
   const bus = createPostMessageBus(apiHost);
   if ("message" in bus) {
@@ -38,7 +39,10 @@ export const setupBus = (
   });
 
   bus.on(MessageKind.REQUEST_SEND_TRANSACTION, async (message) => {
-    if (message.kind === MessageKind.REQUEST_SEND_TRANSACTION) {
+    if (
+      message.kind === MessageKind.REQUEST_SEND_TRANSACTION &&
+      onSendTransactionRequest
+    ) {
       const {
         amount,
         recipientAddress,

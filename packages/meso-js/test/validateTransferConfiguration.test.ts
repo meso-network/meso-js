@@ -23,7 +23,7 @@ describe("validateTransferConfiguration", () => {
     );
   });
 
-  test("sourceAmount not matching USDAmount template literal emits", () => {
+  test("sourceAmount not matching AssetAmount template literal emits", () => {
     // @ts-expect-error: Bypass type system to simulate runtime behavior
     expect(validateTransferConfiguration({ onEvent, sourceAmount: "1." })).toBe(
       false,
