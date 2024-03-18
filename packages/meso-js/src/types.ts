@@ -157,6 +157,11 @@ export const isCryptoAsset = (value: string): value is CryptoAsset => {
 export type AssetAmount = `${number}${"." | ""}${number | ""}`;
 
 /**
+ * @deprecated Legacy type for amount when only cash-in was supported
+ */
+export type USDAmount = AssetAmount;
+
+/**
  * Screen position to launch the Meso experience.
  */
 export enum Position {

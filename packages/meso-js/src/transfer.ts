@@ -40,7 +40,7 @@ export const transfer = ({
   destinationAsset,
   environment,
   partnerId,
-  layout = DEFAULT_LAYOUT, // Assuming DEFAULT_LAYOUT is of type Layout
+  layout = DEFAULT_LAYOUT,
   authenticationStrategy = AuthenticationStrategy.WALLET_VERIFICATION,
   onSignMessageRequest,
   onEvent,
