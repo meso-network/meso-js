@@ -72,15 +72,13 @@ export const transfer = ({
     };
     if (!validateTransferConfiguration(cashOutConfiguration))
       return NOOP_TRANSFER_INSTANCE;
-  } else if (destinationAsset in CryptoAsset) {
+  } else {
     const cashInConfiguration: CashInConfiguration = {
       ...baseConfiguration,
       destinationAsset: destinationAsset as CryptoAsset,
     };
     if (!validateTransferConfiguration(cashInConfiguration))
       return NOOP_TRANSFER_INSTANCE;
-  } else {
-    return NOOP_TRANSFER_INSTANCE;
   }
 
   const apiHost = apiHosts[environment];
