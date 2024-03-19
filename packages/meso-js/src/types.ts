@@ -117,9 +117,6 @@ export enum Network {
   OP_MAINNET = "eip155:10",
 }
 
-/**
- * Symbol representing a cryptocurrency.
- */
 export enum CryptoAsset {
   ETH = "ETH",
   SOL = "SOL",
@@ -127,25 +124,12 @@ export enum CryptoAsset {
   MATIC = "MATIC",
 }
 
-/**
- * Symbol representing a fiat currency.
- */
 export enum FiatAsset {
   USD = "USD",
 }
 
-/**
- * Symbol representing a crypto/fiat currency.
- */
 export type Asset = CryptoAsset | FiatAsset;
-
-export const isFiatAsset = (value: string): value is FiatAsset => {
-  return Object.values(FiatAsset).includes(value as FiatAsset);
-};
-
-export const isCryptoAsset = (value: string): value is CryptoAsset => {
-  return Object.values(CryptoAsset).includes(value as CryptoAsset);
-};
+export const Asset = { ...CryptoAsset, ...FiatAsset };
 
 /**
  * A stringified number representing an amount of USD.

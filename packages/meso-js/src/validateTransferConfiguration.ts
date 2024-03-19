@@ -1,13 +1,11 @@
 import {
   Asset,
   AuthenticationStrategy,
-  CryptoAsset,
   Environment,
   EventKind,
   FiatAsset,
   Network,
   TransferConfiguration,
-  isFiatAsset,
 } from "./types";
 import { validateLayout } from "./validateLayout";
 
@@ -65,18 +63,14 @@ export const validateTransferConfiguration = ({
       payload: { error: { message: `"walletAddress" must be provided.` } },
     });
     return false;
-  } else if (
-    !(destinationAsset in CryptoAsset) &&
-    !(destinationAsset in FiatAsset)
-  ) {
+  } else if (!(destinationAsset in Asset)) {
     onEvent({
       kind: EventKind.UNSUPPORTED_ASSET_ERROR,
       payload: {
         error: {
-          message: `"destinationAsset" must be a supported asset: ${[
-            ...Object.values(CryptoAsset),
-            ...Object.values(FiatAsset),
-          ]}.`,
+          message: `"destinationAsset" must be a supported asset: ${Object.values(
+            Asset,
+          )}.`,
         },
       },
     });
@@ -127,7 +121,7 @@ export const validateTransferConfiguration = ({
     });
     return false;
   } else if (
-    isFiatAsset(destinationAsset) &&
+    destinationAsset in FiatAsset &&
     (!("onSendTransactionRequest" in rest) ||
       typeof rest.onSendTransactionRequest !== "function")
   ) {

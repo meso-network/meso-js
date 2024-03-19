@@ -7,14 +7,14 @@ import {
   BaseConfiguration,
   CashInConfiguration,
   CashOutConfiguration,
+  CryptoAsset,
   Environment,
+  FiatAsset,
   Layout,
   Position,
   TransferConfiguration,
   TransferExperienceMode,
   TransferInstance,
-  isCryptoAsset,
-  isFiatAsset,
 } from "./types";
 
 const apiHosts: { readonly [key in Environment]: string } = {
@@ -64,18 +64,18 @@ export const transfer = ({
     onEvent,
   };
 
-  if (isFiatAsset(destinationAsset)) {
+  if (destinationAsset in FiatAsset) {
     const cashOutConfiguration: CashOutConfiguration = {
       ...baseConfiguration,
-      destinationAsset,
+      destinationAsset: destinationAsset as FiatAsset,
       onSendTransactionRequest: onSendTransactionRequest!,
     };
     if (!validateTransferConfiguration(cashOutConfiguration))
       return NOOP_TRANSFER_INSTANCE;
-  } else if (isCryptoAsset(destinationAsset)) {
+  } else if (destinationAsset in CryptoAsset) {
     const cashInConfiguration: CashInConfiguration = {
       ...baseConfiguration,
-      destinationAsset,
+      destinationAsset: destinationAsset as CryptoAsset,
     };
     if (!validateTransferConfiguration(cashInConfiguration))
       return NOOP_TRANSFER_INSTANCE;

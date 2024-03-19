@@ -52,7 +52,7 @@ describe("transfer", () => {
     expect(setupBusMock).not.toHaveBeenCalled();
   });
 
-  test("valid configuration sets up frame, bus, and returns destroy method to clean up both", () => {
+  test("valid cash-in configuration sets up frame, bus, and returns destroy method to clean up both", () => {
     validateTransferConfigurationMock.mockImplementationOnce(() => true);
     const frameRemoveMock = vi.fn();
     setupFrameMock.mockImplementationOnce(() => ({ remove: frameRemoveMock }));
@@ -89,6 +89,59 @@ describe("transfer", () => {
         {
           "remove": [MockFunction spy],
         },
+        [MockFunction spy],
+        [MockFunction spy],
+        undefined,
+      ]
+    `);
+
+    destroy();
+    expect(frameRemoveMock).toHaveBeenCalledOnce();
+    expect(busDestroyMock).toHaveBeenCalledOnce();
+  });
+
+  test("valid cash-out configuration sets up frame, bus, and returns destroy method to clean up both", () => {
+    validateTransferConfigurationMock.mockImplementationOnce(() => true);
+    const frameRemoveMock = vi.fn();
+    setupFrameMock.mockImplementationOnce(() => ({ remove: frameRemoveMock }));
+    const busDestroyMock = vi.fn();
+    setupBusMock.mockImplementationOnce(() => ({ destroy: busDestroyMock }));
+
+    const { destroy } = transfer({
+      ...configuration,
+      destinationAsset: Asset.USD,
+      onSendTransactionRequest: vi.fn(),
+    });
+    expect(setupFrameMock).toHaveBeenCalledOnce();
+    expect(setupFrameMock.mock.lastCall[0]).toMatchInlineSnapshot(
+      '"https://api.sandbox.meso.network"',
+    );
+    expect(setupFrameMock.mock.lastCall[1]).toMatchInlineSnapshot(
+      { version: expect.any(String) },
+      `
+      {
+        "authenticationStrategy": "wallet_verification",
+        "destinationAsset": "USD",
+        "layoutOffset": "0",
+        "layoutPosition": "top-right",
+        "mode": "embedded",
+        "network": "eip155:1",
+        "partnerId": "partnerId",
+        "sourceAmount": "100",
+        "version": Any<String>,
+        "walletAddress": "0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48",
+      }
+    `,
+    );
+    expect(setupFrameMock.mock.lastCall[1].version).toEqual(version);
+    expect(setupBusMock).toHaveBeenCalledOnce();
+    expect(setupBusMock.mock.lastCall).toMatchInlineSnapshot(`
+      [
+        "https://api.sandbox.meso.network",
+        {
+          "remove": [MockFunction spy],
+        },
+        [MockFunction spy],
         [MockFunction spy],
         [MockFunction spy],
       ]

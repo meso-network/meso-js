@@ -160,7 +160,7 @@ describe("validateTransferConfiguration", () => {
           "kind": "UNSUPPORTED_ASSET_ERROR",
           "payload": {
             "error": {
-              "message": "\\"destinationAsset\\" must be a supported asset: ETH,SOL,USDC,MATIC.",
+              "message": "\\"destinationAsset\\" must be a supported asset: ETH,SOL,USDC,MATIC,USD.",
             },
           },
         },
@@ -368,6 +368,82 @@ describe("validateTransferConfiguration", () => {
     `);
   });
 
+  describe("onSendTransaction", () => {
+    test("undefined is valid when destination is Crypto", () => {
+      expect(
+        validateTransferConfiguration({
+          onEvent,
+          sourceAmount: "1",
+          network: Network.ETHEREUM_MAINNET,
+          walletAddress: "0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48",
+          destinationAsset: Asset.USDC,
+          environment: Environment.SANDBOX,
+          partnerId: "meso-js-test",
+          onSignMessageRequest: vi.fn(),
+        }),
+      ).toBe(true);
+    });
+
+    test("non-function onSendTransaction emits when destination asset is Fiat", () => {
+      expect(
+        validateTransferConfiguration({
+          onEvent,
+          sourceAmount: "1",
+          network: Network.ETHEREUM_MAINNET,
+          walletAddress: "0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48",
+          destinationAsset: Asset.USD,
+          environment: Environment.SANDBOX,
+          partnerId: "meso-js-test",
+          onSignMessageRequest: vi.fn(),
+          // @ts-expect-error: Bypass type system to simulate runtime behavior
+          onSendTransactionRequest: "sentTransaction",
+        }),
+      ).toBe(false);
+      expect(onEvent).toHaveBeenCalledOnce();
+      expect(onEvent.mock.lastCall).toMatchInlineSnapshot(`
+      [
+        {
+          "kind": "CONFIGURATION_ERROR",
+          "payload": {
+            "error": {
+              "message": "\\"onSendTransactionRequest\\" must be a valid function.",
+            },
+          },
+        },
+      ]
+    `);
+    });
+
+    test("missing onSendTransaction emits when destination asset is Fiat", () => {
+      expect(
+        // @ts-expect-error: Bypass type system to simulate runtime behavior
+        validateTransferConfiguration({
+          onEvent,
+          sourceAmount: "1",
+          network: Network.ETHEREUM_MAINNET,
+          walletAddress: "0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48",
+          destinationAsset: Asset.USD,
+          environment: Environment.SANDBOX,
+          partnerId: "meso-js-test",
+          onSignMessageRequest: vi.fn(),
+        }),
+      ).toBe(false);
+      expect(onEvent).toHaveBeenCalledOnce();
+      expect(onEvent.mock.lastCall).toMatchInlineSnapshot(`
+      [
+        {
+          "kind": "CONFIGURATION_ERROR",
+          "payload": {
+            "error": {
+              "message": "\\"onSendTransactionRequest\\" must be a valid function.",
+            },
+          },
+        },
+      ]
+    `);
+    });
+  });
+
   describe("layout", () => {
     test("invalid `position` emits an error", () => {
       expect(
@@ -444,7 +520,7 @@ describe("validateTransferConfiguration", () => {
             validateTransferConfiguration({
               ...configuration,
               layout: { position: Position.TOP_RIGHT, offset: "-10" },
-            }),
+            } as TransferConfiguration),
           ).toBe(false);
           expect(onEvent).toHaveBeenCalledOnce();
           expect(onEvent.mock.lastCall).toMatchInlineSnapshot(`
@@ -546,7 +622,7 @@ describe("validateTransferConfiguration", () => {
                 position: Position.TOP_RIGHT,
                 offset: { horizontal: "-10" },
               },
-            }),
+            } as TransferConfiguration),
           ).toBe(false);
           expect(onEvent).toHaveBeenCalledOnce();
           expect(onEvent.mock.lastCall).toMatchInlineSnapshot(`
@@ -571,7 +647,7 @@ describe("validateTransferConfiguration", () => {
                 position: Position.TOP_RIGHT,
                 offset: { vertical: "-10" },
               },
-            }),
+            } as TransferConfiguration),
           ).toBe(false);
           expect(onEvent).toHaveBeenCalledOnce();
           expect(onEvent.mock.lastCall).toMatchInlineSnapshot(`
@@ -596,7 +672,7 @@ describe("validateTransferConfiguration", () => {
                 position: Position.TOP_RIGHT,
                 offset: { horizontal: "-1", vertical: "-10" },
               },
-            }),
+            } as TransferConfiguration),
           ).toBe(false);
           expect(onEvent).toHaveBeenCalledOnce();
           expect(onEvent.mock.lastCall).toMatchInlineSnapshot(`
