@@ -231,7 +231,7 @@ export type BaseConfiguration = Readonly<{
   /** The wallet address for the user. This address must be compatible with the selected `network` and `destinationAsset`. */
   walletAddress: string;
   /**
-   * A stringified number including decimals (if needed) representing the fiat amount to be used for the transfer.
+   * A stringified number including decimals (if needed) representing the amount to be used for the transfer.
    *
    * Examples: `"10",`"0.01"`, `"1.2"`, `"100.23"`, `"1250", `"1250.40"`.
    */
