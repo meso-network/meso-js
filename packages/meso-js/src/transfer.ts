@@ -1,13 +1,9 @@
 import { setupBus } from "./bus";
 import { setupFrame } from "./frame";
-import { validateTransferConfiguration } from "./validateTransferConfiguration";
 import { version } from "../package.json";
 import {
   AuthenticationStrategy,
-  BaseConfiguration,
-  CashInConfiguration,
   CashOutConfiguration,
-  CryptoAsset,
   Environment,
   FiatAsset,
   Layout,
@@ -16,6 +12,7 @@ import {
   TransferExperienceMode,
   TransferInstance,
 } from "./types";
+import { validateTransferConfiguration } from "./validateTransferConfiguration";
 
 const apiHosts: { readonly [key in Environment]: string } = {
   [Environment.LOCAL]: "http://localhost:5173",
@@ -33,76 +30,64 @@ export const DEFAULT_LAYOUT: Required<Layout> = {
   offset: "0",
 };
 
-export const transfer = ({
-  sourceAmount,
-  network,
-  walletAddress,
-  destinationAsset,
-  environment,
-  partnerId,
-  layout = DEFAULT_LAYOUT,
-  authenticationStrategy = AuthenticationStrategy.WALLET_VERIFICATION,
-  onSignMessageRequest,
-  onEvent,
-  ...rest
-}: TransferConfiguration): TransferInstance => {
-  const mergedLayout = { ...DEFAULT_LAYOUT, ...layout };
-  const onSendTransactionRequest =
-    "onSendTransactionRequest" in rest
-      ? rest.onSendTransactionRequest
-      : undefined;
+export const transfer = (
+  transferConfiguration: TransferConfiguration,
+): TransferInstance => {
+  transferConfiguration = {
+    // BaseConfiguration defaults
+    layout: { ...DEFAULT_LAYOUT, ...transferConfiguration.layout },
+    authenticationStrategy: AuthenticationStrategy.WALLET_VERIFICATION,
 
-  const baseConfiguration: BaseConfiguration = {
+    // CashInConfiguration defaults
+    // sourceAsset is only optional in Cash-in case (for backwards compatibility
+    // with previous versions), remove when adding support for other FiatAssets
+    // and we make sourceAsset required
+    sourceAsset: FiatAsset.USD,
+
+    ...transferConfiguration,
+  };
+  if (!validateTransferConfiguration(transferConfiguration)) {
+    return NOOP_TRANSFER_INSTANCE;
+  }
+
+  const {
     sourceAmount,
     network,
     walletAddress,
     environment,
     partnerId,
-    layout: mergedLayout,
+    layout,
     authenticationStrategy,
+    sourceAsset,
+    destinationAsset,
     onSignMessageRequest,
     onEvent,
-  };
-
-  if (destinationAsset in FiatAsset) {
-    const cashOutConfiguration: CashOutConfiguration = {
-      ...baseConfiguration,
-      destinationAsset: destinationAsset as FiatAsset,
-      onSendTransactionRequest: onSendTransactionRequest!,
-    };
-    if (!validateTransferConfiguration(cashOutConfiguration))
-      return NOOP_TRANSFER_INSTANCE;
-  } else {
-    const cashInConfiguration: CashInConfiguration = {
-      ...baseConfiguration,
-      destinationAsset: destinationAsset as CryptoAsset,
-    };
-    if (!validateTransferConfiguration(cashInConfiguration))
-      return NOOP_TRANSFER_INSTANCE;
-  }
-
+  } = transferConfiguration;
   const apiHost = apiHosts[environment];
+
   const frame = setupFrame(apiHost, {
     partnerId,
     network,
     walletAddress,
     sourceAmount,
     destinationAsset,
-    layoutPosition: mergedLayout.position,
+    sourceAsset: sourceAsset!,
+    layoutPosition: layout!.position!,
     layoutOffset:
-      typeof mergedLayout.offset === "string"
-        ? mergedLayout.offset
-        : JSON.stringify(mergedLayout.offset),
+      typeof layout!.offset === "string"
+        ? layout!.offset
+        : JSON.stringify(layout!.offset),
     version,
-    authenticationStrategy,
+    authenticationStrategy: authenticationStrategy!,
     mode: TransferExperienceMode.EMBEDDED,
   });
+
   const bus = setupBus(
     apiHost,
     frame,
     onEvent,
     onSignMessageRequest,
-    onSendTransactionRequest,
+    (transferConfiguration as CashOutConfiguration).onSendTransactionRequest,
   );
 
   return {

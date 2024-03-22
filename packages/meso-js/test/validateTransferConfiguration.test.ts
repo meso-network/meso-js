@@ -142,32 +142,6 @@ describe("validateTransferConfiguration", () => {
     `);
   });
 
-  test("non-Asset emits", () => {
-    expect(
-      validateTransferConfiguration({
-        onEvent,
-        sourceAmount: "1",
-        network: Network.ETHEREUM_MAINNET,
-        walletAddress: "0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48",
-        // @ts-expect-error: Bypass type system to simulate runtime behavior
-        destinationAsset: "C2O",
-      }),
-    ).toBe(false);
-    expect(onEvent).toHaveBeenCalledOnce();
-    expect(onEvent.mock.lastCall).toMatchInlineSnapshot(`
-      [
-        {
-          "kind": "UNSUPPORTED_ASSET_ERROR",
-          "payload": {
-            "error": {
-              "message": "\\"destinationAsset\\" must be a supported asset: ETH,SOL,USDC,MATIC,USD.",
-            },
-          },
-        },
-      ]
-    `);
-  });
-
   test("non-Environment emits", () => {
     expect(
       validateTransferConfiguration({
@@ -366,82 +340,6 @@ describe("validateTransferConfiguration", () => {
         },
       ]
     `);
-  });
-
-  describe("onSendTransaction", () => {
-    test("undefined is valid when destination is Crypto", () => {
-      expect(
-        validateTransferConfiguration({
-          onEvent,
-          sourceAmount: "1",
-          network: Network.ETHEREUM_MAINNET,
-          walletAddress: "0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48",
-          destinationAsset: Asset.USDC,
-          environment: Environment.SANDBOX,
-          partnerId: "meso-js-test",
-          onSignMessageRequest: vi.fn(),
-        }),
-      ).toBe(true);
-    });
-
-    test("non-function onSendTransaction emits when destination asset is Fiat", () => {
-      expect(
-        validateTransferConfiguration({
-          onEvent,
-          sourceAmount: "1",
-          network: Network.ETHEREUM_MAINNET,
-          walletAddress: "0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48",
-          destinationAsset: Asset.USD,
-          environment: Environment.SANDBOX,
-          partnerId: "meso-js-test",
-          onSignMessageRequest: vi.fn(),
-          // @ts-expect-error: Bypass type system to simulate runtime behavior
-          onSendTransactionRequest: "sentTransaction",
-        }),
-      ).toBe(false);
-      expect(onEvent).toHaveBeenCalledOnce();
-      expect(onEvent.mock.lastCall).toMatchInlineSnapshot(`
-      [
-        {
-          "kind": "CONFIGURATION_ERROR",
-          "payload": {
-            "error": {
-              "message": "\\"onSendTransactionRequest\\" must be a valid function.",
-            },
-          },
-        },
-      ]
-    `);
-    });
-
-    test("missing onSendTransaction emits when destination asset is Fiat", () => {
-      expect(
-        // @ts-expect-error: Bypass type system to simulate runtime behavior
-        validateTransferConfiguration({
-          onEvent,
-          sourceAmount: "1",
-          network: Network.ETHEREUM_MAINNET,
-          walletAddress: "0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48",
-          destinationAsset: Asset.USD,
-          environment: Environment.SANDBOX,
-          partnerId: "meso-js-test",
-          onSignMessageRequest: vi.fn(),
-        }),
-      ).toBe(false);
-      expect(onEvent).toHaveBeenCalledOnce();
-      expect(onEvent.mock.lastCall).toMatchInlineSnapshot(`
-      [
-        {
-          "kind": "CONFIGURATION_ERROR",
-          "payload": {
-            "error": {
-              "message": "\\"onSendTransactionRequest\\" must be a valid function.",
-            },
-          },
-        },
-      ]
-    `);
-    });
   });
 
   describe("layout", () => {
@@ -690,105 +588,276 @@ describe("validateTransferConfiguration", () => {
         });
       });
     });
+
+    describe("valid configuration", () => {
+      test("returns true (no layout)", () => {
+        const valid = validateTransferConfiguration({
+          onEvent,
+          sourceAmount: "1",
+          network: Network.ETHEREUM_MAINNET,
+          walletAddress: "0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48",
+          destinationAsset: Asset.ETH,
+          environment: Environment.SANDBOX,
+          partnerId: "meso-js-test",
+          onSignMessageRequest: vi.fn(),
+        });
+        expect(onEvent).not.toHaveBeenCalled();
+        expect(valid).toBe(true);
+      });
+
+      test("returns true (no position)", () => {
+        const valid = validateTransferConfiguration({
+          onEvent,
+          sourceAmount: "1",
+          network: Network.ETHEREUM_MAINNET,
+          walletAddress: "0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48",
+          destinationAsset: Asset.ETH,
+          environment: Environment.SANDBOX,
+          partnerId: "meso-js-test",
+          layout: { offset: "0" },
+          onSignMessageRequest: vi.fn(),
+        });
+        expect(onEvent).not.toHaveBeenCalled();
+        expect(valid).toBe(true);
+      });
+
+      test("returns true (no offset)", () => {
+        const valid = validateTransferConfiguration({
+          onEvent,
+          sourceAmount: "1",
+          network: Network.ETHEREUM_MAINNET,
+          walletAddress: "0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48",
+          destinationAsset: Asset.ETH,
+          environment: Environment.SANDBOX,
+          partnerId: "meso-js-test",
+          layout: { position: Position.TOP_RIGHT, offset: "0" },
+          onSignMessageRequest: vi.fn(),
+        });
+        expect(onEvent).not.toHaveBeenCalled();
+        expect(valid).toBe(true);
+      });
+
+      test("returns true (single value offset)", () => {
+        const valid = validateTransferConfiguration({
+          onEvent,
+          sourceAmount: "1",
+          network: Network.ETHEREUM_MAINNET,
+          walletAddress: "0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48",
+          destinationAsset: Asset.ETH,
+          environment: Environment.SANDBOX,
+          partnerId: "meso-js-test",
+          layout: { position: Position.TOP_RIGHT, offset: "0" },
+          onSignMessageRequest: vi.fn(),
+        });
+        expect(onEvent).not.toHaveBeenCalled();
+        expect(valid).toBe(true);
+      });
+
+      test("returns true (x-only offset)", () => {
+        const valid = validateTransferConfiguration({
+          onEvent,
+          sourceAmount: "1",
+          network: Network.ETHEREUM_MAINNET,
+          walletAddress: "0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48",
+          destinationAsset: Asset.ETH,
+          environment: Environment.SANDBOX,
+          partnerId: "meso-js-test",
+          layout: {
+            position: Position.TOP_RIGHT,
+            offset: { horizontal: "10" },
+          },
+          onSignMessageRequest: vi.fn(),
+        });
+        expect(onEvent).not.toHaveBeenCalled();
+        expect(valid).toBe(true);
+      });
+
+      test("returns true (x/y offset)", () => {
+        const valid = validateTransferConfiguration({
+          onEvent,
+          sourceAmount: "1",
+          network: Network.ETHEREUM_MAINNET,
+          walletAddress: "0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48",
+          destinationAsset: Asset.ETH,
+          environment: Environment.SANDBOX,
+          partnerId: "meso-js-test",
+          layout: {
+            position: Position.TOP_RIGHT,
+            offset: { horizontal: "10", vertical: "22" },
+          },
+          onSignMessageRequest: vi.fn(),
+        });
+        expect(onEvent).not.toHaveBeenCalled();
+        expect(valid).toBe(true);
+      });
+    });
   });
 
-  describe("valid configuration", () => {
-    test("returns true (no layout)", () => {
-      const valid = validateTransferConfiguration({
+  test("non-Asset destinationAsset emits", () => {
+    expect(
+      validateTransferConfiguration({
         onEvent,
         sourceAmount: "1",
         network: Network.ETHEREUM_MAINNET,
         walletAddress: "0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48",
-        destinationAsset: Asset.ETH,
+        // @ts-expect-error: Bypassing types for testing
+        destinationAsset: "$",
         environment: Environment.SANDBOX,
         partnerId: "meso-js-test",
         onSignMessageRequest: vi.fn(),
-      });
-      expect(onEvent).not.toHaveBeenCalled();
-      expect(valid).toBe(true);
-    });
-
-    test("returns true (no position)", () => {
-      const valid = validateTransferConfiguration({
-        onEvent,
-        sourceAmount: "1",
-        network: Network.ETHEREUM_MAINNET,
-        walletAddress: "0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48",
-        destinationAsset: Asset.ETH,
-        environment: Environment.SANDBOX,
-        partnerId: "meso-js-test",
-        layout: { offset: "0" },
-        onSignMessageRequest: vi.fn(),
-      });
-      expect(onEvent).not.toHaveBeenCalled();
-      expect(valid).toBe(true);
-    });
-
-    test("returns true (no offset)", () => {
-      const valid = validateTransferConfiguration({
-        onEvent,
-        sourceAmount: "1",
-        network: Network.ETHEREUM_MAINNET,
-        walletAddress: "0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48",
-        destinationAsset: Asset.ETH,
-        environment: Environment.SANDBOX,
-        partnerId: "meso-js-test",
-        layout: { position: Position.TOP_RIGHT, offset: "0" },
-        onSignMessageRequest: vi.fn(),
-      });
-      expect(onEvent).not.toHaveBeenCalled();
-      expect(valid).toBe(true);
-    });
-
-    test("returns true (single value offset)", () => {
-      const valid = validateTransferConfiguration({
-        onEvent,
-        sourceAmount: "1",
-        network: Network.ETHEREUM_MAINNET,
-        walletAddress: "0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48",
-        destinationAsset: Asset.ETH,
-        environment: Environment.SANDBOX,
-        partnerId: "meso-js-test",
-        layout: { position: Position.TOP_RIGHT, offset: "0" },
-        onSignMessageRequest: vi.fn(),
-      });
-      expect(onEvent).not.toHaveBeenCalled();
-      expect(valid).toBe(true);
-    });
-
-    test("returns true (x-only offset)", () => {
-      const valid = validateTransferConfiguration({
-        onEvent,
-        sourceAmount: "1",
-        network: Network.ETHEREUM_MAINNET,
-        walletAddress: "0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48",
-        destinationAsset: Asset.ETH,
-        environment: Environment.SANDBOX,
-        partnerId: "meso-js-test",
-        layout: { position: Position.TOP_RIGHT, offset: { horizontal: "10" } },
-        onSignMessageRequest: vi.fn(),
-      });
-      expect(onEvent).not.toHaveBeenCalled();
-      expect(valid).toBe(true);
-    });
-
-    test("returns true (x/y offset)", () => {
-      const valid = validateTransferConfiguration({
-        onEvent,
-        sourceAmount: "1",
-        network: Network.ETHEREUM_MAINNET,
-        walletAddress: "0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48",
-        destinationAsset: Asset.ETH,
-        environment: Environment.SANDBOX,
-        partnerId: "meso-js-test",
-        layout: {
-          position: Position.TOP_RIGHT,
-          offset: { horizontal: "10", vertical: "22" },
+      }),
+    ).toBe(false);
+    expect(onEvent).toHaveBeenCalledOnce();
+    expect(onEvent.mock.lastCall).toMatchInlineSnapshot(`
+      [
+        {
+          "kind": "UNSUPPORTED_ASSET_ERROR",
+          "payload": {
+            "error": {
+              "message": "\\"destinationAsset\\" must be a supported Asset: ETH,SOL,USDC,MATIC,USD.",
+            },
+          },
         },
+      ]
+    `);
+  });
+
+  test("non-CryptoAsset sourceAsset when destinationAsset is FiatAsset emits", () => {
+    expect(
+      // @ts-expect-error: Bypassing types for testing
+      validateTransferConfiguration({
+        onEvent,
+        sourceAmount: "1",
+        network: Network.ETHEREUM_MAINNET,
+        walletAddress: "0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48",
+        sourceAsset: Asset.USD,
+        destinationAsset: Asset.USD,
+        environment: Environment.SANDBOX,
+        partnerId: "meso-js-test",
         onSignMessageRequest: vi.fn(),
-      });
-      expect(onEvent).not.toHaveBeenCalled();
-      expect(valid).toBe(true);
+        onSendTransactionRequest: vi.fn(),
+      }),
+    ).toBe(false);
+    expect(onEvent).toHaveBeenCalledOnce();
+    expect(onEvent.mock.lastCall).toMatchInlineSnapshot(`
+      [
+        {
+          "kind": "UNSUPPORTED_ASSET_ERROR",
+          "payload": {
+            "error": {
+              "message": "\\"sourceAsset\\" must be a supported CryptoAsset for Cash-out: ETH,SOL,USDC,MATIC.",
+            },
+          },
+        },
+      ]
+    `);
+  });
+
+  test("non-FiatAsset sourceAsset when destinationAsset is CryptoAsset emits", () => {
+    expect(
+      // @ts-expect-error: Bypassing types for testing
+      validateTransferConfiguration({
+        onEvent,
+        sourceAmount: "1",
+        network: Network.ETHEREUM_MAINNET,
+        walletAddress: "0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48",
+        sourceAsset: Asset.ETH,
+        destinationAsset: Asset.ETH,
+        environment: Environment.SANDBOX,
+        partnerId: "meso-js-test",
+        onSignMessageRequest: vi.fn(),
+      }),
+    ).toBe(false);
+    expect(onEvent).toHaveBeenCalledOnce();
+    expect(onEvent.mock.lastCall).toMatchInlineSnapshot(`
+      [
+        {
+          "kind": "UNSUPPORTED_ASSET_ERROR",
+          "payload": {
+            "error": {
+              "message": "\\"sourceAsset\\" must be a supported FiatAsset for Cash-in: USD.",
+            },
+          },
+        },
+      ]
+    `);
+  });
+
+  describe("onSendTransaction", () => {
+    test("undefined is valid when destinationAsset is CryptoAsset", () => {
+      expect(
+        validateTransferConfiguration({
+          onEvent,
+          sourceAmount: "1",
+          network: Network.ETHEREUM_MAINNET,
+          walletAddress: "0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48",
+          destinationAsset: Asset.USDC,
+          environment: Environment.SANDBOX,
+          partnerId: "meso-js-test",
+          onSignMessageRequest: vi.fn(),
+        }),
+      ).toBe(true);
+    });
+
+    test("non-function onSendTransaction emits when destinationAsset is FiatAsset", () => {
+      expect(
+        validateTransferConfiguration({
+          onEvent,
+          sourceAmount: "1",
+          network: Network.ETHEREUM_MAINNET,
+          walletAddress: "0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48",
+          sourceAsset: Asset.ETH,
+          destinationAsset: Asset.USD,
+          environment: Environment.SANDBOX,
+          partnerId: "meso-js-test",
+          onSignMessageRequest: vi.fn(),
+          // @ts-expect-error: Bypass type system to simulate runtime behavior
+          onSendTransactionRequest: "sentTransaction",
+        }),
+      ).toBe(false);
+      expect(onEvent).toHaveBeenCalledOnce();
+      expect(onEvent.mock.lastCall).toMatchInlineSnapshot(`
+      [
+        {
+          "kind": "CONFIGURATION_ERROR",
+          "payload": {
+            "error": {
+              "message": "\\"onSendTransactionRequest\\" must be a valid function.",
+            },
+          },
+        },
+      ]
+    `);
+    });
+
+    test("missing onSendTransaction emits when destinationAsset is FiatAsset", () => {
+      expect(
+        // @ts-expect-error: Bypass type system to simulate runtime behavior
+        validateTransferConfiguration({
+          onEvent,
+          sourceAmount: "1",
+          network: Network.ETHEREUM_MAINNET,
+          walletAddress: "0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48",
+          sourceAsset: Asset.ETH,
+          destinationAsset: Asset.USD,
+          environment: Environment.SANDBOX,
+          partnerId: "meso-js-test",
+          onSignMessageRequest: vi.fn(),
+        }),
+      ).toBe(false);
+      expect(onEvent).toHaveBeenCalledOnce();
+      expect(onEvent.mock.lastCall).toMatchInlineSnapshot(`
+      [
+        {
+          "kind": "CONFIGURATION_ERROR",
+          "payload": {
+            "error": {
+              "message": "\\"onSendTransactionRequest\\" must be a valid function.",
+            },
+          },
+        },
+      ]
+    `);
     });
   });
 });

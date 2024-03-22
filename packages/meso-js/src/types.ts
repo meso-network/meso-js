@@ -260,14 +260,22 @@ export type BaseConfiguration = Readonly<{
 
 export type CashInConfiguration = BaseConfiguration & {
   /**
-   * The asset to be transferred.
+   * The fiat asset to be used. Defaults to `FiatAsset.USD`.
+   */
+  sourceAsset?: FiatAsset;
+  /**
+   * The crypto asset to be transferred.
    */
   destinationAsset: CryptoAsset;
 };
 
 export type CashOutConfiguration = BaseConfiguration & {
   /**
-   * The asset to be transferred.
+   * The crypto asset to be transferred.
+   */
+  sourceAsset: CryptoAsset;
+  /**
+   * The fiat asset to be cashed out.
    */
   destinationAsset: FiatAsset;
   /**
@@ -320,6 +328,7 @@ export type TransferIframeParams = Pick<
   | "network"
   | "walletAddress"
   | "sourceAmount"
+  | "sourceAsset"
   | "destinationAsset"
   | "authenticationStrategy"
 > & {
