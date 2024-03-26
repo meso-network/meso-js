@@ -2,10 +2,10 @@ import { setupBus } from "./bus";
 import { setupFrame } from "./frame";
 import { version } from "../package.json";
 import {
+  Asset,
   AuthenticationStrategy,
   CashOutConfiguration,
   Environment,
-  FiatAsset,
   Layout,
   Position,
   TransferConfiguration,
@@ -42,7 +42,7 @@ export const transfer = (
     // sourceAsset is only optional in Cash-in case (for backwards compatibility
     // with previous versions), remove when adding support for other FiatAssets
     // and we make sourceAsset required
-    sourceAsset: FiatAsset.USD,
+    sourceAsset: Asset.USD,
 
     ...transferConfiguration,
   };

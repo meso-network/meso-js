@@ -117,19 +117,27 @@ export enum Network {
   OP_MAINNET = "eip155:10",
 }
 
-export enum CryptoAsset {
+export enum Asset {
+  // CryptoAsset
   ETH = "ETH",
   SOL = "SOL",
   USDC = "USDC",
   MATIC = "MATIC",
-}
 
-export enum FiatAsset {
+  // FiatAsset
   USD = "USD",
 }
 
-export type Asset = CryptoAsset | FiatAsset;
-export const Asset = { ...CryptoAsset, ...FiatAsset };
+export const CryptoAsset = {
+  [Asset.ETH]: Asset.ETH,
+  [Asset.SOL]: Asset.SOL,
+  [Asset.USDC]: Asset.USDC,
+  [Asset.MATIC]: Asset.MATIC,
+} as const;
+
+export const FiatAsset = {
+  [Asset.USD]: Asset.USD,
+} as const;
 
 /**
  * A stringified number representing an amount of USD.
@@ -260,24 +268,24 @@ export type BaseConfiguration = Readonly<{
 
 export type CashInConfiguration = BaseConfiguration & {
   /**
-   * The fiat asset to be used. Defaults to `FiatAsset.USD`.
+   * The fiat asset to be used. Defaults to `Asset.USD`.
    */
-  sourceAsset?: FiatAsset;
+  sourceAsset?: keyof typeof FiatAsset;
   /**
    * The crypto asset to be transferred.
    */
-  destinationAsset: CryptoAsset;
+  destinationAsset: keyof typeof CryptoAsset;
 };
 
 export type CashOutConfiguration = BaseConfiguration & {
   /**
    * The crypto asset to be transferred.
    */
-  sourceAsset: CryptoAsset;
+  sourceAsset: keyof typeof CryptoAsset;
   /**
    * The fiat asset to be cashed out.
    */
-  destinationAsset: FiatAsset;
+  destinationAsset: keyof typeof FiatAsset;
   /**
    * A handler to notify you when a transaction needs to be sent.
    *
