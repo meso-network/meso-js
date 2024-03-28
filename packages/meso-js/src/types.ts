@@ -293,14 +293,12 @@ export type CashOutConfiguration = BaseConfiguration & {
    * @param recipientAddress - wallet address of the transaction recipient.
    * @param tokenAddress - contract address of the token being send.
    * @param decimals - number of decimal places used for the token.
-   * @param interfaceDefinition - optional param defining the contract interface.
    */
   onSendTransactionRequest: (
     amount: string,
     recipientAddress: string,
     tokenAddress: string,
     decimals: number,
-    interfaceDefinition?: string,
   ) => Promise<void>;
 };
 
@@ -464,10 +462,6 @@ export type RequestSendTransactionPayload = {
    * Number of decimal places used for the token (e.g. 6 for USDC on Ethereum).
    */
   decimals: number;
-  /*
-   * Optional param defining the contract interface (e.g. the ABI for ERC-20 token).
-   */
-  interfaceDefinition?: string;
 };
 
 /**
