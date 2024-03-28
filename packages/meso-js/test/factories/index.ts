@@ -18,6 +18,7 @@ export const serializedTransferIframeParamsFactory: {
       network: Network.ETHEREUM_MAINNET,
       walletAddress: "0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48",
       sourceAmount: "100",
+      sourceAsset: Asset.USD,
       destinationAsset: Asset.ETH,
       layoutPosition: Position.TOP_RIGHT,
       layoutOffset: "0",

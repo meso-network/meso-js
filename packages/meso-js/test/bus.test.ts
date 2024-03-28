@@ -52,7 +52,7 @@ describe("setupBus", () => {
     }));
 
     expect(() =>
-      setupBus(apiHost, frame, onSignMessageRequestMock, onEventMock),
+      setupBus(apiHost, frame, onEventMock, onSignMessageRequestMock),
     ).toThrowErrorMatchingInlineSnapshot(
       '"Unable to initialize @meso-network/meso-js. Invalid iframe configuration."',
     );
@@ -62,7 +62,7 @@ describe("setupBus", () => {
     const onMock = vi.fn();
     createPostMessageBusMock.mockImplementationOnce(() => ({ on: onMock }));
 
-    setupBus(apiHost, frame, onSignMessageRequestMock, onEventMock);
+    setupBus(apiHost, frame, onEventMock, onSignMessageRequestMock);
     expect(onMock).toBeCalledWith(
       MessageKind.REQUEST_SIGNED_MESSAGE,
       expect.any(Function),
@@ -105,7 +105,7 @@ describe("setupBus", () => {
       destroy: destroyMock,
     }));
 
-    setupBus(apiHost, frame, onSignMessageRequestMock, onEventMock);
+    setupBus(apiHost, frame, onEventMock, onSignMessageRequestMock);
     expect(onMock).toBeCalledWith(MessageKind.CLOSE, expect.any(Function));
     const onCloseCallback = onMock.mock.calls.find(
       (invocationArgs) => invocationArgs[0] === MessageKind.CLOSE,
@@ -133,7 +133,7 @@ describe("setupBus", () => {
       destroy: destroyMock,
     }));
 
-    setupBus(apiHost, frame, onSignMessageRequestMock, onEventMock);
+    setupBus(apiHost, frame, onEventMock, onSignMessageRequestMock);
     expect(onMock).toBeCalledWith(
       MessageKind.TRANSFER_UPDATE,
       expect.any(Function),
@@ -170,7 +170,7 @@ describe("setupBus", () => {
       destroy: destroyMock,
     }));
 
-    setupBus(apiHost, frame, onSignMessageRequestMock, onEventMock);
+    setupBus(apiHost, frame, onEventMock, onSignMessageRequestMock);
     expect(onMock).toBeCalledWith(
       MessageKind.TRANSFER_UPDATE,
       expect.any(Function),
@@ -204,7 +204,7 @@ describe("setupBus", () => {
     const onMock = vi.fn();
     createPostMessageBusMock.mockImplementationOnce(() => ({ on: onMock }));
 
-    setupBus(apiHost, frame, onSignMessageRequestMock, onEventMock);
+    setupBus(apiHost, frame, onEventMock, onSignMessageRequestMock);
     expect(onMock).toBeCalledWith(MessageKind.ERROR, expect.any(Function));
     const onErrorCallback = onMock.mock.calls.find(
       (invocationArgs) => invocationArgs[0] === MessageKind.ERROR,
@@ -228,7 +228,7 @@ describe("setupBus", () => {
     const onMock = vi.fn();
     createPostMessageBusMock.mockImplementationOnce(() => ({ on: onMock }));
 
-    setupBus(apiHost, frame, onSignMessageRequestMock, onEventMock);
+    setupBus(apiHost, frame, onEventMock, onSignMessageRequestMock);
     expect(onMock).toBeCalledWith(
       MessageKind.CONFIGURATION_ERROR,
       expect.any(Function),
@@ -258,7 +258,7 @@ describe("setupBus", () => {
     const onMock = vi.fn();
     createPostMessageBusMock.mockImplementationOnce(() => ({ on: onMock }));
 
-    setupBus(apiHost, frame, onSignMessageRequestMock, onEventMock);
+    setupBus(apiHost, frame, onEventMock, onSignMessageRequestMock);
     expect(onMock).toBeCalledWith(
       MessageKind.UNSUPPORTED_NETWORK_ERROR,
       expect.any(Function),
@@ -289,7 +289,7 @@ describe("setupBus", () => {
     const onMock = vi.fn();
     createPostMessageBusMock.mockImplementationOnce(() => ({ on: onMock }));
 
-    setupBus(apiHost, frame, onSignMessageRequestMock, onEventMock);
+    setupBus(apiHost, frame, onEventMock, onSignMessageRequestMock);
     expect(onMock).toBeCalledWith(
       MessageKind.UNSUPPORTED_ASSET_ERROR,
       expect.any(Function),
