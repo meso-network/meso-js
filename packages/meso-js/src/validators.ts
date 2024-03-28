@@ -64,6 +64,21 @@ export const validateMessage = (message: Message) => {
       }
 
       return true;
+    case MessageKind.REQUEST_SEND_TRANSACTION:
+      if (
+        !message.payload ||
+        !isString(message.payload.tokenAddress) ||
+        isEmptyString(message.payload.tokenAddress) ||
+        !isString(message.payload.recipientAddress) ||
+        isEmptyString(message.payload.recipientAddress) ||
+        typeof message.payload.decimals !== "number" ||
+        !isString(message.payload.amount) ||
+        isEmptyString(message.payload.amount)
+      ) {
+        return false;
+      }
+
+      return true;
     case MessageKind.CLOSE:
       if ("payload" in message) {
         return false;

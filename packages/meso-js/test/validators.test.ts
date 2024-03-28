@@ -111,6 +111,92 @@ describe("validators", () => {
       });
     });
 
+    describe("REQUEST_SEND_TRANSACTION", () => {
+      describe("success", () => {
+        test("returns valid payload", () => {
+          expect(
+            validateMessage({
+              kind: MessageKind.REQUEST_SEND_TRANSACTION,
+              payload: {
+                tokenAddress: "0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48",
+                recipientAddress: "0xDD9Dc1c1Df9bf81044Faa745410f37dfF321BC97",
+                decimals: 6,
+                amount: "100.00",
+              },
+            }),
+          ).toBe(true);
+        });
+      });
+
+      describe("failure", () => {
+        test.each([
+          ["missing payload", { kind: MessageKind.REQUEST_SEND_TRANSACTION }],
+          [
+            "missing kind",
+            {
+              payload: {
+                tokenAddress: "0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48",
+                recipientAddress: "0xDD9Dc1c1Df9bf81044Faa745410f37dfF321BC97",
+                decimals: 6,
+                amount: "100.00",
+              },
+            },
+          ],
+          [
+            "bad tokenAddress",
+            {
+              kind: MessageKind.REQUEST_SEND_TRANSACTION,
+              payload: {
+                tokenAddress: "",
+                recipientAddress: "0xDD9Dc1c1Df9bf81044Faa745410f37dfF321BC97",
+                decimals: 6,
+                amount: "100.00",
+              },
+            },
+          ],
+          [
+            "bad recipientAddress",
+            {
+              kind: MessageKind.REQUEST_SEND_TRANSACTION,
+              payload: {
+                tokenAddress: "0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48",
+                recipientAddress: "",
+                decimals: 6,
+                amount: "100.00",
+              },
+            },
+          ],
+          [
+            "bad decimals",
+            {
+              kind: MessageKind.REQUEST_SEND_TRANSACTION,
+              payload: {
+                tokenAddress: "0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48",
+                recipientAddress: "0xDD9Dc1c1Df9bf81044Faa745410f37dfF321BC97",
+                decimals: "6",
+                amount: "100.00",
+              },
+            },
+          ],
+          [
+            "bad amount",
+            {
+              kind: MessageKind.REQUEST_SEND_TRANSACTION,
+              payload: {
+                tokenAddress: "0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48",
+                recipientAddress: "0xDD9Dc1c1Df9bf81044Faa745410f37dfF321BC97",
+                decimals: 6,
+                amount: 100,
+              },
+            },
+          ],
+        ])("%s", (_, message) => {
+          // @ts-expect-error: Bypass type system to simulate runtime behavior
+          expect(validateMessage(message)).toBe(false);
+        });
+      });
+    });
+
     describe("CLOSE", () => {
       describe("success", () => {
         test("is valid", () => {
