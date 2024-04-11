@@ -12,6 +12,7 @@
   "dictionaries": [],
   "words": [
     "allowtransparency",
+    "ARBITRUM",
     "caip",
     "commitlint",
     "devnet",
@@ -28,6 +29,8 @@
     "webviews"
   ],
   "ignoreWords": [],
-  "ignoreRegExpList": ["/solana:(\\w+)/"],
+  "ignoreRegExpList": [
+    "/solana:(\\w+)/"
+  ],
   "import": []
 }
