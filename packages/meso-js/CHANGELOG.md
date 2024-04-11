@@ -1,5 +1,11 @@
 # @meso-network/meso-js
 
+## 0.0.80
+
+### Patch Changes
+
+- [#47](https://github.com/meso-network/meso-js/pull/47) [`3e384da`](https://github.com/meso-network/meso-js/commit/3e384da0b05da7ef0c064190e32ae8b88b987011) Thanks [@kyledetella](https://github.com/kyledetella)! - Introduce [Arbitrum](https://arbitrum.io/) support via the `Network` type.
+
 ## 0.0.79
 
 ### Patch Changes
