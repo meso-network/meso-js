@@ -115,6 +115,7 @@ export enum Network {
   SOLANA_MAINNET = "solana:5eykt4UsFv8P8NJdTREpY1vzqKqZKvdp",
   POLYGON_MAINNET = "eip155:137",
   OP_MAINNET = "eip155:10",
+  ARBITRUM_MAINNET = "eip155:42161",
 }
 
 /**
