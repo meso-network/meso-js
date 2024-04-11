@@ -29,8 +29,6 @@
     "webviews"
   ],
   "ignoreWords": [],
-  "ignoreRegExpList": [
-    "/solana:(\\w+)/"
-  ],
+  "ignoreRegExpList": ["/solana:(\\w+)/"],
   "import": []
 }
