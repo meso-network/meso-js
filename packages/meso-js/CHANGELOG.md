@@ -1,5 +1,11 @@
 # @meso-network/meso-js
 
+## 0.0.81
+
+### Patch Changes
+
+- [#49](https://github.com/meso-network/meso-js/pull/49) [`ba49aa0`](https://github.com/meso-network/meso-js/commit/ba49aa0eea9aecdd85bf6c430a22bfb66e30bb4b) Thanks [@kyledetella](https://github.com/kyledetella)! - Introduce `READY` event for when iframe is loaded.
+
 ## 0.0.80
 
 ### Patch Changes
