@@ -1,5 +1,11 @@
 # @meso-network/meso-js
 
+## 0.0.82
+
+### Patch Changes
+
+- [#51](https://github.com/meso-network/meso-js/pull/51) [`89ba6d2`](https://github.com/meso-network/meso-js/commit/89ba6d227856cd581f5bff40340729ba600890eb) Thanks [@kyledetella](https://github.com/kyledetella)! - 🐛 This release fixes a bug introduced in [v0.0.81](https://github.com/meso-network/meso-js/releases/tag/%40meso-network%2Fmeso-js%400.0.81) where the `READY` event would not be surfaced. We now ensure the `READY` event is passed through message validation.
+
 ## 0.0.81
 
 ### Patch Changes
