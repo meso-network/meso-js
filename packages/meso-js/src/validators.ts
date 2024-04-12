@@ -65,6 +65,7 @@ export const validateMessage = (message: Message) => {
 
       return true;
     case MessageKind.CLOSE:
+    case MessageKind.READY:
       if ("payload" in message) {
         return false;
       }
