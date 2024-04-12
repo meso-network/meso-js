@@ -80,6 +80,8 @@ export enum EventKind {
   TRANSFER_APPROVED = "TRANSFER_APPROVED",
   /** A Meso transfer has completed */
   TRANSFER_COMPLETE = "TRANSFER_COMPLETE",
+  /** The iframe/window is ready and can be interacted with. */
+  READY = "READY",
 }
 
 /**
@@ -98,7 +100,8 @@ export type MesoEvent =
       kind: EventKind.UNSUPPORTED_ASSET_ERROR;
       payload: UnsupportedAssetErrorPayload;
     }
-  | { kind: EventKind.CLOSE; payload: null };
+  | { kind: EventKind.CLOSE; payload: null }
+  | { kind: EventKind.READY; payload: null };
 
 /**
  * The expected result from requesting the user to sign a message with their wallet.
@@ -369,6 +372,10 @@ export enum MessageKind {
    * Dispatch an unsupported asset error when the `destinationAsset` passed to initialize the Meso experience is not supported.
    */
   UNSUPPORTED_ASSET_ERROR = "UNSUPPORTED_ASSET_ERROR",
+  /**
+   * Dispatch that the iframe is ready.
+   */
+  READY = "READY",
 }
 
 export type RequestSignedMessagePayload = {
@@ -400,6 +407,7 @@ export type Message =
       payload: ReturnSignedMessagePayload;
     }
   | { kind: MessageKind.CLOSE }
+  | { kind: MessageKind.READY }
   | {
       kind: MessageKind.TRANSFER_UPDATE;
       payload: Pick<Transfer, "id" | "status" | "updatedAt"> &

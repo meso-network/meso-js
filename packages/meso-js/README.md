@@ -42,6 +42,7 @@ used in a vanilla JavaScript application as well.
       - [Unsupported Asset errors](#unsupported-asset-errors)
       - [Other errors](#other-errors)
     - [Events](#events)
+      - [`READY`](#ready)
       - [`TRANSFER_APPROVED`](#transfer_approved)
       - [`TRANSFER_COMPLETE`](#transfer_complete)
       - [`ERROR`](#error)
@@ -154,9 +155,12 @@ buyCrypto.addEventListener("click", () => {
     // A callback to handle events throughout the integration lifecycle
     onEvent({ kind, payload }: MesoEvent) {
       switch (kind) {
+        // The iframe/window is ready
+        case EventKind.READY:
+          break;
+
         // The transfer has been approved and will go through, however funds have not yet moved.
         case EventKind.TRANSFER_APPROVED:
-
         // The transfer has been finalized and the assets have been transferred.
         case EventKind.TRANSFER_COMPLETE:
           console.log(payload.transfer);
@@ -232,9 +236,12 @@ export const BuyCrypto = () => {
       // A callback to handle events throughout the integration lifecycle
       onEvent({ kind, payload }: MesoEvent) {
         switch (kind) {
+          // The iframe/window is ready
+          case EventKind.READY:
+          break;
+
           // The transfer has been approved and will go through, however funds have not yet moved.
           case EventKind.TRANSFER_APPROVED:
-
           // The transfer has been finalized and the assets have been transferred.
           case EventKind.TRANSFER_COMPLETE:
             console.log(payload.transfer);
@@ -690,6 +697,9 @@ Each event has a `kind` and a `payload` (which may be `null` in some cases).
 ```ts
 onEvent({kind, payload}: MesoEvent) {
   switch (kind) {
+  case EventKind.READY:
+    // Handle iframe ready if needed.
+    break;
   case EventKind.TRANSFER_APPROVED:
     console.log(payload); // { transfer: { ... }}
     break;
@@ -714,6 +724,12 @@ onEvent({kind, payload}: MesoEvent) {
   }
 }
 ```
+
+#### `READY`
+
+This event is fired when the iframe is loaded and ready. This can be useful in
+cases where you want to delay showing the Meso experience or negotiate
+animations.
 
 #### `TRANSFER_APPROVED`
 
