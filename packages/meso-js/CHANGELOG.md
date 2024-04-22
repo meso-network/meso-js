@@ -1,5 +1,11 @@
 # @meso-network/meso-js
 
+## 0.0.85
+
+### Patch Changes
+
+- [#57](https://github.com/meso-network/meso-js/pull/57) [`30817b6`](https://github.com/meso-network/meso-js/commit/30817b63489d7b16932cef0923ad5ec8cac9517a) Thanks [@dseeto](https://github.com/dseeto)! - Publish without git checks to avoid unclean git errors during publish action
+
 ## 0.0.84
 
 ### Patch Changes
