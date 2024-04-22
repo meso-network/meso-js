@@ -1,5 +1,11 @@
 # @meso-network/meso-js
 
+## 0.0.83
+
+### Patch Changes
+
+- [#46](https://github.com/meso-network/meso-js/pull/46) [`c794274`](https://github.com/meso-network/meso-js/commit/c7942745ea6673310a29f53551b36910fca0bffe) Thanks [@dseeto](https://github.com/dseeto)! - Add initial (limited access) support for cash out transfers.
+
 ## 0.0.82
 
 ### Patch Changes
