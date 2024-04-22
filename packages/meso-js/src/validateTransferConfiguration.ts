@@ -1,8 +1,11 @@
 import {
   Asset,
   AuthenticationStrategy,
+  CashOutConfiguration,
+  CryptoAsset,
   Environment,
   EventKind,
+  FiatAsset,
   Network,
   TransferConfiguration,
 } from "./types";
@@ -14,17 +17,71 @@ type NetworkValue = `${Network}`;
 const isValidNetwork = (network: NetworkValue) =>
   Object.values(Network).some((value) => value === network);
 
-export const validateTransferConfiguration = ({
-  sourceAmount,
-  network,
-  walletAddress,
+export const validateTransferConfiguration = (
+  transferConfig: TransferConfiguration,
+): boolean => {
+  if (!validateSharedConfiguration(transferConfig)) return false;
+  const { onEvent, sourceAsset } = transferConfig;
+
+  if (transferConfig.destinationAsset in FiatAsset) {
+    // Validate CashOutConfiguration specific configs
+    if (!sourceAsset || !(sourceAsset in CryptoAsset)) {
+      onEvent({
+        kind: EventKind.UNSUPPORTED_ASSET_ERROR,
+        payload: {
+          error: {
+            message: `"sourceAsset" must be a supported CryptoAsset for Cash-out: ${Object.values(
+              CryptoAsset,
+            )}.`,
+          },
+        },
+      });
+      return false;
+    } else if (
+      typeof (transferConfig as CashOutConfiguration)
+        .onSendTransactionRequest !== "function"
+    ) {
+      onEvent({
+        kind: EventKind.CONFIGURATION_ERROR,
+        payload: {
+          error: {
+            message: '"onSendTransactionRequest" must be a valid function.',
+          },
+        },
+      });
+      return false;
+    }
+  } else {
+    // Validate CashInConfiguration specific configs
+    if (sourceAsset && !(sourceAsset in FiatAsset)) {
+      onEvent({
+        kind: EventKind.UNSUPPORTED_ASSET_ERROR,
+        payload: {
+          error: {
+            message: `"sourceAsset" must be a supported FiatAsset for Cash-in: ${Object.values(
+              FiatAsset,
+            )}.`,
+          },
+        },
+      });
+      return false;
+    }
+  }
+
+  return true;
+};
+
+const validateSharedConfiguration = ({
+  authenticationStrategy,
   destinationAsset,
   environment,
-  partnerId,
   layout,
-  onSignMessageRequest,
+  network,
   onEvent,
-  authenticationStrategy,
+  onSignMessageRequest,
+  partnerId,
+  sourceAmount,
+  walletAddress,
 }: TransferConfiguration): boolean => {
   if (typeof onEvent !== "function") {
     throw new Error("[meso-js] An onEvent callback is required.");
@@ -59,18 +116,6 @@ export const validateTransferConfiguration = ({
     onEvent({
       kind: EventKind.CONFIGURATION_ERROR,
       payload: { error: { message: `"walletAddress" must be provided.` } },
-    });
-    return false;
-  } else if (!(destinationAsset in Asset)) {
-    onEvent({
-      kind: EventKind.UNSUPPORTED_ASSET_ERROR,
-      payload: {
-        error: {
-          message: `"destinationAsset" must be a supported asset: ${Object.values(
-            Asset,
-          )}.`,
-        },
-      },
     });
     return false;
   } else if (!(environment in Environment)) {
@@ -118,10 +163,21 @@ export const validateTransferConfiguration = ({
       },
     });
     return false;
+  } else if (!(destinationAsset in Asset)) {
+    onEvent({
+      kind: EventKind.UNSUPPORTED_ASSET_ERROR,
+      payload: {
+        error: {
+          message: `"destinationAsset" must be a supported Asset: ${Object.values(
+            Asset,
+          )}.`,
+        },
+      },
+    });
+    return false;
   }
 
   const validateLayoutResult = validateLayout(layout);
-
   if (!validateLayoutResult.isValid) {
     onEvent({
       kind: EventKind.CONFIGURATION_ERROR,

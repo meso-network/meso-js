@@ -121,15 +121,27 @@ export enum Network {
   ARBITRUM_MAINNET = "eip155:42161",
 }
 
-/**
- * Symbol representing a crypto/fiat currency.
- */
 export enum Asset {
+  // CryptoAsset
   ETH = "ETH",
   SOL = "SOL",
   USDC = "USDC",
   MATIC = "MATIC",
+
+  // FiatAsset
+  USD = "USD",
 }
+
+export const CryptoAsset = {
+  [Asset.ETH]: Asset.ETH,
+  [Asset.SOL]: Asset.SOL,
+  [Asset.USDC]: Asset.USDC,
+  [Asset.MATIC]: Asset.MATIC,
+} as const;
+
+export const FiatAsset = {
+  [Asset.USD]: Asset.USD,
+} as const;
 
 /**
  * A stringified number representing an amount of USD.
@@ -138,7 +150,12 @@ export enum Asset {
  *
  * Examples: `"10",`"0.01"`, `"1.2"`, `"100.23"`, `"1250"`, `"1250.40"`
  */
-export type USDAmount = `${number}${"." | ""}${number | ""}`;
+export type AssetAmount = `${number}${"." | ""}${number | ""}`;
+
+/**
+ * @deprecated Legacy type for amount when only cash-in was supported
+ */
+export type USDAmount = AssetAmount;
 
 /**
  * Screen position to launch the Meso experience.
@@ -208,9 +225,9 @@ export type Layout = {
 };
 
 /**
- * Parameters to initialize the Meso experience.
+ * Shared parameters to initialize the Meso experience.
  */
-export type TransferConfiguration = Readonly<{
+export type BaseConfiguration = Readonly<{
   /**
    * The Meso environment to use. (`Environment.SANDBOX` | `Environment.PRODUCTION`).
    */
@@ -226,15 +243,11 @@ export type TransferConfiguration = Readonly<{
   /** The wallet address for the user. This address must be compatible with the selected `network` and `destinationAsset`. */
   walletAddress: string;
   /**
-   * A stringified number including decimals (if needed) representing the fiat amount to be used for the transfer.
+   * A stringified number including decimals (if needed) representing the amount to be used for the transfer.
    *
    * Examples: `"10",`"0.01"`, `"1.2"`, `"100.23"`, `"1250", `"1250.40"`.
    */
-  sourceAmount: USDAmount;
-  /**
-   * The asset to be transferred.
-   */
-  destinationAsset: Asset;
+  sourceAmount: AssetAmount;
   /**
    * Configuration to customize how the Meso experience is launched and presented.
    */
@@ -256,6 +269,44 @@ export type TransferConfiguration = Readonly<{
    */
   onEvent: (event: MesoEvent) => void;
 }>;
+
+export type CashInConfiguration = BaseConfiguration & {
+  /**
+   * The fiat asset to be used. Defaults to `Asset.USD`.
+   */
+  sourceAsset?: keyof typeof FiatAsset;
+  /**
+   * The crypto asset to be transferred.
+   */
+  destinationAsset: keyof typeof CryptoAsset;
+};
+
+export type CashOutConfiguration = BaseConfiguration & {
+  /**
+   * The crypto asset to be transferred.
+   */
+  sourceAsset: keyof typeof CryptoAsset;
+  /**
+   * The fiat asset to be cashed out.
+   */
+  destinationAsset: keyof typeof FiatAsset;
+  /**
+   * A handler to notify you when a transaction needs to be sent.
+   *
+   * @param amount - quantity of the cryptocurrency to send.
+   * @param recipientAddress - wallet address of the transaction recipient.
+   * @param tokenAddress - contract address of the token being send.
+   * @param decimals - number of decimal places used for the token.
+   */
+  onSendTransactionRequest: (
+    amount: string,
+    recipientAddress: string,
+    tokenAddress: string,
+    decimals: number,
+  ) => Promise<void>;
+};
+
+export type TransferConfiguration = CashInConfiguration | CashOutConfiguration;
 
 /**
  * Used to determine the type of authentication the user will need to perform for a transfer.
@@ -287,6 +338,7 @@ export type TransferIframeParams = Pick<
   | "network"
   | "walletAddress"
   | "sourceAmount"
+  | "sourceAsset"
   | "destinationAsset"
   | "authenticationStrategy"
 > & {
@@ -349,6 +401,10 @@ export enum MessageKind {
    */
   RETURN_SIGNED_MESSAGE_RESULT = "RETURN_SIGNED_MESSAGE_RESULT",
   /**
+   * Request from Meso experience to parent window to initiate sending of transaction.
+   */
+  REQUEST_SEND_TRANSACTION = "REQUEST_SEND_TRANSACTION",
+  /**
    * Dispatch a message from the Meso experience to the parent window to close the experience.
    */
   CLOSE = "CLOSE",
@@ -394,6 +450,28 @@ export type ReturnSignedMessagePayload = {
   signedMessage?: string;
 };
 
+export type RequestSendTransactionPayload = {
+  /*
+   * A stringified number including decimal (if needed) representing the
+   * quantity to send for the transaction (e.g. `"10",`"0.01"`, `"1.2"`,
+   * `"100.23"`, `"1250", `"1250.40"`).
+   */
+  amount: AssetAmount;
+  /*
+   * Wallet address of the transaction recipient (i.e. the Meso Deposit Address for Cash-Ins).
+   */
+  recipientAddress: string;
+  /*
+   * Contract address of the token being send (e.g.
+   * "0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48" for USDC on Ethereum).
+   */
+  tokenAddress: string;
+  /*
+   * Number of decimal places used for the token (e.g. 6 for USDC on Ethereum).
+   */
+  decimals: number;
+};
+
 /**
  * Structured `window.postMessage` messages between the Meso experience to parent window
  */
@@ -405,6 +483,10 @@ export type Message =
   | {
       kind: MessageKind.RETURN_SIGNED_MESSAGE_RESULT;
       payload: ReturnSignedMessagePayload;
+    }
+  | {
+      kind: MessageKind.REQUEST_SEND_TRANSACTION;
+      payload: RequestSendTransactionPayload;
     }
   | { kind: MessageKind.CLOSE }
   | { kind: MessageKind.READY }

@@ -7,14 +7,16 @@ import {
   TransferApprovedPayload,
   TransferCompletePayload,
   TransferConfiguration,
+  CashOutConfiguration,
 } from "./types";
 import { createPostMessageBus } from "./createPostMessageBus";
 
 export const setupBus = (
   apiHost: string,
   frame: ReturnType<typeof setupFrame>,
-  onSignMessageRequest: TransferConfiguration["onSignMessageRequest"],
   onEvent: TransferConfiguration["onEvent"],
+  onSignMessageRequest: TransferConfiguration["onSignMessageRequest"],
+  onSendTransactionRequest?: CashOutConfiguration["onSendTransactionRequest"],
 ) => {
   const bus = createPostMessageBus(apiHost);
   if ("message" in bus) {
@@ -33,6 +35,22 @@ export const setupBus = (
         kind: MessageKind.RETURN_SIGNED_MESSAGE_RESULT,
         payload: { signedMessage },
       });
+    }
+  });
+
+  bus.on(MessageKind.REQUEST_SEND_TRANSACTION, async (message) => {
+    if (
+      message.kind === MessageKind.REQUEST_SEND_TRANSACTION &&
+      onSendTransactionRequest
+    ) {
+      const { amount, recipientAddress, tokenAddress, decimals } =
+        message.payload;
+      await onSendTransactionRequest(
+        amount,
+        recipientAddress,
+        tokenAddress,
+        decimals,
+      );
     }
   });
 

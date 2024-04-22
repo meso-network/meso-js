@@ -18,7 +18,8 @@
     "build": "pnpm clean && pnpm typecheck && pnpm run --filter @meso-network/meso-js -r build",
     "fmt": "prettier -w .",
     "fmt:check": "prettier --check .",
-    "spelling:check": "cspell ."
+    "spelling:check": "cspell .",
+    "check": "pnpm lint && pnpm typecheck && pnpm fmt:check && pnpm spelling:check && pnpm test"
   },
   "workspaces": [
     "packages/*"
