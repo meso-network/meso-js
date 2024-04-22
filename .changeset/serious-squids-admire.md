@@ -2,4 +2,4 @@
 "@meso-network/meso-js": patch
 ---
 
-add support for cash-out transfers
+Add initial (limited access) support for cash out transfers.
