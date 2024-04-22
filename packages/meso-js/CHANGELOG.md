@@ -1,5 +1,11 @@
 # @meso-network/meso-js
 
+## 0.0.84
+
+### Patch Changes
+
+- [#55](https://github.com/meso-network/meso-js/pull/55) [`3c3a043`](https://github.com/meso-network/meso-js/commit/3c3a0435094bdae7abf56e949cc666f46bc64c27) Thanks [@kyledetella](https://github.com/kyledetella)! - Reconcile lockfile. This release does not introduce any new functionality, but is bumping the version to reconcile our build process.
+
 ## 0.0.83
 
 ### Patch Changes
