@@ -215,6 +215,24 @@ describe("validators", () => {
       });
     });
 
+    describe("READY", () => {
+      describe("success", () => {
+        test("is valid", () => {
+          expect(validateMessage({ kind: MessageKind.READY })).toBe(true);
+        });
+      });
+
+      describe("failure", () => {
+        test.each([
+          ["contains payload", { kind: MessageKind.READY, payload: {} }],
+          ["missing kind", {}],
+        ])("%s", (_, message) => {
+          // @ts-expect-error: Bypass type system to simulate runtime behavior
+          expect(validateMessage(message)).toBe(false);
+        });
+      });
+    });
+
     describe("TRANSFER_UPDATE", () => {
       describe("success", () => {
         test("is valid w/o networkTransactionId", () => {

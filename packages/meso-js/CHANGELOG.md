@@ -1,5 +1,23 @@
 # @meso-network/meso-js
 
+## 0.0.82
+
+### Patch Changes
+
+- [#51](https://github.com/meso-network/meso-js/pull/51) [`89ba6d2`](https://github.com/meso-network/meso-js/commit/89ba6d227856cd581f5bff40340729ba600890eb) Thanks [@kyledetella](https://github.com/kyledetella)! - 🐛 This release fixes a bug introduced in [v0.0.81](https://github.com/meso-network/meso-js/releases/tag/%40meso-network%2Fmeso-js%400.0.81) where the `READY` event would not be surfaced. We now ensure the `READY` event is passed through message validation.
+
+## 0.0.81
+
+### Patch Changes
+
+- [#49](https://github.com/meso-network/meso-js/pull/49) [`ba49aa0`](https://github.com/meso-network/meso-js/commit/ba49aa0eea9aecdd85bf6c430a22bfb66e30bb4b) Thanks [@kyledetella](https://github.com/kyledetella)! - Introduce `READY` event for when iframe is loaded.
+
+## 0.0.80
+
+### Patch Changes
+
+- [#47](https://github.com/meso-network/meso-js/pull/47) [`3e384da`](https://github.com/meso-network/meso-js/commit/3e384da0b05da7ef0c064190e32ae8b88b987011) Thanks [@kyledetella](https://github.com/kyledetella)! - Introduce [Arbitrum](https://arbitrum.io/) support via the `Network` type.
+
 ## 0.0.79
 
 ### Patch Changes

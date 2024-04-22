@@ -109,5 +109,14 @@ export const setupBus = (
     });
   });
 
+  bus.on(MessageKind.READY, (message) => {
+    if (message.kind !== MessageKind.READY) return;
+
+    onEvent({
+      kind: EventKind.READY,
+      payload: null,
+    });
+  });
+
   return bus;
 };
