@@ -8,7 +8,7 @@
   },
   "license": "MIT",
   "scripts": {
-    "ci:publish": "pnpm build && pnpm publish -r && changeset tag",
+    "ci:publish": "pnpm build && pnpm publish -r  --no-git-checks && changeset tag",
     "clean": "rimraf packages/**/lib packages/**/*.tsbuildinfo packages/**/*.timestamp",
     "lint:es": "eslint .",
     "lint:markdown": "markdownlint .",
