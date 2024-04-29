@@ -2,4 +2,4 @@
 "@meso-network/meso-js": patch
 ---
 
-hide frame on cash out send transaction req
+Automatically hide the Meso iframe when a cash out transfer has been sent.
