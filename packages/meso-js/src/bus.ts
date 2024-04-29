@@ -43,6 +43,7 @@ export const setupBus = (
       message.kind === MessageKind.REQUEST_SEND_TRANSACTION &&
       onSendTransactionRequest
     ) {
+      frame.hide();
       const { amount, recipientAddress, tokenAddress, decimals } =
         message.payload;
       await onSendTransactionRequest(

@@ -2,6 +2,7 @@ import {
   TransferConfiguration,
   TransferStatus,
   MessageKind,
+  CashOutConfiguration,
 } from "../src/types";
 import { setupBus } from "../src/bus";
 import { setupFrame } from "../src/frame";
@@ -26,6 +27,10 @@ describe("setupBus", () => {
     Parameters<TransferConfiguration["onSignMessageRequest"]>,
     ReturnType<TransferConfiguration["onSignMessageRequest"]>
   >;
+  var onRequestSendTransactionMock: Mock<
+    Parameters<CashOutConfiguration["onSendTransactionRequest"]>,
+    ReturnType<CashOutConfiguration["onSendTransactionRequest"]>
+  >;
   var onEventMock: Mock<
     Parameters<TransferConfiguration["onEvent"]>,
     ReturnType<TransferConfiguration["onEvent"]>
@@ -43,6 +48,7 @@ describe("setupBus", () => {
     };
 
     onSignMessageRequestMock = vi.fn();
+    onRequestSendTransactionMock = vi.fn();
     onEventMock = vi.fn();
   });
 
@@ -93,6 +99,47 @@ describe("setupBus", () => {
             "signedMessage": "signedMessage",
           },
         },
+      ]
+    `);
+  });
+
+  test("returns bus which handles REQUEST_SEND_TRANSACTION message", async () => {
+    const onMock = vi.fn();
+    const destroyMock = vi.fn();
+    createPostMessageBusMock.mockImplementationOnce(() => ({
+      on: onMock,
+      destroy: destroyMock,
+    }));
+
+    setupBus(
+      apiHost,
+      frame,
+      onEventMock,
+      onSignMessageRequestMock,
+      onRequestSendTransactionMock,
+    );
+    const onRequestSendTransactionCallback = onMock.mock.calls.find(
+      (invocationArgs) =>
+        invocationArgs[0] === MessageKind.REQUEST_SEND_TRANSACTION,
+    )[1];
+    onRequestSendTransactionCallback({
+      kind: MessageKind.REQUEST_SEND_TRANSACTION,
+      payload: {
+        amount: "100.00",
+        recipientAddress: "GvLJQC9tVeJ7pKxKmKj4V8UDLQ5NUFQ99vPLRwQNbn1u",
+        tokenAddress: "4zMMC9srt5Ri5X14GAgXhaHii3GnPAEERYPJgZJDncDU",
+        decimals: 6,
+      },
+    });
+
+    expect(hideMock).toHaveBeenCalledOnce();
+    expect(onRequestSendTransactionMock).toHaveBeenCalledOnce();
+    expect(onRequestSendTransactionMock.mock.lastCall).toMatchInlineSnapshot(`
+      [
+        "100.00",
+        "GvLJQC9tVeJ7pKxKmKj4V8UDLQ5NUFQ99vPLRwQNbn1u",
+        "4zMMC9srt5Ri5X14GAgXhaHii3GnPAEERYPJgZJDncDU",
+        6,
       ]
     `);
   });
