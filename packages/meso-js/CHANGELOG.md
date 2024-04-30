@@ -1,5 +1,11 @@
 # @meso-network/meso-js
 
+## 0.0.86
+
+### Patch Changes
+
+- [#59](https://github.com/meso-network/meso-js/pull/59) [`81dc4e9`](https://github.com/meso-network/meso-js/commit/81dc4e98c86593a625b5b8b199b2ceb0b1cda009) Thanks [@dseeto](https://github.com/dseeto)! - Automatically hide the Meso iframe when a cash out transfer has been sent.
+
 ## 0.0.85
 
 ### Patch Changes
