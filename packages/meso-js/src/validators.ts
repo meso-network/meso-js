@@ -81,6 +81,7 @@ export const validateMessage = (message: Message) => {
       return true;
     case MessageKind.CLOSE:
     case MessageKind.READY:
+    case MessageKind.INITIATE_ONBOARDING:
     case MessageKind.REPORT_ONBOARDING_COMPLETE:
     case MessageKind.RESUME_INLINE_TRANSFER:
       if ("payload" in message) {
@@ -116,20 +117,6 @@ export const validateMessage = (message: Message) => {
       if (
         !isString(message.payload.message) ||
         isEmptyString(message.payload.message)
-      ) {
-        return false;
-      }
-
-      return true;
-    // TODO: Add tests
-    case MessageKind.INITIATE_ONBOARDING:
-      if (!("payload" in message)) {
-        return false;
-      }
-
-      if (
-        !isString(message.payload.params) ||
-        isEmptyString(message.payload.params)
       ) {
         return false;
       }
