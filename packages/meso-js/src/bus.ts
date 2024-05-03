@@ -8,16 +8,26 @@ import {
   TransferCompletePayload,
   TransferConfiguration,
   CashOutConfiguration,
+  Store,
 } from "./types";
 import { createPostMessageBus } from "./createPostMessageBus";
+import { initiateOnboarding } from "./initiateOnboarding";
 
-export const setupBus = (
-  apiHost: string,
-  frame: ReturnType<typeof setupFrame>,
-  onEvent: TransferConfiguration["onEvent"],
-  onSignMessageRequest: TransferConfiguration["onSignMessageRequest"],
-  onSendTransactionRequest?: CashOutConfiguration["onSendTransactionRequest"],
-) => {
+export const setupBus = ({
+  apiHost,
+  frame,
+  onEvent,
+  onSignMessageRequest,
+  onSendTransactionRequest,
+  store,
+}: {
+  apiHost: string;
+  frame: ReturnType<typeof setupFrame>;
+  onEvent: TransferConfiguration["onEvent"];
+  onSignMessageRequest: TransferConfiguration["onSignMessageRequest"];
+  onSendTransactionRequest?: CashOutConfiguration["onSendTransactionRequest"];
+  store: Store;
+}) => {
   const bus = createPostMessageBus(apiHost);
   if ("message" in bus) {
     throw new Error(
@@ -116,6 +126,27 @@ export const setupBus = (
       kind: EventKind.READY,
       payload: null,
     });
+  });
+
+  bus.on(MessageKind.INITIATE_ONBOARDING, (message) => {
+    if (message.kind !== MessageKind.INITIATE_ONBOARDING) return;
+
+    const { params } = message.payload;
+    const onboardingIframe = initiateOnboarding(params);
+
+    store.onboardingIframe = onboardingIframe;
+  });
+
+  bus.on(MessageKind.REPORT_ONBOARDING_COMPLETE, (_, reply) => {
+    console.log("Onboarding is complete. De-render the onboarding frame!");
+    if (store.onboardingIframe) {
+      store.onboardingIframe.parentNode?.removeChild(store.onboardingIframe);
+      store.onboardingIframe = undefined;
+
+      reply({
+        kind: MessageKind.RESUME_INLINE_TRANSFER,
+      });
+    }
   });
 
   return bus;

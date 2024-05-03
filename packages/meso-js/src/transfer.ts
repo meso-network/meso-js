@@ -13,6 +13,7 @@ import {
   TransferInstance,
 } from "./types";
 import { validateTransferConfiguration } from "./validateTransferConfiguration";
+import { store } from "./store";
 
 const apiHosts: { readonly [key in Environment]: string } = {
   [Environment.LOCAL]: "http://localhost:5173",
@@ -62,33 +63,51 @@ export const transfer = (
     destinationAsset,
     onSignMessageRequest,
     onEvent,
+    container,
   } = transferConfiguration;
   const apiHost = apiHosts[environment];
+  let containerElement: Element | null = null;
 
-  const frame = setupFrame(apiHost, {
-    partnerId,
-    network,
-    walletAddress,
-    sourceAmount,
-    destinationAsset,
-    sourceAsset: sourceAsset!,
-    layoutPosition: layout!.position!,
-    layoutOffset:
-      typeof layout!.offset === "string"
-        ? layout!.offset
-        : JSON.stringify(layout!.offset),
-    version,
-    authenticationStrategy: authenticationStrategy!,
-    mode: TransferExperienceMode.EMBEDDED,
-  });
+  if (container) {
+    // Validate container
+    containerElement = document.querySelector(container);
 
-  const bus = setupBus(
+    // TODO: Structure this error
+    if (!containerElement) {
+      throw new Error(`Invalid container: ${container}`);
+    }
+  }
+
+  const frame = setupFrame(
+    apiHost,
+    {
+      partnerId,
+      network,
+      walletAddress,
+      sourceAmount,
+      destinationAsset,
+      sourceAsset: sourceAsset!,
+      layoutPosition: layout!.position!,
+      layoutOffset:
+        typeof layout!.offset === "string"
+          ? layout!.offset
+          : JSON.stringify(layout!.offset),
+      version,
+      authenticationStrategy: authenticationStrategy!,
+      mode: TransferExperienceMode.EMBEDDED,
+    },
+    containerElement,
+  );
+
+  const bus = setupBus({
     apiHost,
     frame,
     onEvent,
     onSignMessageRequest,
-    (transferConfiguration as CashOutConfiguration).onSendTransactionRequest,
-  );
+    onSendTransactionRequest: (transferConfiguration as CashOutConfiguration)
+      .onSendTransactionRequest,
+    store,
+  });
 
   return {
     destroy: () => {

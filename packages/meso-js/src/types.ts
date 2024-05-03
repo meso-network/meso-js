@@ -268,6 +268,13 @@ export type BaseConfiguration = Readonly<{
    * A handler to notify you when an event has occurred.
    */
   onEvent: (event: MesoEvent) => void;
+
+  /**
+   * A valid [CSS selector](https://developer.mozilla.org/en-US/docs/Glossary/CSS_Selector) that will be used to locate a DOM node on the page to inject the iframe into.
+   *
+   * If omitted, the transfer will be appended to `document.body` and will take over the entire viewport.
+   */
+  container?: string;
 }>;
 
 export type CashInConfiguration = BaseConfiguration & {
@@ -432,6 +439,23 @@ export enum MessageKind {
    * Dispatch that the iframe is ready.
    */
   READY = "READY",
+
+  /**
+   * Dispatch to a calling window that the user needs to onboard. The calling window will handle presenting the onboarding flow.
+   */
+  INITIATE_ONBOARDING = "INITIATE_ONBOARDING",
+
+  /**
+   * Dispatch to an instance of the Meso transfer application that the user has completed onboarding.
+   *
+   * This is used in conjunction with `INITIATE_ONBOARDING` to delegate onboarding flows to a sibling iframe/window.
+   */
+  REPORT_ONBOARDING_COMPLETE = "REPORT_ONBOARDING_COMPLETE",
+
+  /**
+   * Dispatch a message to an inline transfer instance that onboarding is complete and the transfer can proceed.
+   */
+  RESUME_INLINE_TRANSFER = "RESUME_INLINE_TRANSFER",
 }
 
 export type RequestSignedMessagePayload = {
@@ -490,6 +514,15 @@ export type Message =
     }
   | { kind: MessageKind.CLOSE }
   | { kind: MessageKind.READY }
+  | { kind: MessageKind.REPORT_ONBOARDING_COMPLETE }
+  | { kind: MessageKind.RESUME_INLINE_TRANSFER }
+  | {
+      kind: MessageKind.INITIATE_ONBOARDING;
+      payload: {
+        /** A valid query string for initializing the Onboarding flow. */
+        params: string;
+      };
+    }
   | {
       kind: MessageKind.TRANSFER_UPDATE;
       payload: Pick<Transfer, "id" | "status" | "updatedAt"> &
@@ -543,4 +576,12 @@ export type PostMessageBusInitializationError = {
    * A _developer_ friendly message containing details of the error.
    */
   message: string;
+};
+
+/**
+ * A general store for data managed by Meso.js.
+ */
+export type Store = {
+  /** A handle to the onboarding iframe for de-rendering. */
+  onboardingIframe?: Readonly<HTMLIFrameElement>;
 };
