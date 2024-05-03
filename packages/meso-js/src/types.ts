@@ -512,16 +512,13 @@ export type Message =
       kind: MessageKind.REQUEST_SEND_TRANSACTION;
       payload: RequestSendTransactionPayload;
     }
-  | { kind: MessageKind.CLOSE }
-  | { kind: MessageKind.READY }
-  | { kind: MessageKind.REPORT_ONBOARDING_COMPLETE }
-  | { kind: MessageKind.RESUME_INLINE_TRANSFER }
   | {
-      kind: MessageKind.INITIATE_ONBOARDING;
-      payload: {
-        /** A valid query string for initializing the Onboarding flow. */
-        params: string;
-      };
+      kind:
+        | MessageKind.CLOSE
+        | MessageKind.READY
+        | MessageKind.REPORT_ONBOARDING_COMPLETE
+        | MessageKind.RESUME_INLINE_TRANSFER
+        | MessageKind.INITIATE_ONBOARDING;
     }
   | {
       kind: MessageKind.TRANSFER_UPDATE;

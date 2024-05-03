@@ -132,8 +132,7 @@ export const setupBus = ({
   bus.on(MessageKind.INITIATE_ONBOARDING, (message) => {
     if (message.kind !== MessageKind.INITIATE_ONBOARDING) return;
 
-    const { params } = message.payload;
-    const onboardingIframe = initiateOnboarding(params);
+    const onboardingIframe = initiateOnboarding();
 
     store.onboardingIframe = onboardingIframe;
   });
