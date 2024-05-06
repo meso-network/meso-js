@@ -65,7 +65,8 @@ export const transfer = (
     onEvent,
     container,
   } = transferConfiguration;
-  const apiHost = apiHosts[environment];
+  // TODO: REVERT THIS!!!!!
+  const apiHost = apiHosts[Environment.LOCAL];
   let containerElement: Element | null = null;
 
   if (container) {

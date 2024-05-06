@@ -1,7 +1,7 @@
 // TODO: Find a better name for this module/export
 export const initiateOnboarding = () => {
   // TODO: Dynamically set the host
-  const src = `http://localhost:4001/onboarding`;
+  const src = `http://localhost:5173/onboarding`;
 
   const iframe = document.createElement("iframe");
   iframe.src = src;
