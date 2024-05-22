@@ -129,22 +129,26 @@ export const setupBus = ({
     });
   });
 
-  bus.on(MessageKind.INITIATE_ONBOARDING, (message) => {
-    if (message.kind !== MessageKind.INITIATE_ONBOARDING) return;
+  bus.on(MessageKind.INITIATE_MODAL_ONBOARDING, (message) => {
+    if (message.kind !== MessageKind.INITIATE_MODAL_ONBOARDING) return;
 
-    const onboardingIframe = initiateOnboarding();
+    const onboardingIframe = initiateOnboarding({
+      pathname: message.payload.initialPathname,
+    });
 
     store.onboardingIframe = onboardingIframe;
   });
 
-  bus.on(MessageKind.REPORT_ONBOARDING_COMPLETE, (_, reply) => {
-    console.log("Onboarding is complete. De-render the onboarding frame!");
+  bus.on(MessageKind.RESUME_INLINE_FRAME, (message, reply) => {
+    if (message.kind !== MessageKind.RESUME_INLINE_FRAME) return;
+
     if (store.onboardingIframe) {
       store.onboardingIframe.parentNode?.removeChild(store.onboardingIframe);
       store.onboardingIframe = undefined;
 
       reply({
-        kind: MessageKind.RESUME_INLINE_TRANSFER,
+        kind: MessageKind.RESUME_INLINE_FRAME,
+        payload: message.payload,
       });
     }
   });
