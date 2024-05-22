@@ -443,19 +443,12 @@ export enum MessageKind {
   /**
    * Dispatch to a calling window that the user needs to onboard. The calling window will handle presenting the onboarding flow.
    */
-  INITIATE_ONBOARDING = "INITIATE_ONBOARDING",
+  INITIATE_MODAL_ONBOARDING = "INITIATE_MODAL_ONBOARDING",
 
   /**
-   * Dispatch to an instance of the Meso transfer application that the user has completed onboarding.
-   *
-   * This is used in conjunction with `INITIATE_ONBOARDING` to delegate onboarding flows to a sibling iframe/window.
+   * Dispatch an event to that the onboarding modal frame should be closed.
    */
-  REPORT_ONBOARDING_COMPLETE = "REPORT_ONBOARDING_COMPLETE",
-
-  /**
-   * Dispatch a message to an inline transfer instance that onboarding is complete and the transfer can proceed.
-   */
-  RESUME_INLINE_TRANSFER = "RESUME_INLINE_TRANSFER",
+  RESUME_INLINE_FRAME = "RESUME_INLINE_FRAME",
 }
 
 export type RequestSignedMessagePayload = {
@@ -496,6 +489,20 @@ export type RequestSendTransactionPayload = {
   decimals: number;
 };
 
+export enum ResumeInlineFrameAction {
+  ONBOARDING_COMPLETE = "ONBOARDING_COMPLETE",
+  ONBOARDING_CANCELED = "ONBOARDING_CANCELED",
+  /** The user is attempting to login instead of signing up. */
+  LOGIN_FROM_ONBOARDING = "LOGIN_FROM_ONBOARDING",
+}
+
+export type ResumeInlineFramePayload = {
+  /**
+   * The action that triggered the onboarding modal to close. This value is used to determine which view to render in the inline frame.
+   */
+  action: ResumeInlineFrameAction;
+};
+
 /**
  * Structured `window.postMessage` messages between the Meso experience to parent window
  */
@@ -513,12 +520,20 @@ export type Message =
       payload: RequestSendTransactionPayload;
     }
   | {
-      kind:
-        | MessageKind.CLOSE
-        | MessageKind.READY
-        | MessageKind.REPORT_ONBOARDING_COMPLETE
-        | MessageKind.RESUME_INLINE_TRANSFER
-        | MessageKind.INITIATE_ONBOARDING;
+      kind: MessageKind.CLOSE | MessageKind.READY;
+    }
+  | {
+      kind: MessageKind.INITIATE_MODAL_ONBOARDING;
+      payload: {
+        /**
+         * The qualified pathname (including leading `/`) in Onboarding that the user will land on once the modal is opened.         *
+         */
+        initialPathname: string;
+      };
+    }
+  | {
+      kind: MessageKind.RESUME_INLINE_FRAME;
+      payload: ResumeInlineFramePayload;
     }
   | {
       kind: MessageKind.TRANSFER_UPDATE;
