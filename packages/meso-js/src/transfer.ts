@@ -65,17 +65,17 @@ export const transfer = (
     onEvent,
     container,
   } = transferConfiguration;
-  // TODO: REVERT THIS!!!!!
-  const apiHost = apiHosts[Environment.LOCAL];
+  const apiHost = apiHosts[environment];
   let containerElement: Element | null = null;
 
   if (container) {
     // Validate container
     containerElement = document.querySelector(container);
 
-    // TODO: Structure this error
     if (!containerElement) {
-      throw new Error(`Invalid container: ${container}`);
+      throw new Error(
+        `Invalid container: No element found for selector ${container}`,
+      );
     }
   }
 

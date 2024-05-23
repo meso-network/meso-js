@@ -125,7 +125,6 @@ export const validateMessage = (message: Message) => {
 
       return true;
 
-    // TODO: Test this
     case MessageKind.INITIATE_MODAL_ONBOARDING:
       if (
         !("payload" in message) ||
@@ -137,7 +136,6 @@ export const validateMessage = (message: Message) => {
       }
 
       return true;
-    // TODO: Test this
     case MessageKind.RESUME_INLINE_FRAME:
       if (
         !("payload" in message) ||

@@ -1,4 +1,4 @@
-import { setupFrame } from "./frame";
+import { renderModalOnboardingFrame, setupFrame } from "./frame";
 import {
   MessageKind,
   EventKind,
@@ -11,7 +11,6 @@ import {
   Store,
 } from "./types";
 import { createPostMessageBus } from "./createPostMessageBus";
-import { initiateOnboarding } from "./initiateOnboarding";
 
 export const setupBus = ({
   apiHost,
@@ -82,7 +81,6 @@ export const setupBus = ({
         payload: { transfer: transfer as TransferApprovedPayload["transfer"] },
       });
     } else if (transfer.status === TransferStatus.COMPLETE) {
-      // TODO: Document this behavior
       // We only want to automatically remove the frame if this is an "embedded" integration. In the "inline" integration, the developer will manually close the frame.
       if (frame.kind === "embedded") {
         frame.remove();
@@ -137,19 +135,22 @@ export const setupBus = ({
   bus.on(MessageKind.INITIATE_MODAL_ONBOARDING, (message) => {
     if (message.kind !== MessageKind.INITIATE_MODAL_ONBOARDING) return;
 
-    const onboardingIframe = initiateOnboarding({
+    const modalOnboardingIframe = renderModalOnboardingFrame({
+      apiHost,
       pathname: message.payload.initialPathname,
     });
 
-    store.onboardingIframe = onboardingIframe;
+    store.modalOnboardingIframe = modalOnboardingIframe;
   });
 
   bus.on(MessageKind.RESUME_INLINE_FRAME, (message, reply) => {
     if (message.kind !== MessageKind.RESUME_INLINE_FRAME) return;
 
-    if (store.onboardingIframe) {
-      store.onboardingIframe.parentNode?.removeChild(store.onboardingIframe);
-      store.onboardingIframe = undefined;
+    if (store.modalOnboardingIframe) {
+      store.modalOnboardingIframe.parentNode?.removeChild(
+        store.modalOnboardingIframe,
+      );
+      store.modalOnboardingIframe = undefined;
 
       reply({
         kind: MessageKind.RESUME_INLINE_FRAME,
