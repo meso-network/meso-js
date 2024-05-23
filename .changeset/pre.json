@@ -1,8 +1,8 @@
 {
   "mode": "pre",
-  "tag": "beta",
+  "tag": "next",
   "initialVersions": {
-    "@meso-network/meso-js": "0.0.86"
+    "@meso-network/meso-js": "0.1.0-alpha.1.0"
   },
   "changesets": []
 }
