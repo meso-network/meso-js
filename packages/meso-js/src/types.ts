@@ -605,5 +605,5 @@ export type PostMessageBusInitializationError = {
  */
 export type Store = {
   /** A handle to the onboarding iframe for de-rendering. */
-  onboardingIframe?: Readonly<HTMLIFrameElement>;
+  modalOnboardingIframe?: Readonly<HTMLIFrameElement>;
 };

@@ -90,13 +90,16 @@ describe("transfer", () => {
     expect(setupBusMock).toHaveBeenCalledOnce();
     expect(setupBusMock.mock.lastCall).toMatchInlineSnapshot(`
       [
-        "https://api.sandbox.meso.network",
         {
-          "remove": [MockFunction spy],
+          "apiHost": "https://api.sandbox.meso.network",
+          "frame": {
+            "remove": [MockFunction spy],
+          },
+          "onEvent": [MockFunction spy],
+          "onSendTransactionRequest": undefined,
+          "onSignMessageRequest": [MockFunction spy],
+          "store": {},
         },
-        [MockFunction spy],
-        [MockFunction spy],
-        undefined,
       ]
     `);
 
@@ -144,13 +147,16 @@ describe("transfer", () => {
     expect(setupBusMock).toHaveBeenCalledOnce();
     expect(setupBusMock.mock.lastCall).toMatchInlineSnapshot(`
       [
-        "https://api.sandbox.meso.network",
         {
-          "remove": [MockFunction spy],
+          "apiHost": "https://api.sandbox.meso.network",
+          "frame": {
+            "remove": [MockFunction spy],
+          },
+          "onEvent": [MockFunction spy],
+          "onSendTransactionRequest": [MockFunction spy],
+          "onSignMessageRequest": [MockFunction spy],
+          "store": {},
         },
-        [MockFunction spy],
-        [MockFunction spy],
-        [MockFunction spy],
       ]
     `);
 
