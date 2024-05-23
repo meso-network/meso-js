@@ -565,6 +565,16 @@ export type PostMessageBus = {
   on: (eventKind: MessageKind, handler: PostMessageHandlerFn) => PostMessageBus;
 
   /**
+   * Subscribe to an event using the message kind (name).
+   *
+   * The attached handler will be invoked only the first time this event is seen.
+   */
+  once: (
+    eventKind: MessageKind,
+    handler: PostMessageHandlerFn,
+  ) => PostMessageBus;
+
+  /**
    * Send a message to a specific [origin](https://developer.mozilla.org/en-US/docs/Web/API/Location/origin). If the `targetOrigin` is omitted, the message will be broadcast to all origins (`*`).
    */
   emit: (message: Message, targetOrigin?: string) => PostMessageBus;
