@@ -5,26 +5,14 @@ import {
   Asset,
   AuthenticationStrategy,
   CashOutConfiguration,
-  Environment,
   Layout,
   Position,
   TransferConfiguration,
   TransferExperienceMode,
   TransferInstance,
 } from "./types";
-import { validateTransferConfiguration } from "./validateTransferConfiguration";
-import { store } from "./store";
-
-const apiHosts: { readonly [key in Environment]: string } = {
-  [Environment.LOCAL]: "http://localhost:5173",
-  [Environment.LOCAL_PROXY]: "http://localhost:4001",
-  [Environment.DEV]: "https://api.dev.meso.plumbing",
-  [Environment.PREVIEW]: "https://api.preview.meso.plumbing",
-  [Environment.SANDBOX]: "https://api.sandbox.meso.network",
-  [Environment.PRODUCTION]: "https://api.meso.network",
-};
-
-const NOOP_TRANSFER_INSTANCE = { destroy: () => {} };
+import { validateTransferConfiguration } from "./validateConfiguration";
+import { apiHosts, NOOP_TRANSFER_INSTANCE } from "./utils";
 
 export const DEFAULT_LAYOUT: Required<Layout> = {
   position: Position.TOP_RIGHT,
@@ -63,42 +51,25 @@ export const transfer = (
     destinationAsset,
     onSignMessageRequest,
     onEvent,
-    container,
   } = transferConfiguration;
   const apiHost = apiHosts[environment];
-  let containerElement: Element | null = null;
 
-  if (container) {
-    // Validate container
-    containerElement = document.querySelector(container);
-
-    if (!containerElement) {
-      throw new Error(
-        `Invalid container: No element found for selector ${container}`,
-      );
-    }
-  }
-
-  const frame = setupFrame(
-    apiHost,
-    {
-      partnerId,
-      network,
-      walletAddress,
-      sourceAmount,
-      destinationAsset,
-      sourceAsset: sourceAsset!,
-      layoutPosition: layout!.position!,
-      layoutOffset:
-        typeof layout!.offset === "string"
-          ? layout!.offset
-          : JSON.stringify(layout!.offset),
-      version,
-      authenticationStrategy: authenticationStrategy!,
-      mode: TransferExperienceMode.EMBEDDED,
-    },
-    containerElement,
-  );
+  const frame = setupFrame(apiHost, {
+    partnerId,
+    network,
+    walletAddress,
+    sourceAmount,
+    destinationAsset,
+    sourceAsset: sourceAsset!,
+    layoutPosition: layout!.position!,
+    layoutOffset:
+      typeof layout!.offset === "string"
+        ? layout!.offset
+        : JSON.stringify(layout!.offset),
+    version,
+    authenticationStrategy: authenticationStrategy!,
+    mode: TransferExperienceMode.EMBEDDED,
+  });
 
   const bus = setupBus({
     apiHost,
@@ -107,7 +78,6 @@ export const transfer = (
     onSignMessageRequest,
     onSendTransactionRequest: (transferConfiguration as CashOutConfiguration)
       .onSendTransactionRequest,
-    store,
   });
 
   return {

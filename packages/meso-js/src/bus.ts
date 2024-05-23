@@ -1,4 +1,4 @@
-import { renderModalOnboardingFrame, setupFrame } from "./frame";
+import { setupFrame } from "./frame";
 import {
   MessageKind,
   EventKind,
@@ -8,7 +8,6 @@ import {
   TransferCompletePayload,
   TransferConfiguration,
   CashOutConfiguration,
-  Store,
 } from "./types";
 import { createPostMessageBus } from "./createPostMessageBus";
 
@@ -18,14 +17,12 @@ export const setupBus = ({
   onEvent,
   onSignMessageRequest,
   onSendTransactionRequest,
-  store,
 }: {
   apiHost: string;
   frame: ReturnType<typeof setupFrame>;
   onEvent: TransferConfiguration["onEvent"];
   onSignMessageRequest: TransferConfiguration["onSignMessageRequest"];
   onSendTransactionRequest?: CashOutConfiguration["onSendTransactionRequest"];
-  store: Store;
 }) => {
   const bus = createPostMessageBus(apiHost);
   if ("message" in bus) {
@@ -130,33 +127,6 @@ export const setupBus = ({
       kind: EventKind.READY,
       payload: null,
     });
-  });
-
-  bus.on(MessageKind.INITIATE_MODAL_ONBOARDING, (message) => {
-    if (message.kind !== MessageKind.INITIATE_MODAL_ONBOARDING) return;
-
-    const modalOnboardingIframe = renderModalOnboardingFrame({
-      apiHost,
-      pathname: message.payload.initialPathname,
-    });
-
-    store.modalOnboardingIframe = modalOnboardingIframe;
-  });
-
-  bus.on(MessageKind.RESUME_INLINE_FRAME, (message, reply) => {
-    if (message.kind !== MessageKind.RESUME_INLINE_FRAME) return;
-
-    if (store.modalOnboardingIframe) {
-      store.modalOnboardingIframe.parentNode?.removeChild(
-        store.modalOnboardingIframe,
-      );
-      store.modalOnboardingIframe = undefined;
-
-      reply({
-        kind: MessageKind.RESUME_INLINE_FRAME,
-        payload: message.payload,
-      });
-    }
   });
 
   return bus;

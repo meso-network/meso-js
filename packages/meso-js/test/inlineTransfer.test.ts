@@ -1,69 +1,94 @@
 import {
   Asset,
-  CashInConfiguration,
-  CashOutConfiguration,
   Environment,
+  InlineTransferConfiguration,
+  MessageKind,
   Network,
-  TransferConfiguration,
 } from "../src/types";
 import { Mock } from "vitest";
-import { transfer } from "../src";
-import { DEFAULT_LAYOUT } from "../src/transfer";
+import { inlineTransfer } from "../src";
 import { version } from "../package.json";
 
-var validateTransferConfigurationMock: Mock;
+var validateInlineTransferConfigurationMock: Mock;
 vi.mock("../src/validateConfiguration", async () => {
-  validateTransferConfigurationMock = vi.fn();
-  return { validateTransferConfiguration: validateTransferConfigurationMock };
-});
-
-var setupBusMock: Mock;
-vi.mock("../src/bus", async () => {
-  setupBusMock = vi.fn();
-  return { setupBus: setupBusMock };
+  validateInlineTransferConfigurationMock = vi.fn();
+  return {
+    validateInlineTransferConfiguration:
+      validateInlineTransferConfigurationMock,
+  };
 });
 
 var setupFrameMock: Mock;
+var frameRemoveMock: Mock;
 vi.mock("../src/frame", async () => {
-  setupFrameMock = vi.fn();
+  frameRemoveMock = vi.fn();
+
+  setupFrameMock = vi.fn().mockImplementation(() => {
+    return {
+      remove: frameRemoveMock,
+    };
+  });
   return { setupFrame: setupFrameMock };
 });
 
-describe("transfer", () => {
+var setupBusMock: Mock;
+var busDestroyMock: Mock;
+var busOnMock: Mock;
+vi.mock("../src/bus", async () => {
+  busDestroyMock = vi.fn();
+  busOnMock = vi.fn();
+
+  setupBusMock = vi.fn().mockImplementation(() => ({
+    destroy: busDestroyMock,
+    on: busOnMock,
+  }));
+  return { setupBus: setupBusMock };
+});
+
+describe("inlineTransfer", () => {
   beforeEach(() => {
     vi.clearAllMocks();
   });
 
-  const configuration: Partial<TransferConfiguration> = {
+  const configuration: Partial<InlineTransferConfiguration> = {
     sourceAmount: "100",
     network: Network.ETHEREUM_MAINNET,
     walletAddress: "0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48",
     environment: Environment.SANDBOX,
     partnerId: "partnerId",
-    layout: DEFAULT_LAYOUT,
     onSignMessageRequest: vi.fn(),
     onEvent: vi.fn(),
+    container: "#outlet",
   };
 
   test("invalid configuration returns without setting up frame or bus", () => {
-    validateTransferConfigurationMock.mockImplementationOnce(() => false);
-    transfer(configuration as TransferConfiguration);
+    validateInlineTransferConfigurationMock.mockImplementationOnce(() => false);
+    inlineTransfer(configuration as InlineTransferConfiguration);
 
     expect(setupFrameMock).not.toHaveBeenCalled();
     expect(setupBusMock).not.toHaveBeenCalled();
   });
 
-  test("valid cash-in configuration sets up frame, bus, and returns destroy method to clean up both", () => {
-    validateTransferConfigurationMock.mockImplementationOnce(() => true);
-    const frameRemoveMock = vi.fn();
-    setupFrameMock.mockImplementationOnce(() => ({ remove: frameRemoveMock }));
-    const busDestroyMock = vi.fn();
-    setupBusMock.mockImplementationOnce(() => ({ destroy: busDestroyMock }));
+  test("invalid container element returns without setting up frame or bus", () => {
+    validateInlineTransferConfigurationMock.mockImplementationOnce(() => true);
+    vi.spyOn(document, "querySelector").mockReturnValue(null);
 
-    const { destroy } = transfer({
+    expect(() => {
+      inlineTransfer(configuration as InlineTransferConfiguration);
+    }).toThrowError("Invalid container: No element found for selector #outlet");
+
+    expect(setupFrameMock).not.toHaveBeenCalled();
+    expect(setupBusMock).not.toHaveBeenCalled();
+  });
+
+  test("valid cash-in configuration sets up frame, bus, and returns destroy method to clean up both", async () => {
+    validateInlineTransferConfigurationMock.mockImplementationOnce(() => true);
+    vi.spyOn(document, "querySelector").mockReturnValue({} as Element);
+
+    const { destroy } = inlineTransfer({
       ...configuration,
       destinationAsset: Asset.ETH,
-    } as CashInConfiguration);
+    } as InlineTransferConfiguration);
     expect(setupFrameMock).toHaveBeenCalledOnce();
     expect(setupFrameMock.mock.lastCall[0]).toMatchInlineSnapshot(
       '"https://api.sandbox.meso.network"',
@@ -72,15 +97,13 @@ describe("transfer", () => {
       { version: expect.any(String) },
       `
       {
-        "authenticationStrategy": "wallet_verification",
+        "authenticationStrategy": undefined,
         "destinationAsset": "ETH",
-        "layoutOffset": "0",
-        "layoutPosition": "top-right",
-        "mode": "embedded",
+        "mode": "inline",
         "network": "eip155:1",
         "partnerId": "partnerId",
         "sourceAmount": "100",
-        "sourceAsset": "USD",
+        "sourceAsset": undefined,
         "version": Any<String>,
         "walletAddress": "0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48",
       }
@@ -102,24 +125,31 @@ describe("transfer", () => {
       ]
     `);
 
+    expect(busOnMock).toHaveBeenCalledWith(
+      MessageKind.INITIATE_MODAL_ONBOARDING,
+      expect.any(Function),
+    );
+
+    expect(busOnMock).toHaveBeenCalledWith(
+      MessageKind.RESUME_INLINE_FRAME,
+      expect.any(Function),
+    );
+
     destroy();
     expect(frameRemoveMock).toHaveBeenCalledOnce();
     expect(busDestroyMock).toHaveBeenCalledOnce();
   });
 
   test("valid cash-out configuration sets up frame, bus, and returns destroy method to clean up both", () => {
-    validateTransferConfigurationMock.mockImplementationOnce(() => true);
-    const frameRemoveMock = vi.fn();
-    setupFrameMock.mockImplementationOnce(() => ({ remove: frameRemoveMock }));
-    const busDestroyMock = vi.fn();
-    setupBusMock.mockImplementationOnce(() => ({ destroy: busDestroyMock }));
+    validateInlineTransferConfigurationMock.mockImplementationOnce(() => true);
+    vi.spyOn(document, "querySelector").mockReturnValue({} as Element);
 
-    const { destroy } = transfer({
+    const { destroy } = inlineTransfer({
       ...configuration,
       sourceAsset: Asset.ETH,
       destinationAsset: Asset.USD,
       onSendTransactionRequest: vi.fn(),
-    } as CashOutConfiguration);
+    } as InlineTransferConfiguration);
     expect(setupFrameMock).toHaveBeenCalledOnce();
     expect(setupFrameMock.mock.lastCall[0]).toMatchInlineSnapshot(
       '"https://api.sandbox.meso.network"',
@@ -128,11 +158,9 @@ describe("transfer", () => {
       { version: expect.any(String) },
       `
       {
-        "authenticationStrategy": "wallet_verification",
+        "authenticationStrategy": undefined,
         "destinationAsset": "USD",
-        "layoutOffset": "0",
-        "layoutPosition": "top-right",
-        "mode": "embedded",
+        "mode": "inline",
         "network": "eip155:1",
         "partnerId": "partnerId",
         "sourceAmount": "100",
@@ -157,6 +185,16 @@ describe("transfer", () => {
         },
       ]
     `);
+
+    expect(busOnMock).toHaveBeenCalledWith(
+      MessageKind.INITIATE_MODAL_ONBOARDING,
+      expect.any(Function),
+    );
+
+    expect(busOnMock).toHaveBeenCalledWith(
+      MessageKind.RESUME_INLINE_FRAME,
+      expect.any(Function),
+    );
 
     destroy();
     expect(frameRemoveMock).toHaveBeenCalledOnce();

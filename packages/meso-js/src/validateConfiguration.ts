@@ -6,6 +6,8 @@ import {
   Environment,
   EventKind,
   FiatAsset,
+  InlineCashOutConfiguration,
+  InlineTransferConfiguration,
   Network,
   TransferConfiguration,
 } from "./types";
@@ -21,7 +23,18 @@ export const validateTransferConfiguration = (
   transferConfig: TransferConfiguration,
 ): boolean => {
   if (!validateSharedConfiguration(transferConfig)) return false;
+
   const { onEvent, sourceAsset } = transferConfig;
+
+  const validateLayoutResult = validateLayout(transferConfig.layout);
+  if (!validateLayoutResult.isValid) {
+    onEvent({
+      kind: EventKind.CONFIGURATION_ERROR,
+      payload: { error: { message: validateLayoutResult.message } },
+    });
+
+    return false;
+  }
 
   if (transferConfig.destinationAsset in FiatAsset) {
     // Validate CashOutConfiguration specific configs
@@ -71,18 +84,71 @@ export const validateTransferConfiguration = (
   return true;
 };
 
+export const validateInlineTransferConfiguration = (
+  transferConfig: InlineTransferConfiguration,
+): boolean => {
+  if (!validateSharedConfiguration(transferConfig)) return false;
+  const { onEvent, sourceAsset } = transferConfig;
+
+  if (transferConfig.destinationAsset in FiatAsset) {
+    // Validate CashOutConfiguration specific configs
+    if (!sourceAsset || !(sourceAsset in CryptoAsset)) {
+      onEvent({
+        kind: EventKind.UNSUPPORTED_ASSET_ERROR,
+        payload: {
+          error: {
+            message: `"sourceAsset" must be a supported CryptoAsset for Cash-out: ${Object.values(
+              CryptoAsset,
+            )}.`,
+          },
+        },
+      });
+      return false;
+    } else if (
+      typeof (transferConfig as InlineCashOutConfiguration)
+        .onSendTransactionRequest !== "function"
+    ) {
+      onEvent({
+        kind: EventKind.CONFIGURATION_ERROR,
+        payload: {
+          error: {
+            message: '"onSendTransactionRequest" must be a valid function.',
+          },
+        },
+      });
+      return false;
+    }
+  } else {
+    // Validate CashInConfiguration specific configs
+    if (sourceAsset && !(sourceAsset in FiatAsset)) {
+      onEvent({
+        kind: EventKind.UNSUPPORTED_ASSET_ERROR,
+        payload: {
+          error: {
+            message: `"sourceAsset" must be a supported FiatAsset for Cash-in: ${Object.values(
+              FiatAsset,
+            )}.`,
+          },
+        },
+      });
+      return false;
+    }
+  }
+
+  return true;
+};
+
 const validateSharedConfiguration = ({
   authenticationStrategy,
   destinationAsset,
   environment,
-  layout,
   network,
   onEvent,
   onSignMessageRequest,
   partnerId,
   sourceAmount,
   walletAddress,
-}: TransferConfiguration): boolean => {
+}: TransferConfiguration | InlineTransferConfiguration): boolean => {
   if (typeof onEvent !== "function") {
     throw new Error("[meso-js] An onEvent callback is required.");
   } else if (!/^\d*\.?\d+$/.test(sourceAmount)) {
@@ -174,16 +240,6 @@ const validateSharedConfiguration = ({
         },
       },
     });
-    return false;
-  }
-
-  const validateLayoutResult = validateLayout(layout);
-  if (!validateLayoutResult.isValid) {
-    onEvent({
-      kind: EventKind.CONFIGURATION_ERROR,
-      payload: { error: { message: validateLayoutResult.message } },
-    });
-
     return false;
   }
 
