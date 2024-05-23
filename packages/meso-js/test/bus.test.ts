@@ -37,6 +37,7 @@ describe("setupBus", () => {
     removeMock = vi.fn();
     hideMock = vi.fn();
     frame = {
+      kind: "embedded",
       element: {} as HTMLIFrameElement,
       remove: removeMock,
       hide: hideMock,
