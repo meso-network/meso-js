@@ -72,7 +72,10 @@ export const setupBus = ({
 
     const transfer = message.payload as Transfer;
     if (transfer.status == TransferStatus.APPROVED) {
-      frame.hide();
+      if (frame.kind === "embedded") {
+        frame.hide();
+      }
+
       onEvent({
         kind: EventKind.TRANSFER_APPROVED,
         payload: { transfer: transfer as TransferApprovedPayload["transfer"] },

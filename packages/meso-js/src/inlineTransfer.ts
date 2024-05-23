@@ -103,6 +103,11 @@ export const inlineTransfer = (
   return {
     destroy: () => {
       frame.remove();
+      // Remove each frame in the story
+      Object.values(frameStore).forEach((frame) => {
+        frame.parentNode?.removeChild(frame);
+      });
+
       bus.destroy();
     },
   };

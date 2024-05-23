@@ -555,7 +555,7 @@ export type Message =
       kind: MessageKind.INITIATE_MODAL_ONBOARDING;
       payload: {
         /**
-         * The qualified pathname (including leading `/`) in Onboarding that the user will land on once the modal is opened.         *
+         * The qualified pathname (including leading `/`) in Onboarding that the user will land on once the modal is opened.
          */
         initialPathname: string;
       };

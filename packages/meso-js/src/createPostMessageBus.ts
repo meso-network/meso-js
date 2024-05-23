@@ -129,22 +129,19 @@ export const createPostMessageBus = (
 
     const handlers = handlerStore.get(parsedMessageResult.value.kind);
 
-    if (handlers) {
-      handlers.forEach((handler) => {
-        handler.fn(parsedMessageResult.value, (message: Message) => {
-          postMessageWindow.postMessage(message, event.origin);
-        });
+    handlers?.forEach((handler) => {
+      handler.fn(parsedMessageResult.value, (message: Message) => {
+        postMessageWindow.postMessage(message, event.origin);
       });
+    });
 
-      const handlersToKeep = handlers.filter(
-        (handler) => !handler.removeAfterUse,
-      );
+    const handlersToKeep =
+      handlers?.filter((handler) => !handler.removeAfterUse) ?? [];
 
-      if (handlersToKeep.length > 0) {
-        handlerStore.set(parsedMessageResult.value.kind, handlersToKeep);
-      } else {
-        handlerStore.delete(parsedMessageResult.value.kind);
-      }
+    if (handlersToKeep.length > 0) {
+      handlerStore.set(parsedMessageResult.value.kind, handlersToKeep);
+    } else {
+      handlerStore.delete(parsedMessageResult.value.kind);
     }
   };
 
