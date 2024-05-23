@@ -317,12 +317,14 @@ type BaseInlineTransferConfiguration = {
   container: string;
 };
 
-export type InlineCashInConfiguration = Omit<CashInConfiguration, "layout">;
-export type InlineCashOutConfiguration = Omit<CashOutConfiguration, "layout">;
+export type InlineCashInConfiguration = Omit<CashInConfiguration, "layout"> &
+  BaseInlineTransferConfiguration;
+export type InlineCashOutConfiguration = Omit<CashOutConfiguration, "layout"> &
+  BaseInlineTransferConfiguration;
 
 export type InlineTransferConfiguration =
-  | (InlineCashInConfiguration & BaseInlineTransferConfiguration)
-  | (InlineCashOutConfiguration & BaseInlineTransferConfiguration);
+  | InlineCashInConfiguration
+  | InlineCashOutConfiguration;
 
 /**
  * Used to determine the type of authentication the user will need to perform for a transfer.
