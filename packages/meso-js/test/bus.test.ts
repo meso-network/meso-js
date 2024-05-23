@@ -128,7 +128,6 @@ describe("setupBus", () => {
       onEvent: onEventMock,
       onSignMessageRequest: onSignMessageRequestMock,
       onSendTransactionRequest: onRequestSendTransactionMock,
-      store: {},
     });
     const onRequestSendTransactionCallback = onMock.mock.calls.find(
       (invocationArgs) =>
