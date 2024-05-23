@@ -1,5 +1,11 @@
 # @meso-network/meso-js
 
+## 0.1.0-alpha.1.0
+
+### Minor Changes
+
+- Introduce `inlineTransfer`
+
 ## 0.0.86
 
 ### Patch Changes
