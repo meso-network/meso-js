@@ -10,7 +10,7 @@ export const setupFrame = (
   const pathname = containerElement ? "/inline" : "/app";
   const url = `${apiHost}${pathname}?${new URLSearchParams(params).toString()}`;
 
-  const iframe = renderEmbeddedIframe(url, containerElement);
+  const iframe = renderIframe(url, containerElement);
 
   return {
     kind: containerElement ? "inline" : "embedded",
@@ -24,10 +24,7 @@ export const setupFrame = (
 };
 
 // Render the iframe for the "embedded" flow (full viewport modal)
-const renderEmbeddedIframe = (
-  src: string,
-  containerElement: Element | null,
-) => {
+const renderIframe = (src: string, containerElement: Element | null) => {
   const iframe = document.createElement("iframe");
   iframe.src = src;
   iframe.setAttribute("allowtransparency", "true");

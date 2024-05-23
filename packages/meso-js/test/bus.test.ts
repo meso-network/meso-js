@@ -58,7 +58,6 @@ describe("setupBus", () => {
         frame,
         onEvent: onEventMock,
         onSignMessageRequest: onSignMessageRequestMock,
-        store: {},
       }),
     ).toThrowErrorMatchingInlineSnapshot(
       '"Unable to initialize @meso-network/meso-js. Invalid iframe configuration."',
@@ -74,7 +73,6 @@ describe("setupBus", () => {
       frame,
       onEvent: onEventMock,
       onSignMessageRequest: onSignMessageRequestMock,
-      store: {},
     });
     expect(onMock).toBeCalledWith(
       MessageKind.REQUEST_SIGNED_MESSAGE,
@@ -123,7 +121,6 @@ describe("setupBus", () => {
       frame,
       onEvent: onEventMock,
       onSignMessageRequest: onSignMessageRequestMock,
-      store: {},
     });
     expect(onMock).toBeCalledWith(MessageKind.CLOSE, expect.any(Function));
     const onCloseCallback = onMock.mock.calls.find(
@@ -157,7 +154,6 @@ describe("setupBus", () => {
       frame,
       onEvent: onEventMock,
       onSignMessageRequest: onSignMessageRequestMock,
-      store: {},
     });
     expect(onMock).toBeCalledWith(
       MessageKind.TRANSFER_UPDATE,
@@ -200,7 +196,6 @@ describe("setupBus", () => {
       frame,
       onEvent: onEventMock,
       onSignMessageRequest: onSignMessageRequestMock,
-      store: {},
     });
     expect(onMock).toBeCalledWith(
       MessageKind.TRANSFER_UPDATE,
@@ -240,7 +235,6 @@ describe("setupBus", () => {
       frame,
       onEvent: onEventMock,
       onSignMessageRequest: onSignMessageRequestMock,
-      store: {},
     });
     expect(onMock).toBeCalledWith(MessageKind.ERROR, expect.any(Function));
     const onErrorCallback = onMock.mock.calls.find(
@@ -270,7 +264,6 @@ describe("setupBus", () => {
       frame,
       onEvent: onEventMock,
       onSignMessageRequest: onSignMessageRequestMock,
-      store: {},
     });
     expect(onMock).toBeCalledWith(
       MessageKind.CONFIGURATION_ERROR,
@@ -306,7 +299,6 @@ describe("setupBus", () => {
       frame,
       onEvent: onEventMock,
       onSignMessageRequest: onSignMessageRequestMock,
-      store: {},
     });
     expect(onMock).toBeCalledWith(
       MessageKind.UNSUPPORTED_NETWORK_ERROR,
@@ -343,7 +335,6 @@ describe("setupBus", () => {
       frame,
       onEvent: onEventMock,
       onSignMessageRequest: onSignMessageRequestMock,
-      store: {},
     });
     expect(onMock).toBeCalledWith(
       MessageKind.UNSUPPORTED_ASSET_ERROR,

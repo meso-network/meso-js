@@ -268,13 +268,6 @@ export type BaseConfiguration = Readonly<{
    * A handler to notify you when an event has occurred.
    */
   onEvent: (event: MesoEvent) => void;
-
-  /**
-   * A valid [CSS selector](https://developer.mozilla.org/en-US/docs/Glossary/CSS_Selector) that will be used to locate a DOM node on the page to inject the iframe into.
-   *
-   * If omitted, the transfer will be appended to `document.body` and will take over the entire viewport.
-   */
-  container?: string;
 }>;
 
 export type CashInConfiguration = BaseConfiguration & {
@@ -315,6 +308,22 @@ export type CashOutConfiguration = BaseConfiguration & {
 
 export type TransferConfiguration = CashInConfiguration | CashOutConfiguration;
 
+type BaseInlineTransferConfiguration = {
+  /**
+   * A valid [CSS selector](https://developer.mozilla.org/en-US/docs/Glossary/CSS_Selector) that will be used to locate a DOM node on the page to inject the iframe into.
+   *
+   * If omitted, the transfer will be appended to `document.body` and will take over the entire viewport.
+   */
+  container: string;
+};
+
+export type InlineCashInConfiguration = Omit<CashInConfiguration, "layout">;
+export type InlineCashOutConfiguration = Omit<CashOutConfiguration, "layout">;
+
+export type InlineTransferConfiguration =
+  | (InlineCashInConfiguration & BaseInlineTransferConfiguration)
+  | (InlineCashOutConfiguration & BaseInlineTransferConfiguration);
+
 /**
  * Used to determine the type of authentication the user will need to perform for a transfer.
  */
@@ -337,7 +346,7 @@ export enum AuthenticationStrategy {
 }
 
 /**
- * Configuration that will be serialized to query params for the Transfer App.
+ * Configuration that will be serialized to query params for the embedded experience.
  */
 export type TransferIframeParams = Pick<
   TransferConfiguration,
@@ -354,16 +363,33 @@ export type TransferIframeParams = Pick<
   /** The version of meso-js. */
   version: string;
   /** The mode for the rendering context of the Meso experience. */
-  mode: TransferExperienceMode;
+  mode: TransferExperienceMode.EMBEDDED;
+};
+
+/**
+ * Configuration that will be serialized to query params for the Transfer App.
+ */
+export type InlineTransferIframeParams = Pick<
+  InlineTransferConfiguration,
+  | "partnerId"
+  | "network"
+  | "walletAddress"
+  | "sourceAmount"
+  | "sourceAsset"
+  | "destinationAsset"
+  | "authenticationStrategy"
+> & {
+  /** The version of meso-js. */
+  version: string;
+  mode: TransferExperienceMode.INLINE;
 };
 
 /**
  * The serialized configuration sent to the Transfer App as a query string.
  */
-export type SerializedTransferIframeParams = Record<
-  keyof TransferIframeParams,
-  string
->;
+export type SerializedTransferIframeParams =
+  | Record<keyof TransferIframeParams, string>
+  | Record<keyof InlineTransferIframeParams, string>;
 
 /**
  * The mode for the rendering context of the Meso experience.
@@ -377,6 +403,7 @@ export enum TransferExperienceMode {
    * Intended to run inside a webview in a native mobile app.
    */
   WEBVIEW = "webview",
+  INLINE = "inline",
 }
 
 /**
@@ -601,9 +628,11 @@ export type PostMessageBusInitializationError = {
 };
 
 /**
- * A general store for data managed by Meso.js.
+ * A storage container for references to sibling iframes rendered onto the partner page.
+ *
+ * This is used for the "inline" integration.
  */
-export type Store = {
+export type FrameStore = {
   /** A handle to the onboarding iframe for de-rendering. */
   modalOnboardingIframe?: Readonly<HTMLIFrameElement>;
 };
