@@ -1,7 +1,13 @@
+const PREFIX = "/modal/onboarding";
+
 // TODO: Find a better name for this module/export
 export const initiateOnboarding = ({ pathname }: { pathname: string }) => {
+  const route = pathname.startsWith(PREFIX)
+    ? pathname
+    : `${PREFIX}/${pathname}`;
+
   // TODO: Dynamically set the host
-  const src = `http://localhost:5173/onboarding${pathname}`;
+  const src = `http://localhost:5173${route.replaceAll("//", "/")}`;
 
   const iframe = document.createElement("iframe");
   iframe.src = src;
