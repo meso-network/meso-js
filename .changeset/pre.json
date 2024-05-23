@@ -2,7 +2,7 @@
   "mode": "pre",
   "tag": "beta",
   "initialVersions": {
-    "@meso-network/meso-js": "0.1.0-alpha.1.0"
+    "@meso-network/meso-js": "0.0.86"
   },
   "changesets": []
 }
