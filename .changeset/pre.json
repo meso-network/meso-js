@@ -1,0 +1,10 @@
+{
+  "mode": "pre",
+  "tag": "alpha.1",
+  "initialVersions": {
+    "@meso-network/meso-js": "0.0.85"
+  },
+  "changesets": [
+    "rich-squids-kick"
+  ]
+}
