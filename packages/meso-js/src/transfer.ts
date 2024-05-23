@@ -5,25 +5,14 @@ import {
   Asset,
   AuthenticationStrategy,
   CashOutConfiguration,
-  Environment,
   Layout,
   Position,
   TransferConfiguration,
   TransferExperienceMode,
   TransferInstance,
 } from "./types";
-import { validateTransferConfiguration } from "./validateTransferConfiguration";
-
-const apiHosts: { readonly [key in Environment]: string } = {
-  [Environment.LOCAL]: "http://localhost:5173",
-  [Environment.LOCAL_PROXY]: "http://localhost:4001",
-  [Environment.DEV]: "https://api.dev.meso.plumbing",
-  [Environment.PREVIEW]: "https://api.preview.meso.plumbing",
-  [Environment.SANDBOX]: "https://api.sandbox.meso.network",
-  [Environment.PRODUCTION]: "https://api.meso.network",
-};
-
-const NOOP_TRANSFER_INSTANCE = { destroy: () => {} };
+import { validateTransferConfiguration } from "./validateConfiguration";
+import { apiHosts, NOOP_TRANSFER_INSTANCE } from "./utils";
 
 export const DEFAULT_LAYOUT: Required<Layout> = {
   position: Position.TOP_RIGHT,
@@ -82,13 +71,14 @@ export const transfer = (
     mode: TransferExperienceMode.EMBEDDED,
   });
 
-  const bus = setupBus(
+  const bus = setupBus({
     apiHost,
     frame,
     onEvent,
     onSignMessageRequest,
-    (transferConfiguration as CashOutConfiguration).onSendTransactionRequest,
-  );
+    onSendTransactionRequest: (transferConfiguration as CashOutConfiguration)
+      .onSendTransactionRequest,
+  });
 
   return {
     destroy: () => {

@@ -11,12 +11,13 @@ describe("createPostMessageBus", () => {
   describe("in iframe", () => {
     test("returns a post message bus instance for valid target origin", () => {
       expect(createPostMessageBus(PARTNER_APP_ORIGIN)).toMatchInlineSnapshot(`
-      {
-        "destroy": [Function],
-        "emit": [Function],
-        "on": [Function],
-      }
-    `);
+        {
+          "destroy": [Function],
+          "emit": [Function],
+          "on": [Function],
+          "once": [Function],
+        }
+      `);
     });
 
     test("returns a structured error for * origin", () => {
@@ -41,12 +42,13 @@ describe("createPostMessageBus", () => {
       const fakeWindow = {} as Window;
       expect(createPostMessageBus(PARTNER_APP_ORIGIN, fakeWindow))
         .toMatchInlineSnapshot(`
-      {
-        "destroy": [Function],
-        "emit": [Function],
-        "on": [Function],
-      }
-    `);
+          {
+            "destroy": [Function],
+            "emit": [Function],
+            "on": [Function],
+            "once": [Function],
+          }
+        `);
     });
   });
 
@@ -65,6 +67,7 @@ describe("createPostMessageBus", () => {
           "destroy": [Function],
           "emit": [Function],
           "on": [Function],
+          "once": [Function],
         }
       `);
     });
@@ -79,6 +82,7 @@ describe("createPostMessageBus", () => {
           "destroy": [Function],
           "emit": [Function],
           "on": [Function],
+          "once": [Function],
         }
       `);
     });

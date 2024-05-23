@@ -1,0 +1,8 @@
+{
+  "mode": "exit",
+  "tag": "alpha",
+  "initialVersions": {
+    "@meso-network/meso-js": "0.1.0-alpha.1.0"
+  },
+  "changesets": []
+}

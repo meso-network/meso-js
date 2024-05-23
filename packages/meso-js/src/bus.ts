@@ -11,13 +11,19 @@ import {
 } from "./types";
 import { createPostMessageBus } from "./createPostMessageBus";
 
-export const setupBus = (
-  apiHost: string,
-  frame: ReturnType<typeof setupFrame>,
-  onEvent: TransferConfiguration["onEvent"],
-  onSignMessageRequest: TransferConfiguration["onSignMessageRequest"],
-  onSendTransactionRequest?: CashOutConfiguration["onSendTransactionRequest"],
-) => {
+export const setupBus = ({
+  apiHost,
+  frame,
+  onEvent,
+  onSignMessageRequest,
+  onSendTransactionRequest,
+}: {
+  apiHost: string;
+  frame: ReturnType<typeof setupFrame>;
+  onEvent: TransferConfiguration["onEvent"];
+  onSignMessageRequest: TransferConfiguration["onSignMessageRequest"];
+  onSendTransactionRequest?: CashOutConfiguration["onSendTransactionRequest"];
+}) => {
   const bus = createPostMessageBus(apiHost);
   if ("message" in bus) {
     throw new Error(
@@ -66,13 +72,20 @@ export const setupBus = (
 
     const transfer = message.payload as Transfer;
     if (transfer.status == TransferStatus.APPROVED) {
-      frame.hide();
+      if (frame.kind === "embedded") {
+        frame.hide();
+      }
+
       onEvent({
         kind: EventKind.TRANSFER_APPROVED,
         payload: { transfer: transfer as TransferApprovedPayload["transfer"] },
       });
     } else if (transfer.status === TransferStatus.COMPLETE) {
-      frame.remove();
+      // We only want to automatically remove the frame if this is an "embedded" integration. In the "inline" integration, the developer will manually close the frame.
+      if (frame.kind === "embedded") {
+        frame.remove();
+      }
+
       onEvent({
         kind: EventKind.TRANSFER_COMPLETE,
         payload: { transfer: transfer as TransferCompletePayload["transfer"] },

@@ -308,6 +308,24 @@ export type CashOutConfiguration = BaseConfiguration & {
 
 export type TransferConfiguration = CashInConfiguration | CashOutConfiguration;
 
+type BaseInlineTransferConfiguration = {
+  /**
+   * A valid [CSS selector](https://developer.mozilla.org/en-US/docs/Glossary/CSS_Selector) that will be used to locate a DOM node on the page to inject the iframe into.
+   *
+   * If omitted, the transfer will be appended to `document.body` and will take over the entire viewport.
+   */
+  container: string;
+};
+
+export type InlineCashInConfiguration = Omit<CashInConfiguration, "layout"> &
+  BaseInlineTransferConfiguration;
+export type InlineCashOutConfiguration = Omit<CashOutConfiguration, "layout"> &
+  BaseInlineTransferConfiguration;
+
+export type InlineTransferConfiguration =
+  | InlineCashInConfiguration
+  | InlineCashOutConfiguration;
+
 /**
  * Used to determine the type of authentication the user will need to perform for a transfer.
  */
@@ -330,7 +348,7 @@ export enum AuthenticationStrategy {
 }
 
 /**
- * Configuration that will be serialized to query params for the Transfer App.
+ * Configuration that will be serialized to query params for the embedded experience.
  */
 export type TransferIframeParams = Pick<
   TransferConfiguration,
@@ -347,16 +365,33 @@ export type TransferIframeParams = Pick<
   /** The version of meso-js. */
   version: string;
   /** The mode for the rendering context of the Meso experience. */
-  mode: TransferExperienceMode;
+  mode: TransferExperienceMode.EMBEDDED;
+};
+
+/**
+ * Configuration that will be serialized to query params for the Transfer App.
+ */
+export type InlineTransferIframeParams = Pick<
+  InlineTransferConfiguration,
+  | "partnerId"
+  | "network"
+  | "walletAddress"
+  | "sourceAmount"
+  | "sourceAsset"
+  | "destinationAsset"
+  | "authenticationStrategy"
+> & {
+  /** The version of meso-js. */
+  version: string;
+  mode: TransferExperienceMode.INLINE;
 };
 
 /**
  * The serialized configuration sent to the Transfer App as a query string.
  */
-export type SerializedTransferIframeParams = Record<
-  keyof TransferIframeParams,
-  string
->;
+export type SerializedTransferIframeParams =
+  | Record<keyof TransferIframeParams, string>
+  | Record<keyof InlineTransferIframeParams, string>;
 
 /**
  * The mode for the rendering context of the Meso experience.
@@ -370,6 +405,7 @@ export enum TransferExperienceMode {
    * Intended to run inside a webview in a native mobile app.
    */
   WEBVIEW = "webview",
+  INLINE = "inline",
 }
 
 /**
@@ -432,6 +468,16 @@ export enum MessageKind {
    * Dispatch that the iframe is ready.
    */
   READY = "READY",
+
+  /**
+   * Dispatch to a calling window that the user needs to onboard. The calling window will handle presenting the onboarding flow.
+   */
+  INITIATE_MODAL_ONBOARDING = "INITIATE_MODAL_ONBOARDING",
+
+  /**
+   * Dispatch an event to that the onboarding modal frame should be closed.
+   */
+  RESUME_INLINE_FRAME = "RESUME_INLINE_FRAME",
 }
 
 export type RequestSignedMessagePayload = {
@@ -472,6 +518,20 @@ export type RequestSendTransactionPayload = {
   decimals: number;
 };
 
+export enum ResumeInlineFrameAction {
+  ONBOARDING_COMPLETE = "ONBOARDING_COMPLETE",
+  ONBOARDING_CANCELED = "ONBOARDING_CANCELED",
+  /** The user is attempting to login instead of signing up. */
+  LOGIN_FROM_ONBOARDING = "LOGIN_FROM_ONBOARDING",
+}
+
+export type ResumeInlineFramePayload = {
+  /**
+   * The action that triggered the onboarding modal to close. This value is used to determine which view to render in the inline frame.
+   */
+  action: ResumeInlineFrameAction;
+};
+
 /**
  * Structured `window.postMessage` messages between the Meso experience to parent window
  */
@@ -488,8 +548,22 @@ export type Message =
       kind: MessageKind.REQUEST_SEND_TRANSACTION;
       payload: RequestSendTransactionPayload;
     }
-  | { kind: MessageKind.CLOSE }
-  | { kind: MessageKind.READY }
+  | {
+      kind: MessageKind.CLOSE | MessageKind.READY;
+    }
+  | {
+      kind: MessageKind.INITIATE_MODAL_ONBOARDING;
+      payload: {
+        /**
+         * The qualified pathname (including leading `/`) in Onboarding that the user will land on once the modal is opened.
+         */
+        initialPathname: string;
+      };
+    }
+  | {
+      kind: MessageKind.RESUME_INLINE_FRAME;
+      payload: ResumeInlineFramePayload;
+    }
   | {
       kind: MessageKind.TRANSFER_UPDATE;
       payload: Pick<Transfer, "id" | "status" | "updatedAt"> &
@@ -520,6 +594,16 @@ export type PostMessageBus = {
   on: (eventKind: MessageKind, handler: PostMessageHandlerFn) => PostMessageBus;
 
   /**
+   * Subscribe to an event using the message kind (name).
+   *
+   * The attached handler will be invoked only the first time this event is seen.
+   */
+  once: (
+    eventKind: MessageKind,
+    handler: PostMessageHandlerFn,
+  ) => PostMessageBus;
+
+  /**
    * Send a message to a specific [origin](https://developer.mozilla.org/en-US/docs/Web/API/Location/origin). If the `targetOrigin` is omitted, the message will be broadcast to all origins (`*`).
    */
   emit: (message: Message, targetOrigin?: string) => PostMessageBus;
@@ -543,4 +627,14 @@ export type PostMessageBusInitializationError = {
    * A _developer_ friendly message containing details of the error.
    */
   message: string;
+};
+
+/**
+ * A storage container for references to sibling iframes rendered onto the partner page.
+ *
+ * This is used for the "inline" integration.
+ */
+export type FrameStore = {
+  /** A handle to the onboarding iframe for de-rendering. */
+  modalOnboardingIframe?: Readonly<HTMLIFrameElement>;
 };

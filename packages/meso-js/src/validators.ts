@@ -1,4 +1,9 @@
-import { Message, MessageKind, TransferStatus } from "./types";
+import {
+  Message,
+  MessageKind,
+  ResumeInlineFrameAction,
+  TransferStatus,
+} from "./types";
 
 const isString = (str?: string) => {
   return str && typeof str === "string";
@@ -114,6 +119,30 @@ export const validateMessage = (message: Message) => {
       if (
         !isString(message.payload.message) ||
         isEmptyString(message.payload.message)
+      ) {
+        return false;
+      }
+
+      return true;
+
+    case MessageKind.INITIATE_MODAL_ONBOARDING:
+      if (
+        !("payload" in message) ||
+        isEmptyObject(message.payload) ||
+        !isString(message.payload.initialPathname) ||
+        isEmptyString(message.payload.initialPathname)
+      ) {
+        return false;
+      }
+
+      return true;
+    case MessageKind.RESUME_INLINE_FRAME:
+      if (
+        !("payload" in message) ||
+        isEmptyObject(message.payload) ||
+        !isString(message.payload.action) ||
+        isEmptyString(message.payload.action) ||
+        !Object.values(ResumeInlineFrameAction).includes(message.payload.action)
       ) {
         return false;
       }

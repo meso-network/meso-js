@@ -2,6 +2,7 @@ import {
   TransferStatus,
   MessageKind,
   PostMessageHandlerFn,
+  ResumeInlineFrameAction,
 } from "../src/types";
 import {
   validateHandlerFunction,
@@ -496,6 +497,86 @@ describe("validators", () => {
           { kind: MessageKind.UNSUPPORTED_ASSET_ERROR, payload: {} },
         ],
         ["missing kind", { payload: { message: "an error" } }],
+      ])("%s", (_, message) => {
+        // @ts-expect-error: Bypass type system to simulate runtime behavior
+        expect(validateMessage(message)).toBe(false);
+      });
+    });
+  });
+
+  describe("INITIATE_MODAL_ONBOARDING", () => {
+    describe("success", () => {
+      test("is valid", () => {
+        expect(
+          validateMessage({
+            kind: MessageKind.INITIATE_MODAL_ONBOARDING,
+            payload: { initialPathname: "/foo" },
+          }),
+        ).toBe(true);
+      });
+    });
+
+    describe("failure", () => {
+      test.each([
+        [
+          "bad payload (invalid initialPathname type)",
+          {
+            kind: MessageKind.INITIATE_MODAL_ONBOARDING,
+            payload: { initialPathname: false },
+          },
+        ],
+        [
+          "bad payload (empty initialPathname)",
+          {
+            kind: MessageKind.INITIATE_MODAL_ONBOARDING,
+            payload: { initialPathname: "" },
+          },
+        ],
+        [
+          "bad payload (missing initialPathname)",
+          { kind: MessageKind.INITIATE_MODAL_ONBOARDING, payload: {} },
+        ],
+        ["missing kind", { payload: { initialPathname: "/foo" } }],
+      ])("%s", (_, message) => {
+        // @ts-expect-error: Bypass type system to simulate runtime behavior
+        expect(validateMessage(message)).toBe(false);
+      });
+    });
+  });
+
+  describe("RESUME_INLINE_FRAME", () => {
+    describe("success", () => {
+      test("is valid", () => {
+        expect(
+          validateMessage({
+            kind: MessageKind.RESUME_INLINE_FRAME,
+            payload: { action: ResumeInlineFrameAction.LOGIN_FROM_ONBOARDING },
+          }),
+        ).toBe(true);
+      });
+    });
+
+    describe("failure", () => {
+      test.each([
+        [
+          "bad payload (invalid action type)",
+          {
+            kind: MessageKind.RESUME_INLINE_FRAME,
+            payload: { action: false },
+          },
+        ],
+        [
+          "bad payload (empty action)",
+          {
+            kind: MessageKind.RESUME_INLINE_FRAME,
+            payload: { action: "" },
+          },
+        ],
+        [
+          "bad payload (missing action)",
+          { kind: MessageKind.RESUME_INLINE_FRAME, payload: {} },
+        ],
+        ["missing kind", { payload: { action: "/foo" } }],
       ])("%s", (_, message) => {
         // @ts-expect-error: Bypass type system to simulate runtime behavior
         expect(validateMessage(message)).toBe(false);
