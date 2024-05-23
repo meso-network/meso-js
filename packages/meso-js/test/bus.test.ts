@@ -70,7 +70,7 @@ describe("setupBus", () => {
     );
   });
 
-  test("returns bus which handles REQUEST_SIGNED_MESSAGE message", async () => {
+  test("handles REQUEST_SIGNED_MESSAGE message", async () => {
     const onMock = vi.fn();
     createPostMessageBusMock.mockImplementationOnce(() => ({ on: onMock }));
 
@@ -115,7 +115,7 @@ describe("setupBus", () => {
     `);
   });
 
-  test("returns bus which handles REQUEST_SEND_TRANSACTION message", async () => {
+  test("handles REQUEST_SEND_TRANSACTION message", async () => {
     const onMock = vi.fn();
     const destroyMock = vi.fn();
     createPostMessageBusMock.mockImplementationOnce(() => ({
@@ -123,13 +123,14 @@ describe("setupBus", () => {
       destroy: destroyMock,
     }));
 
-    setupBus(
+    setupBus({
       apiHost,
       frame,
-      onEventMock,
-      onSignMessageRequestMock,
-      onRequestSendTransactionMock,
-    );
+      onEvent: onEventMock,
+      onSignMessageRequest: onSignMessageRequestMock,
+      onSendTransactionRequest: onRequestSendTransactionMock,
+      store: {},
+    });
     const onRequestSendTransactionCallback = onMock.mock.calls.find(
       (invocationArgs) =>
         invocationArgs[0] === MessageKind.REQUEST_SEND_TRANSACTION,
@@ -156,7 +157,7 @@ describe("setupBus", () => {
     `);
   });
 
-  test("returns bus which handles CLOSE message", () => {
+  test("handles CLOSE message", () => {
     const onMock = vi.fn();
     const destroyMock = vi.fn();
     createPostMessageBusMock.mockImplementationOnce(() => ({
@@ -190,7 +191,7 @@ describe("setupBus", () => {
     expect(destroyMock).toHaveBeenCalledOnce();
   });
 
-  test("returns bus which handles TRANSFER_UPDATE message with APPROVED status transfer", async () => {
+  test("handles TRANSFER_UPDATE message with APPROVED status transfer", async () => {
     const onMock = vi.fn();
     const destroyMock = vi.fn();
     createPostMessageBusMock.mockImplementationOnce(() => ({
@@ -233,7 +234,7 @@ describe("setupBus", () => {
     `);
   });
 
-  test("returns bus which handles TRANSFER_UPDATE message with COMPLETE status transfer", async () => {
+  test("handles TRANSFER_UPDATE message with COMPLETE status transfer", async () => {
     const onMock = vi.fn();
     const destroyMock = vi.fn();
     createPostMessageBusMock.mockImplementationOnce(() => ({
@@ -277,7 +278,7 @@ describe("setupBus", () => {
     expect(destroyMock).toHaveBeenCalledOnce();
   });
 
-  test("returns bus which handles ERROR message", () => {
+  test("handles ERROR message", () => {
     const onMock = vi.fn();
     createPostMessageBusMock.mockImplementationOnce(() => ({ on: onMock }));
 
@@ -307,7 +308,7 @@ describe("setupBus", () => {
     `);
   });
 
-  test("returns bus which handles CONFIGURATION_ERROR message", () => {
+  test("handles CONFIGURATION_ERROR message", () => {
     const onMock = vi.fn();
     createPostMessageBusMock.mockImplementationOnce(() => ({ on: onMock }));
 
@@ -343,7 +344,7 @@ describe("setupBus", () => {
     `);
   });
 
-  test("returns bus which handles UNSUPPORTED_NETWORK_ERROR message", () => {
+  test("handles UNSUPPORTED_NETWORK_ERROR message", () => {
     const onMock = vi.fn();
     createPostMessageBusMock.mockImplementationOnce(() => ({ on: onMock }));
 
@@ -380,7 +381,7 @@ describe("setupBus", () => {
     `);
   });
 
-  test("returns bus which handles UNSUPPORTED_ASSET_ERROR message", () => {
+  test("handles UNSUPPORTED_ASSET_ERROR message", () => {
     const onMock = vi.fn();
     createPostMessageBusMock.mockImplementationOnce(() => ({ on: onMock }));
 

@@ -13,6 +13,14 @@ import {
 
 type HandlerFn = Parameters<PostMessageBus["on"]>[1];
 
+type Handler = {
+  /**
+   * Whether or not to remove this handler from the collection after it is called.
+   */
+  removeAfterUse: boolean;
+  fn: HandlerFn;
+};
+
 /** Build a namespaced string to identify Meso specific errors/logs. */
 const generateLogMessage = (message: string): string =>
   `(@meso-network/meso-js): ${message}`;
@@ -92,7 +100,7 @@ export const createPostMessageBus = (
     postMessageWindow = frameWindow.contentWindow;
   }
 
-  const handlers = new Map<MessageKind, HandlerFn[]>();
+  const handlerStore = new Map<MessageKind, Handler[]>();
   const postMessageHandler = (event: MessageEvent<Message>) => {
     // Check if we are in an iframe context. If so, check if our event is from a known or trusted source.
     // If we are not in an iframe and are, for example, in a mobile WebView, skip this check.
@@ -112,24 +120,38 @@ export const createPostMessageBus = (
 
     // If there is no handler registered, abort.
     if (
-      !handlers.has(parsedMessageResult.value.kind) ||
+      !handlerStore.has(parsedMessageResult.value.kind) ||
       // Prevent message structs we have identified as extraneous.
       "target" in parsedMessageResult.value
     ) {
       return;
     }
 
-    handlers.get(parsedMessageResult.value.kind)?.forEach((handlerFn) => {
-      handlerFn(parsedMessageResult.value, (message: Message) => {
-        postMessageWindow.postMessage(message, event.origin);
+    const handlers = handlerStore.get(parsedMessageResult.value.kind);
+
+    if (handlers) {
+      handlers.forEach((handler) => {
+        handler.fn(parsedMessageResult.value, (message: Message) => {
+          postMessageWindow.postMessage(message, event.origin);
+        });
       });
-    });
+
+      const handlersToKeep = handlers.filter(
+        (handler) => !handler.removeAfterUse,
+      );
+
+      if (handlersToKeep.length > 0) {
+        handlerStore.set(parsedMessageResult.value.kind, handlersToKeep);
+      } else {
+        handlerStore.delete(parsedMessageResult.value.kind);
+      }
+    }
   };
 
   window.addEventListener("message", postMessageHandler);
 
   const bus: PostMessageBus = {
-    on(eventKind: MessageKind, handler: HandlerFn) {
+    on(eventKind: MessageKind, fn: HandlerFn) {
       const isValidMessageKind = validateMessageKind(eventKind);
 
       if (!isValidMessageKind) {
@@ -140,7 +162,7 @@ export const createPostMessageBus = (
         );
       }
 
-      const isValidHandlerFunction = validateHandlerFunction(handler);
+      const isValidHandlerFunction = validateHandlerFunction(fn);
 
       if (!isValidHandlerFunction) {
         throw new Error(
@@ -150,8 +172,35 @@ export const createPostMessageBus = (
         );
       }
 
-      const fns = handlers.get(eventKind) ?? [];
-      handlers.set(eventKind, fns.concat([handler]));
+      const fns = handlerStore.get(eventKind) ?? [];
+      handlerStore.set(eventKind, fns.concat([{ fn, removeAfterUse: false }]));
+
+      return this;
+    },
+
+    once(eventKind: MessageKind, fn: HandlerFn) {
+      const isValidMessageKind = validateMessageKind(eventKind);
+
+      if (!isValidMessageKind) {
+        throw new Error(
+          generateLogMessage(
+            `Invalid event (${eventKind}). The subscription will not be added.`,
+          ),
+        );
+      }
+
+      const isValidHandlerFunction = validateHandlerFunction(fn);
+
+      if (!isValidHandlerFunction) {
+        throw new Error(
+          generateLogMessage(
+            `Invalid event handler. The subscription will not be added.`,
+          ),
+        );
+      }
+
+      const fns = handlerStore.get(eventKind) ?? [];
+      handlerStore.set(eventKind, fns.concat([{ fn, removeAfterUse: true }]));
 
       return this;
     },
@@ -174,7 +223,7 @@ export const createPostMessageBus = (
 
     destroy() {
       window.removeEventListener("message", postMessageHandler);
-      handlers.clear();
+      handlerStore.clear();
     },
   };
   return bus;
