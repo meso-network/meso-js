@@ -1,5 +1,11 @@
 # @meso-network/meso-js
 
+## 0.1.0
+
+### Minor Changes
+
+- [#61](https://github.com/meso-network/meso-js/pull/61) [`4e299ba`](https://github.com/meso-network/meso-js/commit/4e299babcd96701398a0435ba86d7164893db2a3) Thanks [@kyledetella](https://github.com/kyledetella)! - Introduce `inlineTransfer` integration. With this release, developers can now embed the Meso transfer experience into a specified element within their page instead of a full-viewport modal.
+
 ## 0.0.86
 
 ### Patch Changes
