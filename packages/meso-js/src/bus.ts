@@ -82,7 +82,12 @@ export const setupBus = ({
         payload: { transfer: transfer as TransferApprovedPayload["transfer"] },
       });
     } else if (transfer.status === TransferStatus.COMPLETE) {
-      frame.remove();
+      // TODO: Document this behavior
+      // We only want to automatically remove the frame if this is an "embedded" integration. In the "inline" integration, the developer will manually close the frame.
+      if (frame.kind === "embedded") {
+        frame.remove();
+      }
+
       onEvent({
         kind: EventKind.TRANSFER_COMPLETE,
         payload: { transfer: transfer as TransferCompletePayload["transfer"] },

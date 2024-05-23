@@ -11,6 +11,7 @@ export const setupFrame = (
   const iframe = renderIframe(url, containerElement);
 
   return {
+    kind: containerElement ? "inline" : "embedded",
     element: iframe,
     remove: () => iframe.parentElement?.removeChild(iframe),
     hide: () => {
