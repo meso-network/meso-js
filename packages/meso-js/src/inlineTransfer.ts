@@ -91,7 +91,8 @@ export const inlineTransfer = (
       frameStore.modalOnboardingIframe.parentNode?.removeChild(
         frameStore.modalOnboardingIframe,
       );
-      frameStore.modalOnboardingIframe = undefined;
+
+      delete frameStore.modalOnboardingIframe;
 
       reply({
         kind: MessageKind.RESUME_INLINE_FRAME,
@@ -105,7 +106,9 @@ export const inlineTransfer = (
       frame.remove();
       // Remove each frame in the story
       Object.values(frameStore).forEach((frame) => {
-        frame.parentNode?.removeChild(frame);
+        if (typeof frame === "object" && "parentNode" in frame) {
+          frame.parentNode?.removeChild(frame);
+        }
       });
 
       bus.destroy();
