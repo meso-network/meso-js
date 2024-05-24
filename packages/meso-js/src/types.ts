@@ -520,7 +520,8 @@ export type RequestSendTransactionPayload = {
 
 export enum ResumeInlineFrameAction {
   ONBOARDING_COMPLETE = "ONBOARDING_COMPLETE",
-  ONBOARDING_CANCELED = "ONBOARDING_CANCELED",
+  ONBOARDING_CANCELED = "ONBOARDING_CANCELED" /** Onboarding has been terminated due to a user hitting Manual Review */,
+  ONBOARDING_TERMINATED = "ONBOARDING_TERMINATED",
   /** The user is attempting to login instead of signing up. */
   LOGIN_FROM_ONBOARDING = "LOGIN_FROM_ONBOARDING",
 }
