@@ -1,5 +1,11 @@
 # @meso-network/meso-js
 
+## 0.1.1
+
+### Patch Changes
+
+- [#63](https://github.com/meso-network/meso-js/pull/63) [`5fe098b`](https://github.com/meso-network/meso-js/commit/5fe098ba4e9d10c408c1f5f8d48d467de3871f9c) Thanks [@kyledetella](https://github.com/kyledetella)! - 🥅 Fixes a bug in the inline integration where if a developer called `destroy()` and the reference to the modal onboarding frame was lost, our logic would throw an undue exception. We now guard against missing frames when amounting.
+
 ## 0.1.0
 
 ### Minor Changes
