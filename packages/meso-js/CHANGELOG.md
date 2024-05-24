@@ -1,5 +1,11 @@
 # @meso-network/meso-js
 
+## 0.1.2
+
+### Patch Changes
+
+- [#66](https://github.com/meso-network/meso-js/pull/66) [`36ada91`](https://github.com/meso-network/meso-js/commit/36ada91f4d0255276f23a93c8a3fbbf39c1b8c60) Thanks [@kyledetella](https://github.com/kyledetella)! - Adds `ONBOARDING_TERMINATED` to frame request events. This allows us to have another signal when dismissing modal onboarding in the inline integration.
+
 ## 0.1.1
 
 ### Patch Changes
