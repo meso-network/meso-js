@@ -1,6 +1,6 @@
 {
   "name": "@meso-network/meso-js",
-  "version": "0.1.2",
+  "version": "0.1.3",
   "description": "A TypeScript SDK to embed the Meso on/off-ramp into a dapp.",
   "type": "module",
   "main": "./lib/index.js",

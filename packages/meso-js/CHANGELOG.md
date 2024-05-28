@@ -1,5 +1,14 @@
 # @meso-network/meso-js
 
+## 0.1.3
+
+### Patch Changes
+
+- [#68](https://github.com/meso-network/meso-js/pull/68) [`9f4a88c`](https://github.com/meso-network/meso-js/commit/9f4a88cc79002870e830d16cf293bdd89bde3e9f) Thanks [@kyledetella](https://github.com/kyledetella)! - Provides default values for `sourceAsset` and `authenticationStrategy` when calling `inlineTransfer`.
+
+  - `sourceAsset`: Will default to `Asset.USD` ("USD")
+  - `authenticationStrategy`; Will default to `AuthenticationStrategy.WALLET_VERIFICATION` ([wallet verification](https://developers.meso.network/javascript-sdk/reference#authentication-strategy))
+
 ## 0.1.2
 
 ### Patch Changes
