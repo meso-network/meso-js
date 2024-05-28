@@ -2,6 +2,8 @@ import { version } from "../package.json";
 import { setupBus } from "./bus";
 import { renderModalOnboardingFrame, setupFrame } from "./frame";
 import {
+  Asset,
+  AuthenticationStrategy,
   InlineCashOutConfiguration,
   InlineTransferConfiguration,
   MessageKind,
@@ -13,12 +15,20 @@ import { apiHosts, NOOP_TRANSFER_INSTANCE } from "./utils";
 import { validateInlineTransferConfiguration } from "./validateConfiguration";
 
 export const inlineTransfer = (
-  configuration: InlineTransferConfiguration,
+  inlineTransferConfiguration: InlineTransferConfiguration,
 ): TransferInstance => {
-  // eslint-disable-next-line no-console
-  console.warn(
-    "[meso.js]: `inlineTransfer` is currently in beta and may change in the future.",
-  );
+  // Apply defaults
+  const configuration: InlineTransferConfiguration = {
+    authenticationStrategy: AuthenticationStrategy.WALLET_VERIFICATION,
+
+    // CashInConfiguration defaults
+    // sourceAsset is only optional in Cash-in case (for backwards compatibility
+    // with previous versions), remove when adding support for other FiatAssets
+    // and we make sourceAsset required
+    sourceAsset: Asset.USD,
+
+    ...inlineTransferConfiguration,
+  };
 
   if (!validateInlineTransferConfiguration(configuration)) {
     return NOOP_TRANSFER_INSTANCE;

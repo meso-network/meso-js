@@ -1,5 +1,6 @@
 import {
   Asset,
+  AuthenticationStrategy,
   Environment,
   InlineTransferConfiguration,
   MessageKind,
@@ -61,57 +62,85 @@ describe("inlineTransfer", () => {
     container: "#outlet",
   };
 
-  test("invalid configuration returns without setting up frame or bus", () => {
-    validateInlineTransferConfigurationMock.mockImplementationOnce(() => false);
-    inlineTransfer(configuration as InlineTransferConfiguration);
-
-    expect(setupFrameMock).not.toHaveBeenCalled();
-    expect(setupBusMock).not.toHaveBeenCalled();
-  });
-
-  test("invalid container element returns without setting up frame or bus", () => {
-    validateInlineTransferConfigurationMock.mockImplementationOnce(() => true);
-    vi.spyOn(document, "querySelector").mockReturnValue(null);
-
-    expect(() => {
+  describe("invalid", () => {
+    test("returns without setting up frame or bus (bad configuration)", () => {
+      validateInlineTransferConfigurationMock.mockImplementationOnce(
+        () => false,
+      );
       inlineTransfer(configuration as InlineTransferConfiguration);
-    }).toThrowError("Invalid container: No element found for selector #outlet");
 
-    expect(setupFrameMock).not.toHaveBeenCalled();
-    expect(setupBusMock).not.toHaveBeenCalled();
+      expect(setupFrameMock).not.toHaveBeenCalled();
+      expect(setupBusMock).not.toHaveBeenCalled();
+    });
+
+    test("returns without setting up frame or bus (bad container)", () => {
+      validateInlineTransferConfigurationMock.mockImplementationOnce(
+        () => true,
+      );
+      vi.spyOn(document, "querySelector").mockReturnValue(null);
+
+      expect(() => {
+        inlineTransfer(configuration as InlineTransferConfiguration);
+      }).toThrowError(
+        "Invalid container: No element found for selector #outlet",
+      );
+
+      expect(setupFrameMock).not.toHaveBeenCalled();
+      expect(setupBusMock).not.toHaveBeenCalled();
+    });
   });
 
-  test("valid cash-in configuration sets up frame, bus, and returns destroy method to clean up both", async () => {
-    validateInlineTransferConfigurationMock.mockImplementationOnce(() => true);
-    vi.spyOn(document, "querySelector").mockReturnValue({} as Element);
+  describe("valid", () => {
+    test("applies defaults", () => {
+      validateInlineTransferConfigurationMock.mockImplementationOnce(
+        () => true,
+      );
+      vi.spyOn(document, "querySelector").mockReturnValue({} as Element);
 
-    const { destroy } = inlineTransfer({
-      ...configuration,
-      destinationAsset: Asset.ETH,
-    } as InlineTransferConfiguration);
-    expect(setupFrameMock).toHaveBeenCalledOnce();
-    expect(setupFrameMock.mock.lastCall[0]).toMatchInlineSnapshot(
-      '"https://api.sandbox.meso.network"',
-    );
-    expect(setupFrameMock.mock.lastCall[1]).toMatchInlineSnapshot(
-      { version: expect.any(String) },
-      `
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      const { sourceAsset, authenticationStrategy, ...rest } = configuration;
+
+      inlineTransfer(rest as InlineTransferConfiguration);
+      expect(setupFrameMock).toHaveBeenCalledOnce();
+      expect(setupFrameMock.mock.lastCall[1].sourceAsset).toBe(Asset.USD);
+      expect(setupFrameMock.mock.lastCall[1].authenticationStrategy).toBe(
+        AuthenticationStrategy.WALLET_VERIFICATION,
+      );
+    });
+
+    test("cash-in configuration sets up frame, bus, and returns destroy method to clean up both", async () => {
+      validateInlineTransferConfigurationMock.mockImplementationOnce(
+        () => true,
+      );
+      vi.spyOn(document, "querySelector").mockReturnValue({} as Element);
+
+      const { destroy } = inlineTransfer({
+        ...configuration,
+        destinationAsset: Asset.ETH,
+      } as InlineTransferConfiguration);
+      expect(setupFrameMock).toHaveBeenCalledOnce();
+      expect(setupFrameMock.mock.lastCall[0]).toMatchInlineSnapshot(
+        '"https://api.sandbox.meso.network"',
+      );
+      expect(setupFrameMock.mock.lastCall[1]).toMatchInlineSnapshot(
+        { version: expect.any(String) },
+        `
       {
-        "authenticationStrategy": undefined,
+        "authenticationStrategy": "wallet_verification",
         "destinationAsset": "ETH",
         "mode": "inline",
         "network": "eip155:1",
         "partnerId": "partnerId",
         "sourceAmount": "100",
-        "sourceAsset": undefined,
+        "sourceAsset": "USD",
         "version": Any<String>,
         "walletAddress": "0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48",
       }
     `,
-    );
-    expect(setupFrameMock.mock.lastCall[1].version).toEqual(version);
-    expect(setupBusMock).toHaveBeenCalledOnce();
-    expect(setupBusMock.mock.lastCall).toMatchInlineSnapshot(`
+      );
+      expect(setupFrameMock.mock.lastCall[1].version).toEqual(version);
+      expect(setupBusMock).toHaveBeenCalledOnce();
+      expect(setupBusMock.mock.lastCall).toMatchInlineSnapshot(`
       [
         {
           "apiHost": "https://api.sandbox.meso.network",
@@ -125,40 +154,42 @@ describe("inlineTransfer", () => {
       ]
     `);
 
-    expect(busOnMock).toHaveBeenCalledWith(
-      MessageKind.INITIATE_MODAL_ONBOARDING,
-      expect.any(Function),
-    );
+      expect(busOnMock).toHaveBeenCalledWith(
+        MessageKind.INITIATE_MODAL_ONBOARDING,
+        expect.any(Function),
+      );
 
-    expect(busOnMock).toHaveBeenCalledWith(
-      MessageKind.RESUME_INLINE_FRAME,
-      expect.any(Function),
-    );
+      expect(busOnMock).toHaveBeenCalledWith(
+        MessageKind.RESUME_INLINE_FRAME,
+        expect.any(Function),
+      );
 
-    destroy();
-    expect(frameRemoveMock).toHaveBeenCalledOnce();
-    expect(busDestroyMock).toHaveBeenCalledOnce();
-  });
+      destroy();
+      expect(frameRemoveMock).toHaveBeenCalledOnce();
+      expect(busDestroyMock).toHaveBeenCalledOnce();
+    });
 
-  test("valid cash-out configuration sets up frame, bus, and returns destroy method to clean up both", () => {
-    validateInlineTransferConfigurationMock.mockImplementationOnce(() => true);
-    vi.spyOn(document, "querySelector").mockReturnValue({} as Element);
+    test("cash-out configuration sets up frame, bus, and returns destroy method to clean up both", () => {
+      validateInlineTransferConfigurationMock.mockImplementationOnce(
+        () => true,
+      );
+      vi.spyOn(document, "querySelector").mockReturnValue({} as Element);
 
-    const { destroy } = inlineTransfer({
-      ...configuration,
-      sourceAsset: Asset.ETH,
-      destinationAsset: Asset.USD,
-      onSendTransactionRequest: vi.fn(),
-    } as InlineTransferConfiguration);
-    expect(setupFrameMock).toHaveBeenCalledOnce();
-    expect(setupFrameMock.mock.lastCall[0]).toMatchInlineSnapshot(
-      '"https://api.sandbox.meso.network"',
-    );
-    expect(setupFrameMock.mock.lastCall[1]).toMatchInlineSnapshot(
-      { version: expect.any(String) },
-      `
+      const { destroy } = inlineTransfer({
+        ...configuration,
+        sourceAsset: Asset.ETH,
+        destinationAsset: Asset.USD,
+        onSendTransactionRequest: vi.fn(),
+      } as InlineTransferConfiguration);
+      expect(setupFrameMock).toHaveBeenCalledOnce();
+      expect(setupFrameMock.mock.lastCall[0]).toMatchInlineSnapshot(
+        '"https://api.sandbox.meso.network"',
+      );
+      expect(setupFrameMock.mock.lastCall[1]).toMatchInlineSnapshot(
+        { version: expect.any(String) },
+        `
       {
-        "authenticationStrategy": undefined,
+        "authenticationStrategy": "wallet_verification",
         "destinationAsset": "USD",
         "mode": "inline",
         "network": "eip155:1",
@@ -169,10 +200,10 @@ describe("inlineTransfer", () => {
         "walletAddress": "0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48",
       }
     `,
-    );
-    expect(setupFrameMock.mock.lastCall[1].version).toEqual(version);
-    expect(setupBusMock).toHaveBeenCalledOnce();
-    expect(setupBusMock.mock.lastCall).toMatchInlineSnapshot(`
+      );
+      expect(setupFrameMock.mock.lastCall[1].version).toEqual(version);
+      expect(setupBusMock).toHaveBeenCalledOnce();
+      expect(setupBusMock.mock.lastCall).toMatchInlineSnapshot(`
       [
         {
           "apiHost": "https://api.sandbox.meso.network",
@@ -186,18 +217,19 @@ describe("inlineTransfer", () => {
       ]
     `);
 
-    expect(busOnMock).toHaveBeenCalledWith(
-      MessageKind.INITIATE_MODAL_ONBOARDING,
-      expect.any(Function),
-    );
+      expect(busOnMock).toHaveBeenCalledWith(
+        MessageKind.INITIATE_MODAL_ONBOARDING,
+        expect.any(Function),
+      );
 
-    expect(busOnMock).toHaveBeenCalledWith(
-      MessageKind.RESUME_INLINE_FRAME,
-      expect.any(Function),
-    );
+      expect(busOnMock).toHaveBeenCalledWith(
+        MessageKind.RESUME_INLINE_FRAME,
+        expect.any(Function),
+      );
 
-    destroy();
-    expect(frameRemoveMock).toHaveBeenCalledOnce();
-    expect(busDestroyMock).toHaveBeenCalledOnce();
+      destroy();
+      expect(frameRemoveMock).toHaveBeenCalledOnce();
+      expect(busDestroyMock).toHaveBeenCalledOnce();
+    });
   });
 });
