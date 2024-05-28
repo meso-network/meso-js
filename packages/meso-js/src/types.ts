@@ -80,6 +80,14 @@ export enum EventKind {
   TRANSFER_APPROVED = "TRANSFER_APPROVED",
   /** A Meso transfer has completed */
   TRANSFER_COMPLETE = "TRANSFER_COMPLETE",
+  /**
+   * The user's transfer is incomplete. Upon seeing this event, the integration can be unmounted.
+   *
+   * This event is emitted if the user was unable to complete onboarding due to KYC failures/restrictions. It is not the same as the user canceling the flow.
+   *
+   * **Note:** This event is only fired in the `inline` integration.
+   */
+  TRANSFER_INCOMPLETE = "TRANSFER_INCOMPLETE",
   /** The iframe/window is ready and can be interacted with. */
   READY = "READY",
 }
@@ -100,8 +108,10 @@ export type MesoEvent =
       kind: EventKind.UNSUPPORTED_ASSET_ERROR;
       payload: UnsupportedAssetErrorPayload;
     }
-  | { kind: EventKind.CLOSE; payload: null }
-  | { kind: EventKind.READY; payload: null };
+  | {
+      kind: EventKind.CLOSE | EventKind.READY | EventKind.TRANSFER_INCOMPLETE;
+      payload: null;
+    };
 
 /**
  * The expected result from requesting the user to sign a message with their wallet.

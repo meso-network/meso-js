@@ -4,9 +4,11 @@ import { renderModalOnboardingFrame, setupFrame } from "./frame";
 import {
   Asset,
   AuthenticationStrategy,
+  EventKind,
   InlineCashOutConfiguration,
   InlineTransferConfiguration,
   MessageKind,
+  ResumeInlineFrameAction,
   TransferExperienceMode,
   TransferInstance,
 } from "./types";
@@ -107,6 +109,16 @@ export const inlineTransfer = (
       reply({
         kind: MessageKind.RESUME_INLINE_FRAME,
         payload: message.payload,
+      });
+    }
+
+    if (
+      message.payload.action === ResumeInlineFrameAction.ONBOARDING_TERMINATED
+    ) {
+      // Call developer callback
+      onEvent({
+        kind: EventKind.TRANSFER_INCOMPLETE,
+        payload: null,
       });
     }
   });
