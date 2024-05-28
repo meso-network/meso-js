@@ -6,7 +6,7 @@
 
 - [#70](https://github.com/meso-network/meso-js/pull/70) [`7679a06`](https://github.com/meso-network/meso-js/commit/7679a06fe96e5aeb4ef87492fbe2bb35a65f0da5) Thanks [@kyledetella](https://github.com/kyledetella)! - Adds the `TRANSFER_INCOMPLETE` event to the [`onEvent`](https://developers.meso.network/javascript-sdk/reference#on-event) callback.
 
-  This event is dispatched only for the `inlineTransfer` integration and signals the user was unable to complete onboarding due to KYC failures/restrictions. It is not the same as the user canceling the flow.
+  This event is dispatched only for the `inlineTransfer` integration and signals the user was unable to complete onboarding due to additional risk and compliance checks being required. It is not the same as the user canceling the flow.
 
 ## 0.1.3
 

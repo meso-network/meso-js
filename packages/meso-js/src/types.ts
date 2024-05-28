@@ -83,7 +83,7 @@ export enum EventKind {
   /**
    * The user's transfer is incomplete. Upon seeing this event, the integration can be unmounted.
    *
-   * This event is emitted if the user was unable to complete onboarding due to KYC failures/restrictions. It is not the same as the user canceling the flow.
+   * This event is emitted if the user was unable to complete onboarding due to additional risk and compliance checks being required. It is not the same as the user canceling the flow.
    *
    * **Note:** This event is only fired in the `inline` integration.
    */
