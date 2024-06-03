@@ -129,6 +129,7 @@ export enum Network {
   POLYGON_MAINNET = "eip155:137",
   OP_MAINNET = "eip155:10",
   ARBITRUM_MAINNET = "eip155:42161",
+  BASE_MAINNET = "eip155:8453",
 }
 
 export enum Asset {

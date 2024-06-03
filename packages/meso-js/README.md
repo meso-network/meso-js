@@ -238,7 +238,7 @@ export const BuyCrypto = () => {
         switch (kind) {
           // The iframe/window is ready
           case EventKind.READY:
-          break;
+            break;
 
           // The transfer has been approved and will go through, however funds have not yet moved.
           case EventKind.TRANSFER_APPROVED:
@@ -349,6 +349,7 @@ enum Network {
   POLYGON_MAINNET = "eip155:137",
   OP_MAINNET = "eip155:10",
   ARBITRUM_MAINNET = "eip155:42161",
+  BASE_MAINNET = "eip155:8453"
 }
 
 enum Asset {
