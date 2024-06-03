@@ -1,5 +1,11 @@
 # @meso-network/meso-js
 
+## 0.1.5
+
+### Patch Changes
+
+- [#73](https://github.com/meso-network/meso-js/pull/73) [`5b83847`](https://github.com/meso-network/meso-js/commit/5b838478b049f883c7bc341b4ac277f1f2a99590) Thanks [@mikepilat](https://github.com/mikepilat)! - Add support for the Base blockchain
+
 ## 0.1.4
 
 ### Patch Changes
