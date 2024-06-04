@@ -132,6 +132,7 @@ export const validateMessage = (message: Message) => {
         !isString(message.payload.initialPathname) ||
         isEmptyString(message.payload.initialPathname)
       ) {
+        // TODO: validate search string
         return false;
       }
 

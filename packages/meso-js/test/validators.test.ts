@@ -510,7 +510,7 @@ describe("validators", () => {
         expect(
           validateMessage({
             kind: MessageKind.INITIATE_MODAL_ONBOARDING,
-            payload: { initialPathname: "/foo" },
+            payload: { initialPathname: "/foo", search: "?foo" },
           }),
         ).toBe(true);
       });
