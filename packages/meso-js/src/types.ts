@@ -544,6 +544,9 @@ export type ResumeInlineFramePayload = {
   action: ResumeInlineFrameAction;
 };
 
+/** A valid query param string with the leading `?` */
+export type QueryString = `?${string}`;
+
 /**
  * Structured `window.postMessage` messages between the Meso experience to parent window
  */
@@ -570,6 +573,9 @@ export type Message =
          * The qualified pathname (including leading `/`) in Onboarding that the user will land on once the modal is opened.
          */
         initialPathname: string;
+
+        /** If provided, a valid query param string with the leading `?`*/
+        search?: QueryString;
       };
     }
   | {

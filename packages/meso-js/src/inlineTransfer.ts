@@ -91,6 +91,7 @@ export const inlineTransfer = (
     const modalOnboardingIframe = renderModalOnboardingFrame({
       apiHost,
       pathname: message.payload.initialPathname,
+      search: message.payload.search,
     });
 
     frameStore.modalOnboardingIframe = modalOnboardingIframe;

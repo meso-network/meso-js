@@ -135,6 +135,16 @@ export const validateMessage = (message: Message) => {
         return false;
       }
 
+      // Safely allow `search` to be omitted for backwards compatibility. We only validate if it's present
+      if ("search" in message.payload) {
+        if (
+          !isString(message.payload.search) ||
+          isEmptyString(message.payload.search)
+        ) {
+          return false;
+        }
+      }
+
       return true;
     case MessageKind.RESUME_INLINE_FRAME:
       if (
