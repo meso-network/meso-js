@@ -570,8 +570,9 @@ export type Message =
          * The qualified pathname (including leading `/`) in Onboarding that the user will land on once the modal is opened.
          */
         initialPathname: string;
-        // TODO:
-        search: string;
+
+        /** If provided, a valid query param string with the leading `?`*/
+        search?: `?${string}`;
       };
     }
   | {

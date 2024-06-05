@@ -124,6 +124,22 @@ describe("frame", () => {
         `);
     });
 
+    test("renders iframe element with provided pathname and query string", () => {
+      const frame = renderModalOnboardingFrame({
+        apiHost,
+        pathname: "/foo/bar",
+        search: "?x=foo",
+      });
+
+      expect(frame).toMatchInlineSnapshot(`
+        <iframe
+          allowtransparency="true"
+          src="https://api.sandbox.meso.network/modal/onboarding/foo/bar?x=foo"
+          style="box-sizing: border-box; background-color: transparent; color-scheme: auto; width: 100%; height: 100%; position: fixed; left: 0px; top: 0px; z-index: 9999;"
+        />
+      `);
+    });
+
     test("renders iframe element with deep link", () => {
       const frame = renderModalOnboardingFrame({
         apiHost,

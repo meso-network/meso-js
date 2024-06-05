@@ -506,7 +506,16 @@ describe("validators", () => {
 
   describe("INITIATE_MODAL_ONBOARDING", () => {
     describe("success", () => {
-      test("is valid", () => {
+      test("is valid w/o search", () => {
+        expect(
+          validateMessage({
+            kind: MessageKind.INITIATE_MODAL_ONBOARDING,
+            payload: { initialPathname: "/foo" },
+          }),
+        ).toBe(true);
+      });
+
+      test("is valid w/search", () => {
         expect(
           validateMessage({
             kind: MessageKind.INITIATE_MODAL_ONBOARDING,

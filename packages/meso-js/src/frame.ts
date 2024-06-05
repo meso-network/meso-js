@@ -67,13 +67,13 @@ export const renderModalOnboardingFrame = ({
 }: {
   apiHost: string;
   pathname: string;
-  search?: string;
+  search?: `?${string}`;
 }) => {
   const route = pathname.startsWith(MODAL_ONBOARDING_PATH_PREFIX)
     ? pathname
     : `${MODAL_ONBOARDING_PATH_PREFIX}/${pathname}`;
 
-  const src = `${apiHost}${route.replaceAll("//", "/")}${search}`;
+  const src = `${apiHost}${route.replaceAll("//", "/")}${search ?? ""}`.trim();
 
   const iframe = document.createElement("iframe");
   iframe.src = src;
