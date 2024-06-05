@@ -1,5 +1,11 @@
 # @meso-network/meso-js
 
+## 0.1.6
+
+### Patch Changes
+
+- [#75](https://github.com/meso-network/meso-js/pull/75) [`2e8d94a`](https://github.com/meso-network/meso-js/commit/2e8d94a4ba00a719bdbc5cc51e24c103936d1a61) Thanks [@kyledetella](https://github.com/kyledetella)! - Allow passing query params to modal onboarding frame for `inlineTransfer` integrations.
+
 ## 0.1.5
 
 ### Patch Changes
