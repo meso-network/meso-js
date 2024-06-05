@@ -544,6 +544,9 @@ export type ResumeInlineFramePayload = {
   action: ResumeInlineFrameAction;
 };
 
+/** A valid query param string with the leading `?` */
+export type QueryString = `?${string}`;
+
 /**
  * Structured `window.postMessage` messages between the Meso experience to parent window
  */
@@ -572,7 +575,7 @@ export type Message =
         initialPathname: string;
 
         /** If provided, a valid query param string with the leading `?`*/
-        search?: `?${string}`;
+        search?: QueryString;
       };
     }
   | {
