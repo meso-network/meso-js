@@ -71,12 +71,13 @@ describe("frame", () => {
       );
       expect(setupFrameRes.element).toBeInTheDocument();
       expect(setupFrameRes.element.attributes).toMatchInlineSnapshot(`
-      NamedNodeMap {
-        "allowtransparency": "true",
-        "src": "https://api.sandbox.meso.network/app?partnerId=partnerId&network=eip155%3A1&walletAddress=0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48&sourceAmount=100&sourceAsset=USD&destinationAsset=ETH&layoutPosition=top-right&layoutOffset=0&version=1.0.0&authenticationStrategy=headless_wallet_verification&mode=embedded",
-        "style": "box-sizing: border-box; background-color: transparent; color-scheme: auto; width: 100%; height: 100%; position: fixed; left: 0px; top: 0px; z-index: 9999;",
-      }
-    `);
+        NamedNodeMap {
+          "allowtransparency": "true",
+          "referrerpolicy": "origin",
+          "src": "https://api.sandbox.meso.network/app?partnerId=partnerId&network=eip155%3A1&walletAddress=0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48&sourceAmount=100&sourceAsset=USD&destinationAsset=ETH&layoutPosition=top-right&layoutOffset=0&version=1.0.0&authenticationStrategy=headless_wallet_verification&mode=embedded",
+          "style": "box-sizing: border-box; background-color: transparent; color-scheme: auto; width: 100%; height: 100%; position: fixed; left: 0px; top: 0px; z-index: 9999;",
+        }
+      `);
     });
 
     test("invoking remove callback removes iframe from document", () => {
@@ -116,12 +117,13 @@ describe("frame", () => {
       });
 
       expect(frame).toMatchInlineSnapshot(`
-          <iframe
-            allowtransparency="true"
-            src="https://api.sandbox.meso.network/modal/onboarding/foo/bar"
-            style="box-sizing: border-box; background-color: transparent; color-scheme: auto; width: 100%; height: 100%; position: fixed; left: 0px; top: 0px; z-index: 9999;"
-          />
-        `);
+        <iframe
+          allowtransparency="true"
+          referrerpolicy="origin"
+          src="https://api.sandbox.meso.network/modal/onboarding/foo/bar"
+          style="box-sizing: border-box; background-color: transparent; color-scheme: auto; width: 100%; height: 100%; position: fixed; left: 0px; top: 0px; z-index: 9999;"
+        />
+      `);
     });
 
     test("renders iframe element with provided pathname and query string", () => {
@@ -134,6 +136,7 @@ describe("frame", () => {
       expect(frame).toMatchInlineSnapshot(`
         <iframe
           allowtransparency="true"
+          referrerpolicy="origin"
           src="https://api.sandbox.meso.network/modal/onboarding/foo/bar?x=foo"
           style="box-sizing: border-box; background-color: transparent; color-scheme: auto; width: 100%; height: 100%; position: fixed; left: 0px; top: 0px; z-index: 9999;"
         />
@@ -147,12 +150,13 @@ describe("frame", () => {
       });
 
       expect(frame).toMatchInlineSnapshot(`
-          <iframe
-            allowtransparency="true"
-            src="https://api.sandbox.meso.network/modal/onboarding/deep"
-            style="box-sizing: border-box; background-color: transparent; color-scheme: auto; width: 100%; height: 100%; position: fixed; left: 0px; top: 0px; z-index: 9999;"
-          />
-        `);
+        <iframe
+          allowtransparency="true"
+          referrerpolicy="origin"
+          src="https://api.sandbox.meso.network/modal/onboarding/deep"
+          style="box-sizing: border-box; background-color: transparent; color-scheme: auto; width: 100%; height: 100%; position: fixed; left: 0px; top: 0px; z-index: 9999;"
+        />
+      `);
     });
 
     test("cleans pathname", () => {
@@ -162,12 +166,13 @@ describe("frame", () => {
       });
 
       expect(frame).toMatchInlineSnapshot(`
-          <iframe
-            allowtransparency="true"
-            src="https://api.sandbox.meso.network/modal/onboarding/deep"
-            style="box-sizing: border-box; background-color: transparent; color-scheme: auto; width: 100%; height: 100%; position: fixed; left: 0px; top: 0px; z-index: 9999;"
-          />
-        `);
+        <iframe
+          allowtransparency="true"
+          referrerpolicy="origin"
+          src="https://api.sandbox.meso.network/modal/onboarding/deep"
+          style="box-sizing: border-box; background-color: transparent; color-scheme: auto; width: 100%; height: 100%; position: fixed; left: 0px; top: 0px; z-index: 9999;"
+        />
+      `);
     });
   });
 });

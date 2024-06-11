@@ -45,6 +45,7 @@ const configureFramePositioningStyles = (iframe: HTMLIFrameElement) => {
 const renderIframe = (src: string, containerElement: Element | null) => {
   const iframe = document.createElement("iframe");
   iframe.src = src;
+  iframe.setAttribute("referrerPolicy", "origin");
 
   configureFrameCommonStyles(iframe);
 
@@ -78,6 +79,7 @@ export const renderModalOnboardingFrame = ({
   const iframe = document.createElement("iframe");
   iframe.src = src;
   iframe.setAttribute("allowtransparency", "true");
+  iframe.setAttribute("referrerPolicy", "origin");
 
   configureFrameCommonStyles(iframe);
   configureFramePositioningStyles(iframe);
