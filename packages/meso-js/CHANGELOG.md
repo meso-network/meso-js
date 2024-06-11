@@ -1,5 +1,11 @@
 # @meso-network/meso-js
 
+## 0.1.7
+
+### Patch Changes
+
+- [#77](https://github.com/meso-network/meso-js/pull/77) [`69036e7`](https://github.com/meso-network/meso-js/commit/69036e7318b5934ac37916a8201ad377ee8f2297) Thanks [@dseeto](https://github.com/dseeto)! - Explicitly set [referrerPolicy](https://developer.mozilla.org/en-US/docs/Web/API/HTMLIFrameElement/referrerPolicy) on Meso iframes. This prevents a bug in Firefox browsers where frames cannot establish their parent's origin using `document.referrer` if the parent has a no-referrer policy set.
+
 ## 0.1.6
 
 ### Patch Changes
