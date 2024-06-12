@@ -75,7 +75,7 @@ describe("frame", () => {
           "allowtransparency": "true",
           "referrerpolicy": "origin",
           "src": "https://api.sandbox.meso.network/app?partnerId=partnerId&network=eip155%3A1&walletAddress=0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48&sourceAmount=100&sourceAsset=USD&destinationAsset=ETH&layoutPosition=top-right&layoutOffset=0&version=1.0.0&authenticationStrategy=headless_wallet_verification&mode=embedded",
-          "style": "box-sizing: border-box; background-color: transparent; color-scheme: auto; width: 100%; height: 100%; position: fixed; left: 0px; top: 0px; z-index: 9999;",
+          "style": "box-sizing: border-box; background-color: transparent; color-scheme: auto; width: 100%; height: 100%; position: fixed; left: 0px; top: 0px; z-index: 2147483647;",
         }
       `);
     });
@@ -97,7 +97,7 @@ describe("frame", () => {
       );
       var style = setupFrameRes.element.style;
       expect(style.display).toBe("");
-      expect(style.zIndex).toBe("9999");
+      expect(style.zIndex).toBe("2147483647q");
 
       setupFrameRes.hide();
 
@@ -121,7 +121,7 @@ describe("frame", () => {
           allowtransparency="true"
           referrerpolicy="origin"
           src="https://api.sandbox.meso.network/modal/onboarding/foo/bar"
-          style="box-sizing: border-box; background-color: transparent; color-scheme: auto; width: 100%; height: 100%; position: fixed; left: 0px; top: 0px; z-index: 9999;"
+          style="box-sizing: border-box; background-color: transparent; color-scheme: auto; width: 100%; height: 100%; position: fixed; left: 0px; top: 0px; z-index: 2147483647;"
         />
       `);
     });
@@ -138,7 +138,7 @@ describe("frame", () => {
           allowtransparency="true"
           referrerpolicy="origin"
           src="https://api.sandbox.meso.network/modal/onboarding/foo/bar?x=foo"
-          style="box-sizing: border-box; background-color: transparent; color-scheme: auto; width: 100%; height: 100%; position: fixed; left: 0px; top: 0px; z-index: 9999;"
+          style="box-sizing: border-box; background-color: transparent; color-scheme: auto; width: 100%; height: 100%; position: fixed; left: 0px; top: 0px; z-index: 2147483647;"
         />
       `);
     });
@@ -154,7 +154,7 @@ describe("frame", () => {
           allowtransparency="true"
           referrerpolicy="origin"
           src="https://api.sandbox.meso.network/modal/onboarding/deep"
-          style="box-sizing: border-box; background-color: transparent; color-scheme: auto; width: 100%; height: 100%; position: fixed; left: 0px; top: 0px; z-index: 9999;"
+          style="box-sizing: border-box; background-color: transparent; color-scheme: auto; width: 100%; height: 100%; position: fixed; left: 0px; top: 0px; z-index: 2147483647;"
         />
       `);
     });
@@ -170,7 +170,7 @@ describe("frame", () => {
           allowtransparency="true"
           referrerpolicy="origin"
           src="https://api.sandbox.meso.network/modal/onboarding/deep"
-          style="box-sizing: border-box; background-color: transparent; color-scheme: auto; width: 100%; height: 100%; position: fixed; left: 0px; top: 0px; z-index: 9999;"
+          style="box-sizing: border-box; background-color: transparent; color-scheme: auto; width: 100%; height: 100%; position: fixed; left: 0px; top: 0px; z-index: 2147483647;"
         />
       `);
     });
