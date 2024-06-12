@@ -1,5 +1,11 @@
 # @meso-network/meso-js
 
+## 0.1.8
+
+### Patch Changes
+
+- [#79](https://github.com/meso-network/meso-js/pull/79) [`c84bd58`](https://github.com/meso-network/meso-js/commit/c84bd58f69d40b051a3f06d7c9759bfa577c2d36) Thanks [@kyledetella](https://github.com/kyledetella)! - Ensure modal iframes are rendered at the highest allowed `z-index` (`2147483647`). This forces the Meso UI to live above all other elements in the [stacking context](https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_positioned_layout/Understanding_z-index/Stacking_context).
+
 ## 0.1.7
 
 ### Patch Changes
