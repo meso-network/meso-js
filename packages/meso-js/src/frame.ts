@@ -38,7 +38,9 @@ const configureFramePositioningStyles = (iframe: HTMLIFrameElement) => {
   iframe.style.position = "fixed";
   iframe.style.left = "0";
   iframe.style.top = "0";
-  iframe.style.zIndex = "9999";
+  // https://x.com/wesbos/status/1796201727529513377
+  // "It’s the largest integer that fits in 32 bits, so it’s the highest z-index you can give something in CSS" – https://x.com/wesbos/status/1796209959509578212
+  iframe.style.zIndex = "2147483647";
 };
 
 // Render the iframe for the "embedded" flow (full viewport modal)
