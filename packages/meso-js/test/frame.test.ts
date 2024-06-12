@@ -97,7 +97,7 @@ describe("frame", () => {
       );
       var style = setupFrameRes.element.style;
       expect(style.display).toBe("");
-      expect(style.zIndex).toBe("2147483647q");
+      expect(style.zIndex).toBe("2147483647");
 
       setupFrameRes.hide();
 
