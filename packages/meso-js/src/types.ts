@@ -260,7 +260,7 @@ export type BaseConfiguration = Readonly<{
    */
   sourceAmount?: AssetAmount;
   /**
-   * A stringified number including decimals (if needed) representing the destination amount desired from the transfer. If both sourceAmount and destinationAmount are specified, destinationAmount will take precedence.
+   * A stringified number including decimals (if needed) representing the destination amount desired from the transfer. If both `sourceAmount` and `destinationAmount` are specified, `destinationAmount` will take precedence.
    *
    * Examples: `"10",`"0.01"`, `"1.2"`, `"100.23"`, `"1250", `"1250.40"`.
    */
