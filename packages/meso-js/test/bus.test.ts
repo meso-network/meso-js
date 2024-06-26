@@ -19,7 +19,7 @@ vi.mock("../src/createPostMessageBus", async () => {
 });
 
 describe("setupBus", () => {
-  const apiHost = "https://api.sandbox.meso.network";
+  const apiHost = "https://transfer.sandbox.meso.network";
   var frame: ReturnType<typeof setupFrame>;
   var removeMock: Mock;
   var hideMock: Mock;

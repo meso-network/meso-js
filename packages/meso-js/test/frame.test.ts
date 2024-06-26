@@ -5,7 +5,7 @@ import { AuthenticationStrategy } from "../src";
 
 describe("frame", () => {
   describe("setupFrame", () => {
-    const apiHost = "https://api.sandbox.meso.network";
+    const apiHost = "https://transfer.sandbox.meso.network";
 
     describe("encodes", () => {
       test("configuration as query params", () => {
@@ -75,7 +75,7 @@ describe("frame", () => {
         NamedNodeMap {
           "allowtransparency": "true",
           "referrerpolicy": "origin",
-          "src": "https://api.sandbox.meso.network/app?partnerId=partnerId&network=eip155%3A1&walletAddress=0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48&sourceAmount=100&destinationAmount=0.01&sourceAsset=USD&destinationAsset=ETH&layoutPosition=top-right&layoutOffset=0&version=1.0.0&authenticationStrategy=headless_wallet_verification&mode=embedded",
+          "src": "https://transfer.sandbox.meso.network/app?partnerId=partnerId&network=eip155%3A1&walletAddress=0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48&sourceAmount=100&destinationAmount=0.01&sourceAsset=USD&destinationAsset=ETH&layoutPosition=top-right&layoutOffset=0&version=1.0.0&authenticationStrategy=headless_wallet_verification&mode=embedded",
           "style": "box-sizing: border-box; background-color: transparent; color-scheme: auto; width: 100%; height: 100%; position: fixed; left: 0px; top: 0px; z-index: 2147483647;",
         }
       `);
@@ -109,7 +109,7 @@ describe("frame", () => {
   });
 
   describe("renderModalOnboardingFrame", () => {
-    const apiHost = "https://api.sandbox.meso.network";
+    const apiHost = "https://transfer.sandbox.meso.network";
 
     test("renders iframe element with provided pathname", () => {
       const frame = renderModalOnboardingFrame({
@@ -121,7 +121,7 @@ describe("frame", () => {
         <iframe
           allowtransparency="true"
           referrerpolicy="origin"
-          src="https://api.sandbox.meso.network/modal/onboarding/foo/bar"
+          src="https://transfer.sandbox.meso.network/modal/onboarding/foo/bar"
           style="box-sizing: border-box; background-color: transparent; color-scheme: auto; width: 100%; height: 100%; position: fixed; left: 0px; top: 0px; z-index: 2147483647;"
         />
       `);
@@ -138,7 +138,7 @@ describe("frame", () => {
         <iframe
           allowtransparency="true"
           referrerpolicy="origin"
-          src="https://api.sandbox.meso.network/modal/onboarding/foo/bar?x=foo"
+          src="https://transfer.sandbox.meso.network/modal/onboarding/foo/bar?x=foo"
           style="box-sizing: border-box; background-color: transparent; color-scheme: auto; width: 100%; height: 100%; position: fixed; left: 0px; top: 0px; z-index: 2147483647;"
         />
       `);
@@ -154,7 +154,7 @@ describe("frame", () => {
         <iframe
           allowtransparency="true"
           referrerpolicy="origin"
-          src="https://api.sandbox.meso.network/modal/onboarding/deep"
+          src="https://transfer.sandbox.meso.network/modal/onboarding/deep"
           style="box-sizing: border-box; background-color: transparent; color-scheme: auto; width: 100%; height: 100%; position: fixed; left: 0px; top: 0px; z-index: 2147483647;"
         />
       `);
@@ -170,7 +170,7 @@ describe("frame", () => {
         <iframe
           allowtransparency="true"
           referrerpolicy="origin"
-          src="https://api.sandbox.meso.network/modal/onboarding/deep"
+          src="https://transfer.sandbox.meso.network/modal/onboarding/deep"
           style="box-sizing: border-box; background-color: transparent; color-scheme: auto; width: 100%; height: 100%; position: fixed; left: 0px; top: 0px; z-index: 2147483647;"
         />
       `);
