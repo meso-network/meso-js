@@ -1,5 +1,11 @@
 # @meso-network/meso-js
 
+## 0.1.9
+
+### Patch Changes
+
+- [#81](https://github.com/meso-network/meso-js/pull/81) [`9a440cf`](https://github.com/meso-network/meso-js/commit/9a440cfaaef51150bb76d9260c6e28b0e1ccf9f5) Thanks [@dseeto](https://github.com/dseeto)! - Add support for passing `destinationAmount`, when initiating a transfer.
+
 ## 0.1.8
 
 ### Patch Changes
