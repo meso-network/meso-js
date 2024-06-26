@@ -125,18 +125,19 @@ describe("inlineTransfer", () => {
       expect(setupFrameMock.mock.lastCall[1]).toMatchInlineSnapshot(
         { version: expect.any(String) },
         `
-      {
-        "authenticationStrategy": "wallet_verification",
-        "destinationAsset": "ETH",
-        "mode": "inline",
-        "network": "eip155:1",
-        "partnerId": "partnerId",
-        "sourceAmount": "100",
-        "sourceAsset": "USD",
-        "version": Any<String>,
-        "walletAddress": "0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48",
-      }
-    `,
+        {
+          "authenticationStrategy": "wallet_verification",
+          "destinationAmount": undefined,
+          "destinationAsset": "ETH",
+          "mode": "inline",
+          "network": "eip155:1",
+          "partnerId": "partnerId",
+          "sourceAmount": "100",
+          "sourceAsset": "USD",
+          "version": Any<String>,
+          "walletAddress": "0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48",
+        }
+      `,
       );
       expect(setupFrameMock.mock.lastCall[1].version).toEqual(version);
       expect(setupBusMock).toHaveBeenCalledOnce();
@@ -188,18 +189,19 @@ describe("inlineTransfer", () => {
       expect(setupFrameMock.mock.lastCall[1]).toMatchInlineSnapshot(
         { version: expect.any(String) },
         `
-      {
-        "authenticationStrategy": "wallet_verification",
-        "destinationAsset": "USD",
-        "mode": "inline",
-        "network": "eip155:1",
-        "partnerId": "partnerId",
-        "sourceAmount": "100",
-        "sourceAsset": "ETH",
-        "version": Any<String>,
-        "walletAddress": "0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48",
-      }
-    `,
+        {
+          "authenticationStrategy": "wallet_verification",
+          "destinationAmount": undefined,
+          "destinationAsset": "USD",
+          "mode": "inline",
+          "network": "eip155:1",
+          "partnerId": "partnerId",
+          "sourceAmount": "100",
+          "sourceAsset": "ETH",
+          "version": Any<String>,
+          "walletAddress": "0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48",
+        }
+      `,
       );
       expect(setupFrameMock.mock.lastCall[1].version).toEqual(version);
       expect(setupBusMock).toHaveBeenCalledOnce();
