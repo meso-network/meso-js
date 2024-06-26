@@ -73,6 +73,7 @@ describe("transfer", () => {
       `
       {
         "authenticationStrategy": "wallet_verification",
+        "destinationAmount": undefined,
         "destinationAsset": "ETH",
         "layoutOffset": "0",
         "layoutPosition": "top-right",
@@ -129,6 +130,7 @@ describe("transfer", () => {
       `
       {
         "authenticationStrategy": "wallet_verification",
+        "destinationAmount": undefined,
         "destinationAsset": "USD",
         "layoutOffset": "0",
         "layoutPosition": "top-right",

@@ -17,20 +17,21 @@ describe("frame", () => {
           new URLSearchParams(new URL(setupFrameRes.element.src).search),
         );
         expect(params).toMatchInlineSnapshot(`
-        {
-          "authenticationStrategy": "headless_wallet_verification",
-          "destinationAsset": "ETH",
-          "layoutOffset": "0",
-          "layoutPosition": "top-right",
-          "mode": "embedded",
-          "network": "eip155:1",
-          "partnerId": "partnerId",
-          "sourceAmount": "100",
-          "sourceAsset": "USD",
-          "version": "1.0.0",
-          "walletAddress": "0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48",
-        }
-      `);
+          {
+            "authenticationStrategy": "headless_wallet_verification",
+            "destinationAmount": "0.01",
+            "destinationAsset": "ETH",
+            "layoutOffset": "0",
+            "layoutPosition": "top-right",
+            "mode": "embedded",
+            "network": "eip155:1",
+            "partnerId": "partnerId",
+            "sourceAmount": "100",
+            "sourceAsset": "USD",
+            "version": "1.0.0",
+            "walletAddress": "0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48",
+          }
+        `);
       });
 
       test.each([
@@ -74,7 +75,7 @@ describe("frame", () => {
         NamedNodeMap {
           "allowtransparency": "true",
           "referrerpolicy": "origin",
-          "src": "https://api.sandbox.meso.network/app?partnerId=partnerId&network=eip155%3A1&walletAddress=0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48&sourceAmount=100&sourceAsset=USD&destinationAsset=ETH&layoutPosition=top-right&layoutOffset=0&version=1.0.0&authenticationStrategy=headless_wallet_verification&mode=embedded",
+          "src": "https://api.sandbox.meso.network/app?partnerId=partnerId&network=eip155%3A1&walletAddress=0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48&sourceAmount=100&destinationAmount=0.01&sourceAsset=USD&destinationAsset=ETH&layoutPosition=top-right&layoutOffset=0&version=1.0.0&authenticationStrategy=headless_wallet_verification&mode=embedded",
           "style": "box-sizing: border-box; background-color: transparent; color-scheme: auto; width: 100%; height: 100%; position: fixed; left: 0px; top: 0px; z-index: 2147483647;",
         }
       `);

@@ -7,8 +7,13 @@ export const setupFrame = (
   params: SerializedTransferIframeParams,
   containerElement: Element | null = null,
 ) => {
+  const filteredParams = Object.fromEntries(
+    Object.entries(params).filter(([_, v]) => v !== undefined),
+  );
   const pathname = containerElement ? "/inline" : "/app";
-  const url = `${apiHost}${pathname}?${new URLSearchParams(params).toString()}`;
+  const url = `${apiHost}${pathname}?${new URLSearchParams(
+    filteredParams,
+  ).toString()}`;
 
   const iframe = renderIframe(url, containerElement);
 

@@ -333,7 +333,8 @@ To initialize the `transfer` experience, provide the following configuration.
 type TransferConfiguration = {
   partnerId: string; // Your unique Meso partner ID
   environment: Environment; // SANDBOX | PRODUCTION
-  sourceAmount: string; // The amount (in USD) the user will spend
+  sourceAmount?: string; // The amount (in USD) the user will spend
+  destinationAmount?: string; // The amount (in destinationAsset token) the user will receive. If both sourceAmount and destinationAmount are specified, destinationAmount will take precedence
   destinationAsset: Asset; // The token the user will receive ("ETH" | "SOL" | "USDC")
   network: Network; // The network to use for the transfer
   walletAddress: string; // The user's wallet address obtained at runtime by your application
