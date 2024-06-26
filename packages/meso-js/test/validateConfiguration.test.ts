@@ -27,6 +27,26 @@ describe("validateConfiguration", () => {
       );
     });
 
+    test("sourceAmount and destinationAmount undefined emits", () => {
+      expect(
+        // @ts-expect-error: Bypass type system to simulate runtime behavior
+        validateTransferConfiguration({ onEvent }),
+      ).toBe(false);
+      expect(onEvent).toHaveBeenCalledOnce();
+      expect(onEvent.mock.lastCall).toMatchInlineSnapshot(`
+        [
+          {
+            "kind": "CONFIGURATION_ERROR",
+            "payload": {
+              "error": {
+                "message": "\\"sourceAmount\\" or \\"destinationAmount\\" must be specified.",
+              },
+            },
+          },
+        ]
+      `);
+    });
+
     test("sourceAmount not matching AssetAmount template literal emits", () => {
       expect(
         // @ts-expect-error: Bypass type system to simulate runtime behavior
@@ -45,6 +65,30 @@ describe("validateConfiguration", () => {
         },
       ]
     `);
+    });
+
+    test("destinationAmount not matching AssetAmount template literal emits", () => {
+      expect(
+        // @ts-expect-error: Bypass type system to simulate runtime behavior
+        validateTransferConfiguration({
+          onEvent,
+          sourceAmount: "1",
+          destinationAmount: "1.",
+        }),
+      ).toBe(false);
+      expect(onEvent).toHaveBeenCalledOnce();
+      expect(onEvent.mock.lastCall).toMatchInlineSnapshot(`
+        [
+          {
+            "kind": "CONFIGURATION_ERROR",
+            "payload": {
+              "error": {
+                "message": "\\"destinationAmount\\" must be a valid stringified number including optional decimals.",
+              },
+            },
+          },
+        ]
+      `);
     });
 
     test("non-Network value emits", () => {
@@ -694,6 +738,21 @@ describe("validateConfiguration", () => {
           expect(onEvent).not.toHaveBeenCalled();
           expect(valid).toBe(true);
         });
+
+        test("returns true (only destinationAmount)", () => {
+          const valid = validateTransferConfiguration({
+            onEvent,
+            destinationAmount: "1",
+            network: Network.ETHEREUM_MAINNET,
+            walletAddress: "0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48",
+            destinationAsset: Asset.ETH,
+            environment: Environment.SANDBOX,
+            partnerId: "meso-js-test",
+            onSignMessageRequest: vi.fn(),
+          });
+          expect(onEvent).not.toHaveBeenCalled();
+          expect(valid).toBe(true);
+        });
       });
     });
 
@@ -876,6 +935,26 @@ describe("validateConfiguration", () => {
       );
     });
 
+    test("sourceAmount and destinationAmount undefined emits", () => {
+      expect(
+        // @ts-expect-error: Bypass type system to simulate runtime behavior
+        validateInlineTransferConfiguration({ onEvent }),
+      ).toBe(false);
+      expect(onEvent).toHaveBeenCalledOnce();
+      expect(onEvent.mock.lastCall).toMatchInlineSnapshot(`
+        [
+          {
+            "kind": "CONFIGURATION_ERROR",
+            "payload": {
+              "error": {
+                "message": "\\"sourceAmount\\" or \\"destinationAmount\\" must be specified.",
+              },
+            },
+          },
+        ]
+      `);
+    });
+
     test("sourceAmount not matching AssetAmount template literal emits", () => {
       expect(
         // @ts-expect-error: Bypass type system to simulate runtime behavior
@@ -894,6 +973,30 @@ describe("validateConfiguration", () => {
         },
       ]
     `);
+    });
+
+    test("destinationAmount not matching AssetAmount template literal emits", () => {
+      expect(
+        // @ts-expect-error: Bypass type system to simulate runtime behavior
+        validateInlineTransferConfiguration({
+          onEvent,
+          sourceAmount: "1",
+          destinationAmount: "1.",
+        }),
+      ).toBe(false);
+      expect(onEvent).toHaveBeenCalledOnce();
+      expect(onEvent.mock.lastCall).toMatchInlineSnapshot(`
+        [
+          {
+            "kind": "CONFIGURATION_ERROR",
+            "payload": {
+              "error": {
+                "message": "\\"destinationAmount\\" must be a valid stringified number including optional decimals.",
+              },
+            },
+          },
+        ]
+      `);
     });
 
     test("non-Network value emits", () => {

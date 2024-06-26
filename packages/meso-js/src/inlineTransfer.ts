@@ -38,6 +38,7 @@ export const inlineTransfer = (
 
   const {
     sourceAmount,
+    destinationAmount,
     network,
     walletAddress,
     environment,
@@ -67,6 +68,7 @@ export const inlineTransfer = (
       network,
       walletAddress,
       sourceAmount,
+      destinationAmount,
       destinationAsset,
       sourceAsset: sourceAsset!,
       version,

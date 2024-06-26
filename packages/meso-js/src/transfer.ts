@@ -41,6 +41,7 @@ export const transfer = (
 
   const {
     sourceAmount,
+    destinationAmount,
     network,
     walletAddress,
     environment,
@@ -55,10 +56,11 @@ export const transfer = (
   const apiHost = apiHosts[environment];
 
   const frame = setupFrame(apiHost, {
+    sourceAmount,
+    destinationAmount,
     partnerId,
     network,
     walletAddress,
-    sourceAmount,
     destinationAsset,
     sourceAsset: sourceAsset!,
     layoutPosition: layout!.position!,

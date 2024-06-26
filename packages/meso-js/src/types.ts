@@ -254,11 +254,17 @@ export type BaseConfiguration = Readonly<{
   /** The wallet address for the user. This address must be compatible with the selected `network` and `destinationAsset`. */
   walletAddress: string;
   /**
-   * A stringified number including decimals (if needed) representing the amount to be used for the transfer.
+   * A stringified number including decimals (if needed) representing the source amount to be used for the transfer.
    *
    * Examples: `"10",`"0.01"`, `"1.2"`, `"100.23"`, `"1250", `"1250.40"`.
    */
-  sourceAmount: AssetAmount;
+  sourceAmount?: AssetAmount;
+  /**
+   * A stringified number including decimals (if needed) representing the destination amount desired from the transfer. If both sourceAmount and destinationAmount are specified, destinationAmount will take precedence.
+   *
+   * Examples: `"10",`"0.01"`, `"1.2"`, `"100.23"`, `"1250", `"1250.40"`.
+   */
+  destinationAmount?: AssetAmount;
   /**
    * Configuration to customize how the Meso experience is launched and presented.
    */
@@ -359,6 +365,11 @@ export enum AuthenticationStrategy {
 }
 
 /**
+ * Utility type allowing optional keys from Record
+ */
+type OptionalStringify<T> = { [K in keyof T]?: string };
+
+/**
  * Configuration that will be serialized to query params for the embedded experience.
  */
 export type TransferIframeParams = Pick<
@@ -366,11 +377,12 @@ export type TransferIframeParams = Pick<
   | "partnerId"
   | "network"
   | "walletAddress"
-  | "sourceAmount"
   | "sourceAsset"
   | "destinationAsset"
   | "authenticationStrategy"
 > & {
+  sourceAmount?: AssetAmount;
+  destinationAmount?: AssetAmount;
   layoutPosition: NonNullable<Layout["position"]>;
   layoutOffset: NonNullable<Layout["offset"]>;
   /** The version of meso-js. */
@@ -387,11 +399,12 @@ export type InlineTransferIframeParams = Pick<
   | "partnerId"
   | "network"
   | "walletAddress"
-  | "sourceAmount"
   | "sourceAsset"
   | "destinationAsset"
   | "authenticationStrategy"
 > & {
+  sourceAmount?: AssetAmount;
+  destinationAmount?: AssetAmount;
   /** The version of meso-js. */
   version: string;
   mode: TransferExperienceMode.INLINE;
@@ -401,8 +414,8 @@ export type InlineTransferIframeParams = Pick<
  * The serialized configuration sent to the Transfer App as a query string.
  */
 export type SerializedTransferIframeParams =
-  | Record<keyof TransferIframeParams, string>
-  | Record<keyof InlineTransferIframeParams, string>;
+  | OptionalStringify<TransferIframeParams>
+  | OptionalStringify<InlineTransferIframeParams>;
 
 /**
  * The mode for the rendering context of the Meso experience.

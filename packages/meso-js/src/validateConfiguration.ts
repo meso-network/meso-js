@@ -147,17 +147,39 @@ const validateSharedConfiguration = ({
   onSignMessageRequest,
   partnerId,
   sourceAmount,
+  destinationAmount,
   walletAddress,
 }: TransferConfiguration | InlineTransferConfiguration): boolean => {
   if (typeof onEvent !== "function") {
     throw new Error("[meso-js] An onEvent callback is required.");
-  } else if (!/^\d*\.?\d+$/.test(sourceAmount)) {
+  } else if (!sourceAmount && !destinationAmount) {
+    onEvent({
+      kind: EventKind.CONFIGURATION_ERROR,
+      payload: {
+        error: {
+          message: '"sourceAmount" or "destinationAmount" must be specified.',
+        },
+      },
+    });
+    return false;
+  } else if (sourceAmount && !/^\d*\.?\d+$/.test(sourceAmount)) {
     onEvent({
       kind: EventKind.CONFIGURATION_ERROR,
       payload: {
         error: {
           message:
             '"sourceAmount" must be a valid stringified number including optional decimals.',
+        },
+      },
+    });
+    return false;
+  } else if (destinationAmount && !/^\d*\.?\d+$/.test(destinationAmount)) {
+    onEvent({
+      kind: EventKind.CONFIGURATION_ERROR,
+      payload: {
+        error: {
+          message:
+            '"destinationAmount" must be a valid stringified number including optional decimals.',
         },
       },
     });
