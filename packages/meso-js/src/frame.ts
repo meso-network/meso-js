@@ -30,7 +30,8 @@ export const setupFrame = (
 
 const configureFrameCommonStyles = (iframe: HTMLIFrameElement) => {
   iframe.setAttribute("allowtransparency", "true");
-  iframe.allow = "payment";
+  iframe.setAttribute("referrerPolicy", "origin");
+  iframe.setAttribute("allow", "payment");
 
   iframe.style.border = "none";
   iframe.style.boxSizing = "border-box";
@@ -53,7 +54,6 @@ const configureFramePositioningStyles = (iframe: HTMLIFrameElement) => {
 const renderIframe = (src: string, containerElement: Element | null) => {
   const iframe = document.createElement("iframe");
   iframe.src = src;
-  iframe.setAttribute("referrerPolicy", "origin");
 
   configureFrameCommonStyles(iframe);
 
@@ -86,8 +86,6 @@ export const renderModalOnboardingFrame = ({
 
   const iframe = document.createElement("iframe");
   iframe.src = src;
-  iframe.setAttribute("allowtransparency", "true");
-  iframe.setAttribute("referrerPolicy", "origin");
 
   configureFrameCommonStyles(iframe);
   configureFramePositioningStyles(iframe);
