@@ -30,6 +30,7 @@ export const setupFrame = (
 
 const configureFrameCommonStyles = (iframe: HTMLIFrameElement) => {
   iframe.setAttribute("allowtransparency", "true");
+  iframe.allow = "payment";
 
   iframe.style.border = "none";
   iframe.style.boxSizing = "border-box";
