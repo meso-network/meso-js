@@ -73,6 +73,7 @@ describe("frame", () => {
       expect(setupFrameRes.element).toBeInTheDocument();
       expect(setupFrameRes.element.attributes).toMatchInlineSnapshot(`
         NamedNodeMap {
+          "allow": "payment",
           "allowtransparency": "true",
           "referrerpolicy": "origin",
           "src": "https://api.sandbox.meso.network/app?partnerId=partnerId&network=eip155%3A1&walletAddress=0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48&sourceAmount=100&destinationAmount=0.01&sourceAsset=USD&destinationAsset=ETH&layoutPosition=top-right&layoutOffset=0&version=1.0.0&authenticationStrategy=headless_wallet_verification&mode=embedded",
@@ -119,6 +120,7 @@ describe("frame", () => {
 
       expect(frame).toMatchInlineSnapshot(`
         <iframe
+          allow="payment"
           allowtransparency="true"
           referrerpolicy="origin"
           src="https://api.sandbox.meso.network/modal/onboarding/foo/bar"
@@ -136,6 +138,7 @@ describe("frame", () => {
 
       expect(frame).toMatchInlineSnapshot(`
         <iframe
+          allow="payment"
           allowtransparency="true"
           referrerpolicy="origin"
           src="https://api.sandbox.meso.network/modal/onboarding/foo/bar?x=foo"
@@ -152,6 +155,7 @@ describe("frame", () => {
 
       expect(frame).toMatchInlineSnapshot(`
         <iframe
+          allow="payment"
           allowtransparency="true"
           referrerpolicy="origin"
           src="https://api.sandbox.meso.network/modal/onboarding/deep"
@@ -168,6 +172,7 @@ describe("frame", () => {
 
       expect(frame).toMatchInlineSnapshot(`
         <iframe
+          allow="payment"
           allowtransparency="true"
           referrerpolicy="origin"
           src="https://api.sandbox.meso.network/modal/onboarding/deep"
