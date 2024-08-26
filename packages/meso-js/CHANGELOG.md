@@ -1,5 +1,11 @@
 # @meso-network/meso-js
 
+## 0.1.10
+
+### Patch Changes
+
+- [#83](https://github.com/meso-network/meso-js/pull/83) [`add10c0`](https://github.com/meso-network/meso-js/commit/add10c0f9e5ece6b6b99b547122028f592d78d5b) Thanks [@dseeto](https://github.com/dseeto)! - Add support for Apple Pay
+
 ## 0.1.9
 
 ### Patch Changes
