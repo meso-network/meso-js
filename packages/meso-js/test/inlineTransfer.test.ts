@@ -120,7 +120,7 @@ describe("inlineTransfer", () => {
       } as InlineTransferConfiguration);
       expect(setupFrameMock).toHaveBeenCalledOnce();
       expect(setupFrameMock.mock.lastCall[0]).toMatchInlineSnapshot(
-        '"https://api.sandbox.meso.network"',
+        '"https://transfer.sandbox.meso.network"',
       );
       expect(setupFrameMock.mock.lastCall[1]).toMatchInlineSnapshot(
         { version: expect.any(String) },
@@ -144,7 +144,7 @@ describe("inlineTransfer", () => {
       expect(setupBusMock.mock.lastCall).toMatchInlineSnapshot(`
       [
         {
-          "apiHost": "https://api.sandbox.meso.network",
+          "apiHost": "https://transfer.sandbox.meso.network",
           "frame": {
             "remove": [MockFunction spy],
           },
@@ -184,7 +184,7 @@ describe("inlineTransfer", () => {
       } as InlineTransferConfiguration);
       expect(setupFrameMock).toHaveBeenCalledOnce();
       expect(setupFrameMock.mock.lastCall[0]).toMatchInlineSnapshot(
-        '"https://api.sandbox.meso.network"',
+        '"https://transfer.sandbox.meso.network"',
       );
       expect(setupFrameMock.mock.lastCall[1]).toMatchInlineSnapshot(
         { version: expect.any(String) },
@@ -208,7 +208,7 @@ describe("inlineTransfer", () => {
       expect(setupBusMock.mock.lastCall).toMatchInlineSnapshot(`
       [
         {
-          "apiHost": "https://api.sandbox.meso.network",
+          "apiHost": "https://transfer.sandbox.meso.network",
           "frame": {
             "remove": [MockFunction spy],
           },

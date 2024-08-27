@@ -87,13 +87,13 @@ with the correct values per-environment.
 **Sandbox:**
 
 ```sh
-Content-Security-Policy: frame-src https://api.sandbox.meso.network/; connect-src https://api.sandbox.meso.network/;
+Content-Security-Policy: frame-src https://*.sandbox.meso.network/; connect-src https://*.sandbox.meso.network/;
 ```
 
 **Production:**
 
 ```sh
-Content-Security-Policy: frame-src https://api.meso.network/; connect-src https://api.meso.network/;
+Content-Security-Policy: frame-src https://*.meso.network/; connect-src https://*.meso.network/;
 ```
 
 ## Usage
