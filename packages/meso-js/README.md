@@ -842,7 +842,7 @@ See [unsupported asset errors](#unsupported-asset-errors) for more.
 {
   kind: "UNSUPPORTED_ASSET_ERROR",
   payload: {
-    message: "\"destinationAsset\" must be a supported asset: ETH,SOL,USDC,MATIC.",
+    message: "\"destinationAsset\" must be a supported asset: ETH,SOL,USDC,MATIC,POL.",
   }
 }
 ```
