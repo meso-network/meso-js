@@ -772,17 +772,17 @@ describe("validateConfiguration", () => {
       ).toBe(false);
       expect(onEvent).toHaveBeenCalledOnce();
       expect(onEvent.mock.lastCall).toMatchInlineSnapshot(`
-      [
-        {
-          "kind": "UNSUPPORTED_ASSET_ERROR",
-          "payload": {
-            "error": {
-              "message": "\\"destinationAsset\\" must be a supported Asset: ETH,SOL,USDC,MATIC,USD.",
+        [
+          {
+            "kind": "UNSUPPORTED_ASSET_ERROR",
+            "payload": {
+              "error": {
+                "message": "\\"destinationAsset\\" must be a supported Asset: ETH,SOL,USDC,MATIC,POL,USD.",
+              },
             },
           },
-        },
-      ]
-    `);
+        ]
+      `);
     });
 
     test("non-CryptoAsset sourceAsset when destinationAsset is FiatAsset emits", () => {
@@ -803,17 +803,17 @@ describe("validateConfiguration", () => {
       ).toBe(false);
       expect(onEvent).toHaveBeenCalledOnce();
       expect(onEvent.mock.lastCall).toMatchInlineSnapshot(`
-      [
-        {
-          "kind": "UNSUPPORTED_ASSET_ERROR",
-          "payload": {
-            "error": {
-              "message": "\\"sourceAsset\\" must be a supported CryptoAsset for Cash-out: ETH,SOL,USDC,MATIC.",
+        [
+          {
+            "kind": "UNSUPPORTED_ASSET_ERROR",
+            "payload": {
+              "error": {
+                "message": "\\"sourceAsset\\" must be a supported CryptoAsset for Cash-out: ETH,SOL,USDC,MATIC,POL.",
+              },
             },
           },
-        },
-      ]
-    `);
+        ]
+      `);
     });
 
     test("non-FiatAsset sourceAsset when destinationAsset is CryptoAsset emits", () => {
@@ -1314,17 +1314,17 @@ describe("validateConfiguration", () => {
       ).toBe(false);
       expect(onEvent).toHaveBeenCalledOnce();
       expect(onEvent.mock.lastCall).toMatchInlineSnapshot(`
-      [
-        {
-          "kind": "UNSUPPORTED_ASSET_ERROR",
-          "payload": {
-            "error": {
-              "message": "\\"destinationAsset\\" must be a supported Asset: ETH,SOL,USDC,MATIC,USD.",
+        [
+          {
+            "kind": "UNSUPPORTED_ASSET_ERROR",
+            "payload": {
+              "error": {
+                "message": "\\"destinationAsset\\" must be a supported Asset: ETH,SOL,USDC,MATIC,POL,USD.",
+              },
             },
           },
-        },
-      ]
-    `);
+        ]
+      `);
     });
 
     test("non-CryptoAsset sourceAsset when destinationAsset is FiatAsset emits", () => {
@@ -1345,17 +1345,17 @@ describe("validateConfiguration", () => {
       ).toBe(false);
       expect(onEvent).toHaveBeenCalledOnce();
       expect(onEvent.mock.lastCall).toMatchInlineSnapshot(`
-      [
-        {
-          "kind": "UNSUPPORTED_ASSET_ERROR",
-          "payload": {
-            "error": {
-              "message": "\\"sourceAsset\\" must be a supported CryptoAsset for Cash-out: ETH,SOL,USDC,MATIC.",
+        [
+          {
+            "kind": "UNSUPPORTED_ASSET_ERROR",
+            "payload": {
+              "error": {
+                "message": "\\"sourceAsset\\" must be a supported CryptoAsset for Cash-out: ETH,SOL,USDC,MATIC,POL.",
+              },
             },
           },
-        },
-      ]
-    `);
+        ]
+      `);
     });
 
     test("non-FiatAsset sourceAsset when destinationAsset is CryptoAsset emits", () => {
