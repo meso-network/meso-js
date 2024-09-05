@@ -357,7 +357,7 @@ enum Asset {
   ETH = "ETH"
   SOL = "SOL"
   USDC = "USDC"
-  MATIC = "MATIC",
+  POL = "POL"
 }
 
 enum Environment {

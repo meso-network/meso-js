@@ -137,7 +137,9 @@ export enum Asset {
   ETH = "ETH",
   SOL = "SOL",
   USDC = "USDC",
+  /** @deprecated Use `POL` instead. */
   MATIC = "MATIC",
+  POL = "POL",
 
   // FiatAsset
   USD = "USD",
@@ -148,6 +150,7 @@ export const CryptoAsset = {
   [Asset.SOL]: Asset.SOL,
   [Asset.USDC]: Asset.USDC,
   [Asset.MATIC]: Asset.MATIC,
+  [Asset.POL]: Asset.POL,
 } as const;
 
 export const FiatAsset = {
