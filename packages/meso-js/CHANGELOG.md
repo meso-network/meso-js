@@ -1,5 +1,13 @@
 # @meso-network/meso-js
 
+## 0.2.0
+
+### Minor Changes
+
+- [#86](https://github.com/meso-network/meso-js/pull/86) [`d6f88d3`](https://github.com/meso-network/meso-js/commit/d6f88d328700ada2f6e5f8006ae8869a610d6f52) Thanks [@kyledetella](https://github.com/kyledetella)! - Deprecate `MATIC` in favor of `POL`. As of September 4, 2024, the `MATIC` token is now `POL` ([read more](https://polygon.technology/blog/save-the-date-matic-pol-migration-coming-september-4th-everything-you-need-to-know)).
+
+  This release deprecates `Asset.MATIC` which will be removed in a future version. Instead, `Asset.POL` should be used.
+
 ## 0.1.10
 
 ### Patch Changes
